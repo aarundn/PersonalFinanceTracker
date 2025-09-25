@@ -1,25 +1,38 @@
 package com.example.personalfinancetracker.features.home
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.budget.budgets.navigation.navigateToBudgetScreen
+import com.example.personalfinancetracker.features.transaction.add_transaction.navigation.navigateToAddTransactionScreen
+import com.example.personalfinancetracker.features.transaction.transactions.navigation.navigateToTransactionsScreen
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeRoute(navController: NavController, onNavigateToCurrency: () -> Unit ) {
-    Column (Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = "HomeScreen",
-            Modifier.clickable(onClick = { navController.navigateToBudgetScreen() })
-        )
-        Text(
-            text = "HomeScreen2",
-            Modifier.clickable(onClick = { onNavigateToCurrency() })
-        )
+fun HomeRoute(
+
+    navController: NavController,
+    onNavigateToCurrency: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel(),
+    modifier: Modifier = Modifier
+) {
+    val state = viewModel.state.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.effects.collectLatest { effect ->
+            when (effect) {
+                HomeContract.SideEffect.NavigateBudgets -> navController.navigateToBudgetScreen()
+                HomeContract.SideEffect.NavigateTransactions -> navController.navigateToTransactionsScreen()
+                HomeContract.SideEffect.NavigateAddExpense -> navController.navigateToAddTransactionScreen()
+                HomeContract.SideEffect.NavigateAddIncome -> navController.navigateToAddTransactionScreen()
+                HomeContract.SideEffect.NavigateCurrency -> onNavigateToCurrency()
+                is HomeContract.SideEffect.ShowMessage -> { /* Snackbar later */ }
+            }
+        }
     }
+
+    HomeScreen(state = state, onEvent = viewModel::onEvent, modifier)
 }

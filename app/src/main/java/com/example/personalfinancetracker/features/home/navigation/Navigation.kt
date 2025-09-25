@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.features.home.navigation
 
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -12,11 +13,12 @@ fun NavController.navigateToHomeScreen() {
 
 fun NavGraphBuilder.homeRoute(
     navController: NavController,
-    currencyConversionNavigator: CurrencyConversionNavigator
+    currencyConversionNavigator: CurrencyConversionNavigator,
+    modifier: Modifier = Modifier
 ) {
     composable<HomeRoutes.HomeRoute> {
         HomeRoute(navController = navController, onNavigateToCurrency = {
             currencyConversionNavigator.navigateToCurrencyConverter(navController = navController)
-        })
+        }, modifier = modifier)
     }
 }

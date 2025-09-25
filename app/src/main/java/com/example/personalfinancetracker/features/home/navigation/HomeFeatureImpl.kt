@@ -17,7 +17,8 @@ class HomeFeatureImpl : HomeFeature {
     ) {
         navGraphBuilder.homeRoute(
             navController = navController,
-            currencyConversionNavigator = CurrencyConversionNavigator.Default
+            currencyConversionNavigator = CurrencyConversionNavigator.Default,
+            modifier = modifier
         )
     }
 }
