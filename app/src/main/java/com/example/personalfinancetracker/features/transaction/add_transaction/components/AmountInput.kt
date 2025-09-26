@@ -69,7 +69,7 @@ fun AmountInput(
                 )
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.surface, // Light gray border
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(12.dp),

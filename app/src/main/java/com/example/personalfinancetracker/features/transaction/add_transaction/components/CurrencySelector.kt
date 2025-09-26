@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -95,7 +96,9 @@ fun CurrencySelector(
             
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             ) {
                 AddTransactionContract.PopularCurrencies.currencies.forEach { currency ->
                     DropdownMenuItem(
