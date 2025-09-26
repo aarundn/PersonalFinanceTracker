@@ -51,7 +51,7 @@ fun HomeScreen(
 private fun HomeScreenPreview() {
     PersonalFinanceTrackerTheme {
         HomeScreen(
-            state = HomeContract.State(
+            state = State(
                 budgets = listOf(
                     BudgetProgress("Food", 385.0, 500.0),
                     BudgetProgress("Transport", 265.0, 300.0),
