@@ -1,5 +1,7 @@
 package com.example.personalfinancetracker
 
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
@@ -11,6 +13,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -20,7 +24,7 @@ import com.example.personalfinancetracker.features.budget.navigation.BudgetRoute
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
 import com.example.personalfinancetracker.features.transaction.navigation.TransactionRoutes
 
- data class BottomItem(
+data class BottomItem(
     val label: String,
     val icon: ImageVector,
     val route: Any,
@@ -64,7 +68,7 @@ fun shouldShowBottomBar(
 
 @Composable
 fun AppBottomBar(navController: NavHostController, items: List<BottomItem>) {
-     if (!shouldShowBottomBar(navController, items)) return
+    if (!shouldShowBottomBar(navController, items)) return
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val destination = navBackStackEntry.value?.destination
     NavigationBar(
@@ -85,8 +89,8 @@ fun AppBottomBar(navController: NavHostController, items: List<BottomItem>) {
             NavigationBarItem(
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.route){
-                        popUpTo(navController.graph.startDestinationId){
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }
 
@@ -95,26 +99,30 @@ fun AppBottomBar(navController: NavHostController, items: List<BottomItem>) {
                     }
 
                 },
-                icon = { 
+                icon = {
                     Icon(
-                        icon, 
-                        contentDescription = label,
-                        tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                    ) 
+                        icon,
+                        contentDescription = label
+                    )
                 },
-                label = { 
+                label = {
                     Text(
-                        label, 
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                    ) 
+                        label,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledIconColor = MaterialTheme.colorScheme.primary,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     indicatorColor = Color.Transparent
+                ),
+                interactionSource = remember { MutableInteractionSource() }, // required
+                modifier = Modifier.indication(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
                 )
             )
         }
