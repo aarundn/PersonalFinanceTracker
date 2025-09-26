@@ -2,10 +2,11 @@ package com.example.personalfinancetracker.features.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +19,7 @@ import com.example.personalfinancetracker.features.home.components.HeaderSection
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.home.components.OverviewRow
 import com.example.personalfinancetracker.features.home.components.QuickActions
+import com.example.personalfinancetracker.features.home.components.SavingsCard
 import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -26,23 +28,23 @@ fun HomeScreen(
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold { innerPadding ->
-            Column(
-                modifier = modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                HeaderSection(state)
-                OverviewRow(state)
-                MonthCard(state)
-                BudgetSummaryCard(state, onEvent)
-                QuickActions(onEvent)
-            }
-
+    Column(
+        modifier = modifier.padding(PaddingValues(horizontal = 16.dp))
+            .fillMaxSize()
+            .verticalScroll(
+                rememberScrollState()
+            ),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        HeaderSection(state)
+        OverviewRow(state)
+        MonthCard(state)
+        BudgetSummaryCard(state, onEvent)
+        SavingsCard(state, onEvent)
+        QuickActions(onEvent)
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

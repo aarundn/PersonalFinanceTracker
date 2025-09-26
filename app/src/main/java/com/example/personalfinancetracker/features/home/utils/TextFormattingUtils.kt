@@ -50,4 +50,17 @@ object TextFormattingUtils {
         return "${formatCurrencyNoDecimals(spent)} of ${formatCurrencyNoDecimals(limit)}"
     }
     
+    /**
+     * Format savings progress text (e.g., "$950 of $1,500")
+     */
+    fun formatSavingsProgress(saved: Double, goal: Double): String {
+        return "${formatCurrencyNoDecimals(saved)} of ${formatCurrencyNoDecimals(goal)} goal"
+    }
+    
+    /**
+     * Format remaining amount text (e.g., "$550 remaining to reach your goal")
+     */
+    fun formatRemainingAmount(remaining: Double): String {
+        return "${formatCurrencyNoDecimals(remaining)} remaining to reach your goal"
+    }
 }

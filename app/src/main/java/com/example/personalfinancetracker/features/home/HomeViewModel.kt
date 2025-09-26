@@ -23,6 +23,7 @@ class HomeViewModel(
             Event.OnClickTransactions -> emit(SideEffect.NavigateTransactions)
             Event.OnClickCurrency -> emit(SideEffect.NavigateCurrency)
             is Event.OnClickBudgetItem -> emit(SideEffect.ShowMessage("${event.name} tapped"))
+            Event.OnClickSavings -> emit(SideEffect.ShowMessage("Savings tapped"))
             Event.OnRetry -> Unit
         }
     }

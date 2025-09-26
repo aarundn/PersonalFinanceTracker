@@ -1,6 +1,5 @@
 package com.example.personalfinancetracker
 
-import AppBottomBar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,7 +23,6 @@ import com.example.core.navigation.features.HomeFeature
 import com.example.core.navigation.features.TransactionFeature
 import com.example.core.navigation.register
 import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
-import mainBottomItems
 import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
