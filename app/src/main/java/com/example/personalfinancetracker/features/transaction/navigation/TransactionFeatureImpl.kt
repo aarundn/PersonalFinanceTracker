@@ -20,7 +20,7 @@ class TransactionFeatureImpl: TransactionFeature {
         navController: NavController,
         modifier: Modifier
     ) {
-        navGraphBuilder.transactionRoute(navController = navController)
+        navGraphBuilder.transactionRoute(navController = navController, modifier = modifier)
         navGraphBuilder.addTransactionRoute(navController = navController)
         navGraphBuilder.editTransactionRoute(navController = navController)
     }
