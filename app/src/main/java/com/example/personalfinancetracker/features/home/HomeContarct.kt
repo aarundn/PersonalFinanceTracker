@@ -16,7 +16,6 @@ object HomeContract {
         val balance: MoneyCard = MoneyCard(label = "Balance", amount = 1200.0),
         val monthStats: MonthStats = MonthStats(),
         val budgets: List<BudgetProgress> = emptyList(),
-        val savings: SavingsProgress = SavingsProgress(),
         val isLoading: Boolean = false,
         val errorMessage: String? = null
     )
@@ -44,15 +43,6 @@ object HomeContract {
         val color: Color? = null
     ) {
         val progress: Float get() = if (limit == 0.0) 0f else (spent / limit).toFloat().coerceIn(0f, 1f)
-    }
-
-    @Immutable
-    data class SavingsProgress(
-        val saved: Double = 950.0,
-        val goal: Double = 1500.0
-    ) {
-        val progress: Float get() = if (goal == 0.0) 0f else (saved / goal).toFloat().coerceIn(0f, 1f)
-        val remaining: Double get() = (goal - saved).coerceAtLeast(0.0)
     }
 
     sealed interface Event {

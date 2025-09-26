@@ -20,7 +20,7 @@ class BudgetFeatureImpl : BudgetFeature {
         navController: NavController,
         modifier: Modifier,
     ) {
-        navGraphBuilder.budgetRoute(navController = navController)
+        navGraphBuilder.budgetRoute(navController = navController, modifier = modifier)
         navGraphBuilder.addBudgetRoute(navController = navController)
         navGraphBuilder.editBudgetRoute(navController = navController)
     }

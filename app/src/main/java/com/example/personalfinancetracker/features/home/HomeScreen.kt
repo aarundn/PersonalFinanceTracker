@@ -19,7 +19,6 @@ import com.example.personalfinancetracker.features.home.components.HeaderSection
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.home.components.OverviewRow
 import com.example.personalfinancetracker.features.home.components.QuickActions
-import com.example.personalfinancetracker.features.home.components.SavingsCard
 import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -40,7 +39,6 @@ fun HomeScreen(
         OverviewRow(state)
         MonthCard(state)
         BudgetSummaryCard(state, onEvent)
-        SavingsCard(state, onEvent)
         QuickActions(onEvent)
     }
 }

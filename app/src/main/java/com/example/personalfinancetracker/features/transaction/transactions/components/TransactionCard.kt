@@ -44,7 +44,6 @@ fun TransactionCard(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier
