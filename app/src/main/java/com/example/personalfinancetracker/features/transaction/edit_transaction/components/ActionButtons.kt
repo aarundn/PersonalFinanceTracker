@@ -1,4 +1,4 @@
-package com.example.personalfinancetracker.features.transaction.add_transaction.components
+package com.example.personalfinancetracker.features.transaction.edit_transaction.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -55,7 +55,7 @@ fun ActionButtons(
             enabled = isSaveEnabled && !isLoading,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2563EB), // Blue-600
+                containerColor = MaterialTheme.colorScheme.primary, // Blue-600
                 contentColor = Color.White
             )
         ) {
@@ -89,5 +89,3 @@ private fun ActionButtonsPreview() {
         )
     }
 }
-
-

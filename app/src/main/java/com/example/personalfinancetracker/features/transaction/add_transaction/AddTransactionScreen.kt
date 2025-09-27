@@ -24,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.ActionButtons
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.AmountInput
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.CategorySelector
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.CurrencySelector
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.FormInput
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.FormTextArea
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.TransactionTypeToggle
+import com.example.personalfinancetracker.features.transaction.common.AmountInput
+import com.example.personalfinancetracker.features.transaction.common.CategorySelector
+import com.example.personalfinancetracker.features.transaction.common.CurrencySelector
+import com.example.personalfinancetracker.features.transaction.common.TransactionFormInput
+import com.example.personalfinancetracker.features.transaction.common.TransactionFormTextArea
+import com.example.personalfinancetracker.features.transaction.common.TransactionTypeToggle
 import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -102,7 +102,7 @@ fun AddTransactionScreen(
                     )
 
                     // Title Input
-                    FormInput(
+                    TransactionFormInput(
                         label = "Title",
                         value = state.title,
                         onValueChange = { onEvent(AddTransactionContract.Event.OnTitleChanged(it)) },
@@ -145,7 +145,7 @@ fun AddTransactionScreen(
                     )
 
                     // Date Input
-                    FormInput(
+                    TransactionFormInput(
                         label = "Date",
                         value = state.date,
                         onValueChange = { onEvent(AddTransactionContract.Event.OnDateChanged(it)) },
@@ -153,7 +153,7 @@ fun AddTransactionScreen(
                     )
 
                     // Notes Input
-                    FormTextArea(
+                    TransactionFormTextArea(
                         label = "Notes (Optional)",
                         value = state.notes,
                         onValueChange = { onEvent(AddTransactionContract.Event.OnNotesChanged(it)) },
