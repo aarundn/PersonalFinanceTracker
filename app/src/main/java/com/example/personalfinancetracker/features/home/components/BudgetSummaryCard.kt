@@ -24,17 +24,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.personalfinancetracker.ui.theme.CategoryFood
-import com.example.personalfinancetracker.ui.theme.CategoryTransport
-import com.example.personalfinancetracker.ui.theme.CategoryShopping
-import com.example.personalfinancetracker.ui.theme.CategoryBills
-import com.example.personalfinancetracker.ui.theme.ProgressError
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.CategoryBills
+import com.example.core.ui.theme.CategoryFood
+import com.example.core.ui.theme.CategoryShopping
+import com.example.core.ui.theme.CategoryTransport
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.ProgressPrimary
 import com.example.personalfinancetracker.features.home.HomeContract
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.ui.theme.ProgressPrimary
 
 @Composable
 fun BudgetSummaryCard(

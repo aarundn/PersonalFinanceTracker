@@ -19,7 +19,7 @@ import com.example.personalfinancetracker.features.home.components.HeaderSection
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.home.components.OverviewRow
 import com.example.personalfinancetracker.features.home.components.QuickActions
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun HomeScreen(

@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.ui.components.CustomProgressBar
+import com.example.core.components.CustomProgressBar
 
 @Composable
 fun OverallSummaryCard(

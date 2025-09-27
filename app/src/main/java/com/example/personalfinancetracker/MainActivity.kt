@@ -22,7 +22,7 @@ import com.example.core.navigation.features.BudgetFeature
 import com.example.core.navigation.features.HomeFeature
 import com.example.core.navigation.features.TransactionFeature
 import com.example.core.navigation.register
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {

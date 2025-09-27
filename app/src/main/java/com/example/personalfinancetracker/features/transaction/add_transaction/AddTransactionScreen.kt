@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.ActionButtons
-import com.example.personalfinancetracker.features.transaction.common.AmountInput
-import com.example.personalfinancetracker.features.transaction.common.CategorySelector
-import com.example.personalfinancetracker.features.transaction.common.CurrencySelector
-import com.example.personalfinancetracker.features.transaction.common.TransactionFormInput
-import com.example.personalfinancetracker.features.transaction.common.TransactionFormTextArea
-import com.example.personalfinancetracker.features.transaction.common.TransactionTypeToggle
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.components.AmountInput
+import com.example.core.components.CategorySelector
+import com.example.core.components.CurrencySelector
+import com.example.core.components.TransactionFormInput
+import com.example.core.components.TransactionFormTextArea
+import com.example.core.components.TransactionTypeToggle
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun AddTransactionScreen(

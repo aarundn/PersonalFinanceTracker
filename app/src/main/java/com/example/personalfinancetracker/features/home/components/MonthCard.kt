@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.home.HomeContract
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable

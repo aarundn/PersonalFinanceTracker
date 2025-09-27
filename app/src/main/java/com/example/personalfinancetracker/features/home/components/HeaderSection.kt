@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.personalfinancetracker.features.home.HomeContract
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun HeaderSection(

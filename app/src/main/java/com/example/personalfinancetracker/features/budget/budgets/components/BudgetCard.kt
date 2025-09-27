@@ -27,9 +27,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.budget.budgets.BudgetContract
-import com.example.personalfinancetracker.ui.components.CustomProgressBar
-import com.example.personalfinancetracker.ui.theme.ProgressError
-import com.example.personalfinancetracker.ui.theme.Warning
+import com.example.core.components.CustomProgressBar
+import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.Warning
 
 @Composable
 fun BudgetCard(

@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
-import com.example.personalfinancetracker.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun MoneyCard(
