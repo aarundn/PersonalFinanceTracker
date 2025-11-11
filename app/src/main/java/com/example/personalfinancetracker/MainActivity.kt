@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 }) { paddingValues ->
                     AppNavGraph(
                         navController = navController,
-                        modifier = Modifier.padding(paddingValues)
+                         modifier = Modifier.padding(paddingValues)
                     )
                 }
             }

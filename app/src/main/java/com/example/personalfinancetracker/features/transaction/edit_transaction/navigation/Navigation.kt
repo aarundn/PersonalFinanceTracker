@@ -12,12 +12,13 @@ fun NavController.navigateToEditTransaction(transactionId: Int) {
 
 fun NavGraphBuilder.editTransactionRoute(navController: NavController) {
     composable<TransactionRoutes.EditTransactionRoute> { backStackEntry ->
-        val transactionId = backStackEntry.arguments?.getString("transactionId")?.toIntOrNull() ?: -1
-        
+        val transactionId =
+            backStackEntry.arguments?.getString("transactionId")?.toIntOrNull() ?: -1
+
         EditTransactionRoute(
             transactionId = transactionId,
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToTransactions = { 
+            onNavigateToTransactions = {
                 navController.navigate(TransactionRoutes.TransactionsRoute) {
                     popUpTo(TransactionRoutes.TransactionsRoute) {
                         inclusive = true
