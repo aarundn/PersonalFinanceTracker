@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetRoute
 import com.example.personalfinancetracker.features.budget.navigation.BudgetRoutes
 
 fun NavController.navigateToEditBudgetScreen(budgetId: String) {
@@ -13,6 +14,11 @@ fun NavController.navigateToEditBudgetScreen(budgetId: String) {
 fun NavGraphBuilder.editBudgetRoute(navController: NavController) {
     composable<BudgetRoutes.EditBudgetRoute> { backStackEntry ->
         val budgetId = backStackEntry.toRoute<BudgetRoutes.EditBudgetRoute>().budgetId
-        //todo add edit budget screen
+        val parsedId = budgetId.toIntOrNull() ?: -1
+
+        EditBudgetRoute(
+            budgetId = parsedId,
+            onNavigateBack = { navController.popBackStack() }
+        )
     }
 }

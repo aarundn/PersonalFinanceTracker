@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.budget.add_budget.navigation.navigateToAddBudgetScreen
+import com.example.personalfinancetracker.features.budget.edit_budget.navigation.navigateToEditBudgetScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -24,7 +25,7 @@ fun BudgetRoute(
                     navController.navigateToAddBudgetScreen()
                 }
                 is BudgetContract.SideEffect.NavigateToBudgetDetails -> {
-                    // TODO: Implement navigation to budget details
+                    navController.navigateToEditBudgetScreen(effect.budgetId.toString())
                 }
                 is BudgetContract.SideEffect.ShowError -> {
                     // Show error message using your preferred method (Snackbar, Toast, etc.)
