@@ -18,11 +18,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.conversion_rate.navigation.currencyConverterScreen
+import com.example.core.navigation.Feature
 import com.example.core.navigation.features.BudgetFeature
 import com.example.core.navigation.features.HomeFeature
 import com.example.core.navigation.features.TransactionFeature
 import com.example.core.navigation.register
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
 import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
@@ -31,13 +33,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PersonalFinanceTrackerTheme {
+
                 val navController = rememberNavController()
+
+
+
                 Scaffold(bottomBar = {
                     AppBottomBar(navController = navController, items = mainBottomItems)
                 }) { paddingValues ->
+                    val homeFeature: HomeFeature = koinInject()
+                    val budgetFeature: BudgetFeature = koinInject()
+                    val transactionFeature: TransactionFeature = koinInject()
                     AppNavGraph(
                         navController = navController,
-                         modifier = Modifier.padding(paddingValues)
+                         modifier = Modifier.padding(paddingValues),
+                        features = listOf(
+                            homeFeature,
+                            transactionFeature,
+                            budgetFeature
+                        )
                     )
                 }
             }
@@ -48,18 +62,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    features : List<Feature> = emptyList()
 ) {
-
-
-    val homeFeature: HomeFeature = koinInject()
-    val budgetFeature: BudgetFeature = koinInject()
-    val transactionFeature: TransactionFeature = koinInject()
-
 
     NavHost(
         navController = navController,
-        startDestination = homeFeature.homeRoute(),
+        startDestination = HomeRoutes.HomeRoute,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -85,9 +94,9 @@ fun AppNavGraph(
             ) + fadeOut(tween(500))
         },
     ) {
-        register(homeFeature, navController, modifier)
-        register(transactionFeature, navController, modifier)
-        register(budgetFeature, navController, modifier)
+        features.forEach {
+            register(it, navController, modifier)
+        }
         currencyConverterScreen(onNavigateBack = { navController.popBackStack() })
     }
 }
