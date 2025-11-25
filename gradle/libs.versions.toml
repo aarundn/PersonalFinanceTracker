@@ -1,5 +1,8 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.1"
+googleGmsGoogleServices = "4.4.4"
+firebaseFirestore = "26.0.2"
+firebaseDatabase = "22.0.1"
 koinAndroidxCompose = "4.1.1"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
@@ -40,6 +43,9 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koinAndroidxCompose" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
+#FireStore
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -48,3 +54,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 # Kotlin serialization plugin
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# Firbase
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

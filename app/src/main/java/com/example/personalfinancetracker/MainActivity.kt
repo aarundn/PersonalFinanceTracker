@@ -36,17 +36,17 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
 
-
+                val homeFeature: HomeFeature = koinInject()
+                val budgetFeature: BudgetFeature = koinInject()
+                val transactionFeature: TransactionFeature = koinInject()
 
                 Scaffold(bottomBar = {
                     AppBottomBar(navController = navController, items = mainBottomItems)
                 }) { paddingValues ->
-                    val homeFeature: HomeFeature = koinInject()
-                    val budgetFeature: BudgetFeature = koinInject()
-                    val transactionFeature: TransactionFeature = koinInject()
+
                     AppNavGraph(
                         navController = navController,
-                         modifier = Modifier.padding(paddingValues),
+                        modifier = Modifier.padding(paddingValues),
                         features = listOf(
                             homeFeature,
                             transactionFeature,
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 fun AppNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    features : List<Feature> = emptyList()
+    features: List<Feature> = emptyList()
 ) {
 
     NavHost(
