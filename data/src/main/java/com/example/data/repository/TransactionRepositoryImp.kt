@@ -1,4 +1,4 @@
-package com.example.data.remote.repo
+package com.example.data.repository
 
 import com.example.domain.model.Transaction
 import com.example.domain.repo.TransactionRepository
@@ -10,7 +10,5 @@ class TransactionRepositoryImp(
 ) : TransactionRepository {
     override suspend fun addTransaction(transaction: Transaction) {
         firestore.collection("Transactions").add(transaction).await()
-
-
     }
 }

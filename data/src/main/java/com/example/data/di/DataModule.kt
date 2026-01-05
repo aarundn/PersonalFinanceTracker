@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.data.remote.repo.TransactionRepositoryImp
+import com.example.data.repository.TransactionRepositoryImp
 import com.example.domain.repo.TransactionRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
