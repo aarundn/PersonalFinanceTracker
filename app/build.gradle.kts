@@ -44,6 +44,8 @@ android {
 dependencies {
 
     implementation(project(path = ":core"))
+    implementation(project(path = ":domain"))
+    implementation(project(path = ":data"))
     implementation(project(":conversion-rate"))
 
     implementation(libs.androidx.core.ktx)
@@ -65,11 +67,13 @@ dependencies {
     //koin DI
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.androidx.compose.navigation)
+    implementation(libs.koin.android)
 
     //navigation
     implementation(libs.androidx.navigation.compose)
 
     //firebase
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database)
 }

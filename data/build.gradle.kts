@@ -34,10 +34,21 @@ android {
 
 dependencies {
 
+
+    implementation(project(path = ":domain"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //koin DI
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.android)
+
+    //firebase
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
 }

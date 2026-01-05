@@ -1,6 +1,8 @@
 package com.example.personalfinancetracker
 
 import android.app.Application
+import com.example.data.di.dataModule
+import com.example.domain.di.domainModule
 import com.example.personalfinancetracker.features.budget.di.budgetModule
 import com.example.personalfinancetracker.features.home.di.homeModule
 import com.example.personalfinancetracker.features.transaction.di.transactionsModule
@@ -18,7 +20,9 @@ class App: Application()  {
 }
 
 val appModule = listOf(
+    dataModule,
+    domainModule,
     homeModule,
     budgetModule,
-    transactionsModule
+    transactionsModule,
 )
