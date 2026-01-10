@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Transaction
+import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 
 class AddTransactionViewModel(
@@ -100,7 +103,7 @@ class AddTransactionViewModel(
         viewModelScope.launch {
             try {
                 // Simulate currency conversion API call
-                kotlinx.coroutines.delay(1000)
+                delay(1000)
 
                 val amount = currentState.amount.toDoubleOrNull() ?: 0.0
                 // Mock conversion rate (in real app, this would be from API)
@@ -169,7 +172,16 @@ class AddTransactionViewModel(
         viewModelScope.launch {
             try {
 
-                val transactionData = Transaction(id = currentState.title)
+                val transactionData = Transaction(
+                    id = currentState.title,
+                    userId = UUID.randomUUID().toString(),
+                    amount = 21.9,
+                    description = "",
+                    iconUrl = "",
+                    date = Date(),
+                    category = "",
+                    type = Type.EXPENSE
+                )
                 addTransactionUseCase(transactionData)
                 Log.d("AddTransactionViewModel2", "Saving transaction with data: $transactionData")
 
