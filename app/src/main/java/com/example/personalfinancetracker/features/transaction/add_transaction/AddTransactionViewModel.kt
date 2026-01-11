@@ -14,9 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 
@@ -26,7 +23,7 @@ class AddTransactionViewModel(
 
     private val _state = MutableStateFlow(
         AddTransactionContract.State(
-            date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            date = System.currentTimeMillis()
         )
     )
     val state: StateFlow<AddTransactionContract.State> = _state.asStateFlow()
@@ -68,7 +65,7 @@ class AddTransactionViewModel(
             }
 
             is AddTransactionContract.Event.OnDateChanged -> {
-                _state.value = _state.value.copy(date = event.date)
+                _state.value = _state.value.copy(date = event.date.toLong())
             }
 
             is AddTransactionContract.Event.OnNotesChanged -> {
@@ -174,16 +171,25 @@ class AddTransactionViewModel(
 
                 val transactionData = Transaction(
                     id = currentState.title,
-                    userId = UUID.randomUUID().toString(),
+                    userId = "A1",
                     amount = 21.9,
                     description = "",
                     iconUrl = "",
-                    date = Date(),
+                    date = currentState.date,
                     category = "",
                     type = Type.EXPENSE
                 )
-                addTransactionUseCase(transactionData)
-                Log.d("AddTransactionViewModel2", "Saving transaction with data: $transactionData")
+                try {
+                    addTransactionUseCase(transactionData)
+                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Transaction saved successfully"))
+
+                } catch (e: Exception) {
+
+                    Log.d(
+                        "AddTransactionViewModel2",
+                        "Saving transaction with data: $transactionData"
+                    )
+                }
 
 
             } catch (e: Exception) {

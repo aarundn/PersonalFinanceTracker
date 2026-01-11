@@ -11,12 +11,12 @@ class TransactionRepositoryImp(
 ) : TransactionRepository {
     override suspend fun addTransaction(transaction: Transaction) {
         val transactionDto = transaction.toDto()
-        firestore.collection(TRANSACTION_COLLECTION).document()
-            .collection(transactionDto.userId)
+        firestore.collection(TRANSACTION_COLLECTION).document(transactionDto.userId)
+            .collection(TRANSACTION_COLLECTION)
             .add(transaction.toDto()).addOnSuccessListener {
                 Log.d(TRANSACTION_COLLECTION , "added successfully")
             }.addOnFailureListener {
-                Log.d(TRANSACTION_COLLECTION , "adding failed")
+                Log.d(TRANSACTION_COLLECTION , "adding failed ${it.message}")
             }
     }
 

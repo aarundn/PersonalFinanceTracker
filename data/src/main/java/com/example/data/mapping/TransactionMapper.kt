@@ -3,7 +3,6 @@ package com.example.data.mapping
 import com.example.data.remote.model.TransactionsDto
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
-import java.util.Date
 
 fun Transaction.toDto(): TransactionsDto {
     return TransactionsDto(
@@ -20,15 +19,15 @@ fun Transaction.toDto(): TransactionsDto {
 
 fun TransactionsDto.toDomain(): Transaction {
     return Transaction(
-        id = id ?: "",
+        id = id,
         userId = userId ,
-        amount = amount ?: 0.0,
+        amount = amount,
         description = description ?: "",
         iconUrl = iconUrl ?: "",
-        date = date ?: Date(),
-        category = category ?: "",
+        date = date,
+        category = category,
         type = try {
-            Type.valueOf(type ?: "EXPENSE")
+            Type.valueOf(type)
         } catch (e: IllegalArgumentException) {
             Type.EXPENSE
         }

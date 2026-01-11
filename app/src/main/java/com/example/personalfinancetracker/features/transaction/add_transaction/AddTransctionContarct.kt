@@ -8,7 +8,7 @@ object AddTransactionContract {
         val category: String = "",
         val amount: String = "",
         val currency: String = "USD",
-        val date: String = "",
+        val date: Long = 0L,
         val notes: String = "",
         val convertedAmount: Double? = null,
         val isConverting: Boolean = false,

@@ -1,19 +1,18 @@
 package com.example.data.remote.model
 
-import com.google.firebase.database.PropertyName
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
 
 @Serializable
 data class TransactionsDto(
-    val id: String? = null,
-    @PropertyName("user_id")
+    val id: String,
+    @SerialName("user_id")
     val userId: String,
-    val amount: Double? = null,
+    val amount: Double,
     val description: String? = null,
-    @PropertyName("icon_url")
-    val iconUrl : String? = null,
-    val date: Date? = null,
-    val category: String? = null,
-    val type: String? = null,
+    @SerialName("icon_url")
+    val iconUrl: String? = null,
+    val date: Long,
+    val category: String,
+    val type: String,
 )

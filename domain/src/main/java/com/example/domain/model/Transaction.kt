@@ -1,7 +1,5 @@
 package com.example.domain.model
 
-import java.util.Date
-
 
 data class Transaction(
     val id: String,
@@ -9,7 +7,7 @@ data class Transaction(
     val amount: Double,
     val description: String,
     val iconUrl: String,
-    val date: Date,
+    val date: Long,
     val category: String,
     val type: Type,
     )

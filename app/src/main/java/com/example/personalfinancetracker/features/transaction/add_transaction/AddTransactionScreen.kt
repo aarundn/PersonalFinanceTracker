@@ -147,7 +147,7 @@ fun AddTransactionScreen(
                     // Date Input
                     TransactionFormInput(
                         label = "Date",
-                        value = state.date,
+                        value = state.date.toString(),
                         onValueChange = { onEvent(AddTransactionContract.Event.OnDateChanged(it)) },
                         placeholder = "Select date"
                     )
@@ -187,7 +187,7 @@ private fun AddTransactionScreenPreview() {
                 category = "Food",
                 amount = "25.50",
                 currency = "USD",
-                date = "2024-01-15",
+                date = 0L,
                 notes = "Lunch at restaurant"
             ),
             onEvent = {}
