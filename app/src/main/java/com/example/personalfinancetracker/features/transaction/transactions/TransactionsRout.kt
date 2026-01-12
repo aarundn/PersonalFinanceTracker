@@ -4,16 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.transaction.add_transaction.navigation.navigateToAddTransactionScreen
 import com.example.personalfinancetracker.features.transaction.edit_transaction.navigation.navigateToEditTransaction
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TransactionsRoute(
     navController: NavController,
-    viewModel: TransactionsViewModel = viewModel(),
+    viewModel: TransactionsViewModel = koinViewModel(),
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value

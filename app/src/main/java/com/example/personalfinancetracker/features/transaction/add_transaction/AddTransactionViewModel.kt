@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 
 class AddTransactionViewModel(
@@ -173,22 +172,28 @@ class AddTransactionViewModel(
                     id = currentState.title,
                     userId = "A1",
                     amount = 21.9,
-                    description = "",
-                    iconUrl = "",
+                    currency = "USD",
+                    categoryId = "1",
+
                     date = currentState.date,
-                    category = "",
-                    type = Type.EXPENSE
+                    notes = currentState.notes,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
+                    type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE
+
                 )
-                try {
-                    addTransactionUseCase(transactionData)
-                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Transaction saved successfully"))
 
-                } catch (e: Exception) {
+                addTransactionUseCase(transactionData).onSuccess {
 
-                    Log.d(
-                        "AddTransactionViewModel2",
-                        "Saving transaction with data: $transactionData"
-                    )
+                    _state.value = currentState.copy(isLoading = false)
+                    _effect.emit(AddTransactionContract.SideEffect.NavigateBack)
+
+
+                }.onFailure {
+
+                    _state.value = currentState.copy(isLoading = false)
+                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
+
                 }
 
 

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,16 +24,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.transaction.transactions.TransactionsContract
+import com.example.domain.model.Transaction
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.abs
 
 @Composable
 fun TransactionCard(
-    transaction: TransactionsContract.Transaction,
+    transaction: Transaction,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -60,14 +63,13 @@ fun TransactionCard(
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .clip(CircleShape)
-                        .background(transaction.iconTint.copy(alpha = 0.1f)),
+                        .clip(CircleShape).background(Color(0xFFF97316).copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = transaction.icon,
+                        imageVector = Icons.Outlined.ShoppingCart,
                         contentDescription = null,
-                        tint = transaction.iconTint,
+                        tint = Color(0xFFF97316),
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -75,13 +77,13 @@ fun TransactionCard(
                 // Title and Category
                 Column {
                     Text(
-                        text = transaction.title,
+                        text = "Grocery Shopping",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${transaction.category} • ${formatDate(transaction.date)}",
+                        text = "${"Food"} • ${transaction.date}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -95,7 +97,7 @@ fun TransactionCard(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = if (transaction.amount > 0)
-                    transaction.iconTint
+                    Color(0xFFF97316)
                 else
                     MaterialTheme.colorScheme.error
             )

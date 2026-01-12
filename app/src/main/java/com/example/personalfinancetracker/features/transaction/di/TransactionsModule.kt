@@ -2,8 +2,10 @@ package com.example.personalfinancetracker.features.transaction.di
 
 import com.example.core.navigation.features.TransactionFeature
 import com.example.domain.usecase.AddTransactionUseCase
+import com.example.domain.usecase.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.transaction.add_transaction.AddTransactionViewModel
 import com.example.personalfinancetracker.features.transaction.navigation.TransactionFeatureImpl
+import com.example.personalfinancetracker.features.transaction.transactions.TransactionsViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -14,8 +16,10 @@ val transactionsModule = module {
 
     //use case
     singleOf(::AddTransactionUseCase)
+    singleOf(::GetTransactionsUseCase)
 
     // view models
     viewModelOf(::AddTransactionViewModel)
+    viewModelOf(::TransactionsViewModel)
 
 }

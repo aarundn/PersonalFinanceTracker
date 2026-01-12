@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 object TransactionsContract {
     @Immutable
     data class State(
-        val transactions: List<Transaction> = emptyList(),
+        val transactions: List<com.example.domain.model.Transaction> = emptyList(),
         val isLoading: Boolean = false,
         val error: String? = null
     )
@@ -31,7 +31,7 @@ object TransactionsContract {
 
     sealed interface Event {
         data object LoadTransactions : Event
-        data class OnTransactionClick(val transaction: Transaction) : Event
+        data class OnTransactionClick(val transaction: com.example.domain.model.Transaction) : Event
         data object OnAddTransactionClick : Event
         data object OnRetry : Event
     }

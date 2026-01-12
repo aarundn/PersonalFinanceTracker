@@ -1,0 +1,20 @@
+package com.example.data.local.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.domain.model.Type
+
+@Entity(tableName = "transactions")
+data class TransactionEntity(
+    @PrimaryKey
+    val id: String,
+    val userId: String,
+    val type: Type,
+    val amount: Double,
+    val currency: String,
+    val categoryId: String,
+    val date: Long,
+    val notes: String?,
+    val createdAt: Long,
+    val updatedAt: Long
+)

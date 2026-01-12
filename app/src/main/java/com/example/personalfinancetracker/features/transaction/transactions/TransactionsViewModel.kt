@@ -9,16 +9,18 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.usecase.GetTransactionsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransactionsViewModel(
-    private val repository: TransactionsRepository = InMemoryTransactionsRepository()
+    private val getTransactionsUseCase: GetTransactionsUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(TransactionsContract.State())
     val state: StateFlow<TransactionsContract.State> = _state.asStateFlow()
@@ -35,7 +37,7 @@ class TransactionsViewModel(
             TransactionsContract.Event.LoadTransactions -> loadTransactions()
             is TransactionsContract.Event.OnTransactionClick -> {
                 viewModelScope.launch {
-                    _effects.emit(TransactionsContract.SideEffect.NavigateToTransactionDetails(event.transaction.id))
+                    _effects.emit(TransactionsContract.SideEffect.NavigateToTransactionDetails(event.transaction.id.toInt()))
                 }
             }
 
@@ -55,7 +57,14 @@ class TransactionsViewModel(
                 _state.value = _state.value.copy(isLoading = true)
 
                 // Get transactions from repository
-                val transactions = repository.getTransactions().ifEmpty {
+                val transactions = getTransactionsUseCase().collect { transactions ->
+                    _state.update {  it.copy(
+                        transactions = transactions,
+                        isLoading = false,
+                        error = null
+                    )
+                    }
+                }
                     // Sample data if repository is empty
                     listOf(
                         TransactionsContract.Transaction(
@@ -181,12 +190,7 @@ class TransactionsViewModel(
                             iconTint = Color(0xFF22C55E) // Green
                         )
                     )
-                }
-                _state.value = _state.value.copy(
-                    transactions = transactions,
-                    isLoading = false,
-                    error = null
-                )
+
             } catch (_: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
