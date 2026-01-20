@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.features.transaction.transactions
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Home
@@ -57,7 +58,8 @@ class TransactionsViewModel(
                 _state.value = _state.value.copy(isLoading = true)
 
                 // Get transactions from repository
-                val transactions = getTransactionsUseCase().collect { transactions ->
+                 getTransactionsUseCase().collect { transactions ->
+                     Log.d("TransactionsViewModel", "Transactions: ${transactions.size}")
                     _state.update {  it.copy(
                         transactions = transactions,
                         isLoading = false,

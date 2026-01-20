@@ -6,7 +6,7 @@ import com.example.domain.repo.TransactionRepository
 class AddTransactionUseCase(
     private val transactionRepository: TransactionRepository
 ) {
-    suspend operator fun invoke(transaction: Transaction) = runCatching {
+    suspend operator fun invoke(transaction: Transaction) =
         transactionRepository.addTransaction(transaction)
-    }
+
 }

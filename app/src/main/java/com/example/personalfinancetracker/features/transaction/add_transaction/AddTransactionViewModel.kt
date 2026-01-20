@@ -141,19 +141,21 @@ class AddTransactionViewModel(
             viewModelScope.launch {
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Title is required"))
             }
-
+            return
         }
 
         if (currentState.category.isEmpty()) {
             viewModelScope.launch {
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Category is required"))
             }
+            return
         }
 
         if (currentState.amount.isEmpty()) {
             viewModelScope.launch {
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Amount is required"))
             }
+            return
         }
 
         val amount = currentState.amount.toDoubleOrNull()
@@ -161,6 +163,7 @@ class AddTransactionViewModel(
             viewModelScope.launch {
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Please enter a valid amount"))
             }
+            return
         }
 
         _state.value = currentState.copy(isLoading = true)
@@ -169,41 +172,31 @@ class AddTransactionViewModel(
             try {
 
                 val transactionData = Transaction(
-                    id = currentState.title,
-                    userId = "A1",
-                    amount = 21.9,
-                    currency = "USD",
-                    categoryId = "1",
-
+                    id = java.util.UUID.randomUUID().toString(),
+                    userId = "A1", // TODO: Get actual user ID
+                    amount = amount,
+                    currency = currentState.currency,
+                    categoryId = currentState.category, // Using name as ID for now based on selector
                     date = currentState.date,
                     notes = currentState.notes,
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis(),
-                    type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE
-
+                    type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
                 )
 
-                addTransactionUseCase(transactionData).onSuccess {
+                Log.d("AddTransactionViewModel", "Attempting to save transaction: $transactionData")
 
+                addTransactionUseCase(transactionData)
+                    Log.d("AddTransactionViewModel2", "Transaction saved successfully: $transactionData")
                     _state.value = currentState.copy(isLoading = false)
                     _effect.emit(AddTransactionContract.SideEffect.NavigateBack)
-
-
-                }.onFailure {
-
-                    _state.value = currentState.copy(isLoading = false)
-                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
-
-                }
-
 
             } catch (e: Exception) {
                 _state.value = currentState.copy(
                     isLoading = false,
                     error = "Failed to save transaction"
                 )
-                Log.d("AddTransactionViewModel3", "Saving transaction with data: $e")
-
+                Log.e("AddTransactionViewModel3", "Exception saving transaction", e)
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
             }
         }
