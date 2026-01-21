@@ -186,10 +186,22 @@ class AddTransactionViewModel(
 
                 Log.d("AddTransactionViewModel", "Attempting to save transaction: $transactionData")
 
-                addTransactionUseCase(transactionData)
-                    Log.d("AddTransactionViewModel2", "Transaction saved successfully: $transactionData")
+                addTransactionUseCase(transactionData).onSuccess {
+                    Log.d(
+                        "AddTransactionViewModel2",
+                        "Transaction saved successfully: $transactionData"
+                    )
                     _state.value = currentState.copy(isLoading = false)
                     _effect.emit(AddTransactionContract.SideEffect.NavigateBack)
+                }.onFailure {
+                    _state.value = currentState.copy(
+                        isLoading = false,
+                        error = "Failed to save transaction"
+                    )
+                    Log.e("AddTransactionViewModel3", "Exception saving transaction ${it.message}")
+                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
+                }
+
 
             } catch (e: Exception) {
                 _state.value = currentState.copy(

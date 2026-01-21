@@ -8,7 +8,6 @@ import com.example.data.mapping.toEntity
 import com.example.domain.model.Category
 import com.example.domain.model.Transaction
 import com.example.domain.repo.TransactionRepository
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -22,9 +21,11 @@ class TransactionRepositoryImp(
 
     override suspend fun addTransaction(transaction: Transaction) {
         val transactionEntity = transaction.toEntity()
-        Log.d("TransactionRepositoryImp", "Adding transaction to DB: $transactionEntity")
-        transactionDB.transactionDao().insertTransaction(transactionEntity)
-        Log.d("TransactionRepositoryImp", "Transaction added successfully")
+
+            transactionDB.transactionDao().insertTransaction(transactionEntity)
+            Log.d("TransactionRepositoryImp", "Transaction added successfully")
+
+
     }
 
     override fun getAllTransactions(): Flow<List<Transaction>> =
