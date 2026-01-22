@@ -1,36 +1,37 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
- import androidx.compose.foundation.BorderStroke
- import androidx.compose.foundation.layout.Arrangement
- import androidx.compose.foundation.layout.Column
- import androidx.compose.foundation.layout.Row
- import androidx.compose.foundation.layout.fillMaxSize
- import androidx.compose.foundation.layout.fillMaxWidth
- import androidx.compose.foundation.layout.padding
- import androidx.compose.foundation.rememberScrollState
- import androidx.compose.foundation.verticalScroll
- import androidx.compose.material.icons.Icons
- import androidx.compose.material.icons.outlined.Add
- import androidx.compose.material3.Card
- import androidx.compose.material3.CardDefaults
- import androidx.compose.material3.Icon
- import androidx.compose.material3.MaterialTheme
- import androidx.compose.material3.Scaffold
- import androidx.compose.material3.Text
- import androidx.compose.runtime.Composable
- import androidx.compose.ui.Alignment
- import androidx.compose.ui.Modifier
- import androidx.compose.ui.tooling.preview.Preview
- import androidx.compose.ui.unit.dp
- import com.example.core.components.AmountInput
- import com.example.core.components.CategorySelector
- import com.example.core.components.CurrencySelector
- import com.example.core.components.TransactionFormInput
- import com.example.core.components.TransactionFormTextArea
- import com.example.core.components.TransactionTypeToggle
- import com.example.core.ui.theme.PersonalFinanceTrackerTheme
- import com.example.personalfinancetracker.features.transaction.add_transaction.components.ActionButtons
- import com.example.personalfinancetracker.features.transaction.add_transaction.components.HeaderSection
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.core.components.AmountInput
+import com.example.core.components.CategorySelector
+import com.example.core.components.CurrencySelector
+import com.example.core.components.TransactionFormInput
+import com.example.core.components.TransactionFormTextArea
+import com.example.core.components.TransactionTypeToggle
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.utils.parseDateString
+import com.example.personalfinancetracker.features.transaction.add_transaction.components.ActionButtons
+import com.example.personalfinancetracker.features.transaction.add_transaction.components.HeaderSection
 
 @Composable
 fun AddTransactionScreen(
@@ -55,7 +56,7 @@ fun AddTransactionScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Transaction Details Card
+
             Card(
                 modifier = Modifier.padding(top = 16.dp),
                 colors = CardDefaults.cardColors(
@@ -89,7 +90,7 @@ fun AddTransactionScreen(
                         }
                     }
 
-                    // Transaction Type Toggle
+
                     TransactionTypeToggle(
                         isIncome = state.isIncome,
                         onTypeChanged = {
@@ -101,7 +102,6 @@ fun AddTransactionScreen(
                         }
                     )
 
-                    // Title Input
                     TransactionFormInput(
                         label = "Title",
                         value = state.title,
@@ -109,7 +109,6 @@ fun AddTransactionScreen(
                         placeholder = "Enter transaction title"
                     )
 
-                    // Category Selector
                     CategorySelector(
                         selectedCategory = state.category,
                         isIncome = state.isIncome,
@@ -122,7 +121,6 @@ fun AddTransactionScreen(
                         }
                     )
 
-                    // Currency Selection
                     CurrencySelector(
                         selectedCurrency = state.currency,
                         onCurrencySelected = {
@@ -133,8 +131,6 @@ fun AddTransactionScreen(
                             )
                         }
                     )
-
-                    // Amount Input
                     AmountInput(
                         amount = state.amount,
                         currency = state.currency,
@@ -144,15 +140,13 @@ fun AddTransactionScreen(
                         onConvertCurrency = { onEvent(AddTransactionContract.Event.OnConvertCurrency) }
                     )
 
-                    // Date Input
                     TransactionFormInput(
                         label = "Date",
-                        value = state.date.toString(),
+                        value = parseDateString(state.date),
                         onValueChange = { onEvent(AddTransactionContract.Event.OnDateChanged(it)) },
                         placeholder = "Select date"
                     )
 
-                    // Notes Input
                     TransactionFormTextArea(
                         label = "Notes (Optional)",
                         value = state.notes,
@@ -162,7 +156,6 @@ fun AddTransactionScreen(
                 }
             }
 
-            // Action Buttons
             ActionButtons(
                 onCancel = { onEvent(AddTransactionContract.Event.OnCancel) },
                 onSave = { onEvent(AddTransactionContract.Event.OnSave) },

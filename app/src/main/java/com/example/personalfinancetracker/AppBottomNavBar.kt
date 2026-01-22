@@ -2,10 +2,6 @@ package com.example.personalfinancetracker
 
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -17,16 +13,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.core.R
 import com.example.personalfinancetracker.features.budget.navigation.BudgetRoutes
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
 import com.example.personalfinancetracker.features.transaction.navigation.TransactionRoutes
 
 data class BottomItem(
     val label: String,
-    val icon: ImageVector,
+    val icon: Int,
     val route: Any,
 )
 
@@ -34,17 +32,17 @@ data class BottomItem(
 val mainBottomItems = listOf(
     BottomItem(
         label = "Home",
-        icon = Icons.Outlined.Home,
+        icon = R.drawable.home,
         route = HomeRoutes.HomeRoute
     ),
     BottomItem(
         label = "Transactions",
-        icon = Icons.Outlined.ShoppingCart,
+        icon = R.drawable.dollar,
         route = TransactionRoutes.TransactionsRoute
     ),
     BottomItem(
         label = "Budgets",
-        icon = Icons.Outlined.Favorite,
+        icon = R.drawable.folder,
         route = BudgetRoutes.BudgetsRoute
     )
 )
@@ -101,7 +99,7 @@ fun AppBottomBar(navController: NavHostController, items: List<BottomItem>) {
                 },
                 icon = {
                     Icon(
-                        icon,
+                        imageVector = ImageVector.vectorResource(id = icon),
                         contentDescription = label
                     )
                 },

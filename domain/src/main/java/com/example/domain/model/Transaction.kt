@@ -6,7 +6,7 @@ data class Transaction(
     val userId: String,
     val amount: Double,
     val currency: String,
-    val categoryId: String,
+    val category: String,
     val date: Long,
     val notes: String?,
     val createdAt: Long,

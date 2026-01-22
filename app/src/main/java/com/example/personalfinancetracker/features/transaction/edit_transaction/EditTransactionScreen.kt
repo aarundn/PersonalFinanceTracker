@@ -39,10 +39,10 @@ import com.example.core.components.PaymentMethodSelector
 import com.example.core.components.TransactionFormInput
 import com.example.core.components.TransactionFormTextArea
 import com.example.core.components.TransactionTypeToggle
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.ActionButtons
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.HeaderSection
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,8 +150,8 @@ fun EditTransactionScreen(
                         // Category Selector
                         if (state.isEditing) {
                             CategorySelector(
-                                selectedCategory = state.category,
                                 isIncome = state.isIncome,
+                                selectedCategory = state.category,
                                 onCategorySelected = { onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) }
                             )
                         } else {

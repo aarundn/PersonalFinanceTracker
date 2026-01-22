@@ -1,7 +1,6 @@
 package com.example.data.local.model
 
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.domain.model.Type
 
@@ -26,7 +25,7 @@ data class TransactionEntity(
     val type: Type,
     val amount: Double,
     val currency: String,
-    val categoryId: String,
+    val category: String,
     val date: Long,
     val notes: String?,
     val createdAt: Long,

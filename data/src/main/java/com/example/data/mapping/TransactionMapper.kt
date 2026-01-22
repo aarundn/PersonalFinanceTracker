@@ -1,9 +1,7 @@
 package com.example.data.mapping
 
 import com.example.data.local.model.TransactionEntity
-import com.example.data.remote.model.TransactionsDto
 import com.example.domain.model.Transaction
-import com.example.domain.model.Type
 
 /*fun Transaction.toDto(): TransactionsDto {
 //    return TransactionsDto(
@@ -44,7 +42,7 @@ fun TransactionEntity.toDomain(): Transaction {
         userId = userId,
         amount = amount,
         currency = currency,
-        categoryId = categoryId,
+        category = category,
         date = date,
         notes = notes,
         createdAt = createdAt,
@@ -58,7 +56,7 @@ fun Transaction.toEntity(): TransactionEntity{
         userId = userId,
         amount = amount,
         currency = currency,
-        categoryId = categoryId,
+        category = category,
         date = date,
         notes = notes,
         createdAt = createdAt,

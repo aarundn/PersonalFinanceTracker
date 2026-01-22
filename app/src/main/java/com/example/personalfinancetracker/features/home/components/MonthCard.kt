@@ -7,19 +7,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.home.HomeContract
+import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.personalfinancetracker.features.home.HomeContract
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
@@ -39,7 +40,7 @@ fun MonthCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
             ) {
-                Icon(Icons.Outlined.DateRange, contentDescription = null)
+                Icon(ImageVector.vectorResource(R.drawable.calendar), contentDescription = null)
                 Text("This Month", style = MaterialTheme.typography.titleMedium)
             }
             Spacer(Modifier.height(16.dp))

@@ -10,7 +10,7 @@ import com.example.data.local.model.TransactionEntity
         TransactionEntity::class,
         CategoryEntity::class
     ],
-    version = 4,
+    version = 8,
     exportSchema = true
 )
 

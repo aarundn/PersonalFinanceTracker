@@ -50,12 +50,6 @@ val CategoryTransport = Color(0xFF3B82F6)
 val CategoryShopping = Color(0xFF8B5CF6)
 val CategoryBills = Color(0xFF10B981)
 
-// Chart Colors
-val Chart1 = Color(0xFFA36B3A)
-val Chart2 = Color(0xFF2D91C3)
-val Chart3 = Color(0xFF5164C7)
-val Chart4 = Color(0xFFD5B85C)
-val Chart5 = Color(0xFFD18B4B)
 
 
 

@@ -3,14 +3,13 @@ package com.example.personalfinancetracker.features.home.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
@@ -29,7 +28,7 @@ fun OverviewRow(
         MoneyCard(
             title = state.income.label,
             value = state.income.amount,
-            icon = Icons.Outlined.Check,
+            icon = ImageVector.vectorResource(R.drawable.trending_up),
             modifier = Modifier.weight(1f),
             backgroundColor = Income.copy(alpha = 0.1f),
             borderColor = Income.copy(alpha = 0.2f),
@@ -38,7 +37,7 @@ fun OverviewRow(
         MoneyCard(
             title = state.expenses.label,
             value = state.expenses.amount,
-            icon = Icons.Outlined.Clear,
+            icon = ImageVector.vectorResource(R.drawable.trending_down),
             modifier = Modifier.weight(1f),
             backgroundColor = Expense.copy(alpha = 0.1f),
             borderColor = Expense.copy(alpha = 0.2f),
@@ -47,7 +46,7 @@ fun OverviewRow(
         MoneyCard(
             title = state.balance.label,
             value = state.balance.amount,
-            icon = Icons.Outlined.ShoppingCart,
+            icon = ImageVector.vectorResource(R.drawable.bank),
             modifier = Modifier.weight(1f),
             backgroundColor = PrimaryLight.copy(alpha = 0.1f),
             borderColor = PrimaryLight.copy(alpha = 0.2f),

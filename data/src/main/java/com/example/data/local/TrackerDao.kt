@@ -14,8 +14,8 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): Flow<List<TransactionEntity>>
 
-    @Query("SELECT * FROM transactions WHERE categoryId = :categoryId ORDER BY date DESC")
-    fun getTransactionsByCategory(categoryId: String): Flow<List<TransactionEntity>>
+    @Query("SELECT * FROM transactions WHERE category = :category ORDER BY date DESC")
+    fun getTransactionsByCategory(category: String): Flow<List<TransactionEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity): Long

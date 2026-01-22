@@ -48,10 +48,6 @@ object AddTransactionContract {
         val notes: String
     )
 
-    object Categories {
-        val incomeCategories = listOf("Salary", "Freelance", "Investment", "Gift", "Other")
-        val expenseCategories = listOf("Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Other")
-    }
 
     object PopularCurrencies {
         val currencies = listOf(

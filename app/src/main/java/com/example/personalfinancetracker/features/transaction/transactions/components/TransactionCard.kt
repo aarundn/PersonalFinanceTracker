@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -24,12 +22,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.core.model.Categories
+import com.example.core.model.Categories.Companion.displayName
+import com.example.core.ui.theme.ProgressError
+import com.example.core.utils.parseDateString
 import com.example.domain.model.Transaction
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.domain.model.Type
 import kotlin.math.abs
 
 @Composable
@@ -38,6 +41,8 @@ fun TransactionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val category = Categories.valueOf(transaction.category.uppercase())
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -46,7 +51,10 @@ fun TransactionCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        ),
     ) {
         Row(
             modifier = Modifier
@@ -56,68 +64,59 @@ fun TransactionCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
+                modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Icon
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .clip(CircleShape).background(Color(0xFFF97316).copy(alpha = 0.1f)),
+                        .clip(CircleShape)
+                        .background(category.color.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.ShoppingCart,
+                        imageVector = ImageVector.vectorResource(category.icon),
                         contentDescription = null,
-                        tint = Color(0xFFF97316),
+                        tint = category.color,
                         modifier = Modifier.size(24.dp)
                     )
                 }
 
-                // Title and Category
                 Column {
                     Text(
-                        text = "Grocery Shopping",
+                        text = category.name.displayName(),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${"Food"} • ${transaction.date}",
+                        text = "${category.name.displayName()} • ${parseDateString(transaction.date)}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
             }
 
-            // Amount
             Text(
-                text = formatAmount(transaction.amount),
+                text = formatAmount(transaction.type, transaction.amount),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                color = if (transaction.amount > 0)
-                    Color(0xFFF97316)
+                color = if (transaction.type == Type.INCOME)
+                    category.color
                 else
-                    MaterialTheme.colorScheme.error
+                    ProgressError
             )
         }
     }
 }
 
-private fun formatDate(dateString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("MMM d", Locale.getDefault())
-    return try {
-        val date = inputFormat.parse(dateString)
-        outputFormat.format(date!!)
-    } catch (_: Exception) {
-        dateString
-    }
-}
 
 @SuppressLint("DefaultLocale")
-private fun formatAmount(amount: Double): String {
-    return if (amount > 0) "+$${String.format("%.2f", amount)}"
-    else "-$${String.format("%.2f", abs(amount))}"
+private fun formatAmount(type: Type, amount: Double): String {
+    return if (type == Type.EXPENSE) "-$${String.format("%.2f", amount)}"
+    else "+$${String.format("%.2f", abs(amount))}"
 }

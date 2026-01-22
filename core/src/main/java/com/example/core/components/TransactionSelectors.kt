@@ -28,23 +28,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.Categories
+import com.example.core.model.Categories.Companion.displayName
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.domain.model.Type
 
 @Composable
 fun CategorySelector(
     selectedCategory: String,
-    isIncome: Boolean,
     onCategorySelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isIncome: Boolean
 ) {
     var expanded by remember { mutableStateOf(false) }
-    
-    val categories = if (isIncome) {
-        listOf("Salary", "Freelance", "Investment", "Gift", "Other")
-    } else {
-        listOf("Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Other")
+
+
+
+    val currentType = if (isIncome) Type.INCOME else Type.EXPENSE
+
+    val categories = remember(currentType) {
+        Categories.forType(currentType)
     }
-    
+
+
     Column(modifier = modifier) {
         Text(
             text = "Category",
@@ -52,7 +58,7 @@ fun CategorySelector(
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
+
         Box {
             Row(
                 modifier = Modifier
@@ -74,35 +80,36 @@ fun CategorySelector(
                 Text(
                     text = selectedCategory.ifEmpty { "Select category" },
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (selectedCategory.isEmpty()) 
-                        MaterialTheme.colorScheme.onSurfaceVariant 
-                    else 
+                    color = if (selectedCategory.isEmpty())
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
                         MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
                 categories.forEach { category ->
+                    val categoryName = category.name.displayName()
                     DropdownMenuItem(
-                        text = { 
+                        text = {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = category,
+                                    text = categoryName,
                                     style = MaterialTheme.typography.bodyLarge
                                 )
-                                if (selectedCategory == category) {
+                                if (selectedCategory == categoryName) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
@@ -113,7 +120,7 @@ fun CategorySelector(
                             }
                         },
                         onClick = {
-                            onCategorySelected(category)
+                            onCategorySelected(categoryName)
                             expanded = false
                         }
                     )
@@ -130,7 +137,7 @@ fun CurrencySelector(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    
+
     val currencies = listOf(
         "USD" to "$",
         "EUR" to "€",
@@ -143,7 +150,7 @@ fun CurrencySelector(
         "INR" to "₹",
         "BRL" to "R$"
     )
-    
+
     Column(modifier = modifier) {
         Text(
             text = "Currency",
@@ -151,7 +158,7 @@ fun CurrencySelector(
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
+
         Box {
             Row(
                 modifier = Modifier
@@ -173,26 +180,26 @@ fun CurrencySelector(
                 Text(
                     text = selectedCurrency.ifEmpty { "Select currency" },
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (selectedCurrency.isEmpty()) 
-                        MaterialTheme.colorScheme.onSurfaceVariant 
-                    else 
+                    color = if (selectedCurrency.isEmpty())
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
                         MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
                 currencies.forEach { (code, symbol) ->
                     DropdownMenuItem(
-                        text = { 
+                        text = {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
@@ -229,11 +236,11 @@ fun PaymentMethodSelector(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    
+
     val paymentMethods = listOf(
         "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Digital Wallet", "Other"
     )
-    
+
     Column(modifier = modifier) {
         Text(
             text = "Payment Method (Optional)",
@@ -241,7 +248,7 @@ fun PaymentMethodSelector(
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
+
         Box {
             Row(
                 modifier = Modifier
@@ -263,26 +270,26 @@ fun PaymentMethodSelector(
                 Text(
                     text = selectedPaymentMethod.ifEmpty { "Select payment method" },
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (selectedPaymentMethod.isEmpty()) 
-                        MaterialTheme.colorScheme.onSurfaceVariant 
-                    else 
+                    color = if (selectedPaymentMethod.isEmpty())
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
                         MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
                 paymentMethods.forEach { method ->
                     DropdownMenuItem(
-                        text = { 
+                        text = {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
@@ -322,15 +329,15 @@ private fun TransactionSelectorsPreview() {
         ) {
             CategorySelector(
                 selectedCategory = "Food",
-                isIncome = false,
-                onCategorySelected = {}
+                onCategorySelected = {},
+                isIncome = false
             )
-            
+
             CurrencySelector(
                 selectedCurrency = "USD",
                 onCurrencySelected = {}
             )
-            
+
             PaymentMethodSelector(
                 selectedPaymentMethod = "Credit Card",
                 onPaymentMethodSelected = {}

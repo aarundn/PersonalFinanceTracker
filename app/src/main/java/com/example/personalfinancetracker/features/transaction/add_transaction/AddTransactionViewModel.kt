@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 
 class AddTransactionViewModel(
-    private val addTransactionUseCase: AddTransactionUseCase
+    private val addTransactionUseCase: AddTransactionUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
@@ -172,11 +173,11 @@ class AddTransactionViewModel(
             try {
 
                 val transactionData = Transaction(
-                    id = java.util.UUID.randomUUID().toString(),
+                    id = UUID.randomUUID().toString(),
                     userId = "A1", // TODO: Get actual user ID
                     amount = amount,
                     currency = currentState.currency,
-                    categoryId = currentState.category, // Using name as ID for now based on selector
+                    category = currentState.category,
                     date = currentState.date,
                     notes = currentState.notes,
                     createdAt = System.currentTimeMillis(),

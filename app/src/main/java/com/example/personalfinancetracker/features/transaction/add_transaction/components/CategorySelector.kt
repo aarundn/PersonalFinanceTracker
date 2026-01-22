@@ -28,8 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.transaction.add_transaction.AddTransactionContract
+import com.example.core.model.Categories
+import com.example.core.model.Categories.Companion.displayName
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.domain.model.Type
 
 @Composable
 fun CategorySelector(
@@ -39,11 +41,8 @@ fun CategorySelector(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val categories = if (isIncome) {
-        AddTransactionContract.Categories.incomeCategories
-    } else {
-        AddTransactionContract.Categories.expenseCategories
-    }
+    val categories = if (isIncome)
+        Categories.forType(Type.INCOME) else Categories.forType(Type.EXPENSE)
     
     Column(modifier = modifier) {
         Text(
@@ -96,12 +95,12 @@ fun CategorySelector(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = category,
+                                text = category.name.displayName(),
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         },
                         onClick = {
-                            onCategorySelected(category)
+                            onCategorySelected(category.name.displayName())
                             expanded = false
                         }
                     )
