@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.core.R
 import com.example.personalfinancetracker.features.budget.navigation.BudgetRoutes
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
@@ -47,14 +47,14 @@ val mainBottomItems = listOf(
     )
 )
 
+
 @Composable
 fun shouldShowBottomBar(
-    navController: NavHostController,
-    items: List<BottomItem>
+    destination: NavDestination?
 ): Boolean {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    val destination = navBackStackEntry.value?.destination ?: return true
-    return items.any { item ->
+
+    val destination = destination ?: return true
+    return mainBottomItems.any { item ->
         when (item.route) {
             is HomeRoutes.HomeRoute -> destination.hasRoute<HomeRoutes.HomeRoute>()
             is TransactionRoutes.TransactionsRoute -> destination.hasRoute<TransactionRoutes.TransactionsRoute>()
@@ -64,16 +64,15 @@ fun shouldShowBottomBar(
     }
 }
 
+
 @Composable
-fun AppBottomBar(navController: NavHostController, items: List<BottomItem>) {
-    if (!shouldShowBottomBar(navController, items)) return
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    val destination = navBackStackEntry.value?.destination
+fun AppBottomBar(navController: NavHostController, destination: NavDestination?) {
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
-        items.forEach { item ->
+        mainBottomItems.forEach { item ->
             val label = item.label
             val icon = item.icon
             val selected = destination?.let { destination ->

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.conversion_rate.navigation.currencyConverterScreen
 import com.example.core.navigation.Feature
@@ -35,13 +37,21 @@ class MainActivity : ComponentActivity() {
             PersonalFinanceTrackerTheme {
 
                 val navController = rememberNavController()
+                val navBackStackEntry = navController.currentBackStackEntryAsState()
+                val destination = navBackStackEntry.value?.destination
 
                 val homeFeature: HomeFeature = koinInject()
                 val budgetFeature: BudgetFeature = koinInject()
                 val transactionFeature: TransactionFeature = koinInject()
 
                 Scaffold(bottomBar = {
-                    AppBottomBar(navController = navController, items = mainBottomItems)
+                    AnimatedVisibility(
+                        visible = shouldShowBottomBar(destination),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        AppBottomBar(navController = navController, destination)
+                    }
                 }) { paddingValues ->
 
                     AppNavGraph(
@@ -58,6 +68,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun AppNavGraph(
