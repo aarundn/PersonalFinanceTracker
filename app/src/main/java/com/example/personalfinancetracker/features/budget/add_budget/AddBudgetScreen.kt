@@ -22,8 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.components.TransactionFormInput
-import com.example.core.components.TransactionFormTextArea
+import com.example.core.components.FormInput
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.budget.add_budget.components.ActionButtons
 import com.example.personalfinancetracker.features.budget.add_budget.components.BudgetPreviewCard
@@ -83,7 +82,7 @@ fun AddBudgetScreen(
                         onCategorySelected = { onEvent(AddBudgetContract.Event.OnCategorySelected(it)) }
                     )
 
-                    TransactionFormInput(
+                    FormInput(
                         label = "Budget Amount (USD)",
                         value = state.amountInput,
                         onValueChange = { onEvent(AddBudgetContract.Event.OnAmountChanged(it)) },
@@ -106,9 +105,11 @@ fun AddBudgetScreen(
                         }
                     }
 
-                    TransactionFormTextArea(
+                    FormInput(
                         label = "Notes (Optional)",
                         value = state.notes,
+                        maxLine = 5,
+                        minLine = 3,
                         onValueChange = { onEvent(AddBudgetContract.Event.OnNotesChanged(it)) },
                         placeholder = "Add any notes about this budget..."
                     )

@@ -30,11 +30,13 @@ import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
-fun TransactionFormInput(
+fun FormInput(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
+    maxLine: Int = 1,
+    minLine: Int = 1,
     keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier
 ) {
@@ -67,6 +69,8 @@ fun TransactionFormInput(
                 )
                 .padding(12.dp),
             singleLine = keyboardType != KeyboardType.Text,
+            maxLines = maxLine,
+            minLines = minLine,
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     Text(
@@ -80,58 +84,6 @@ fun TransactionFormInput(
         )
     }
 }
-
-@Composable
-fun TransactionFormTextArea(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String = "",
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.onSurface
-            ),
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(12.dp),
-            minLines = 3,
-            maxLines = 5,
-            decorationBox = { innerTextField ->
-                if (value.isEmpty()) {
-                    Text(
-                        text = placeholder,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-                innerTextField()
-            }
-        )
-    }
-}
-
 @Composable
 fun TransactionTypeToggle(
     isIncome: Boolean,
@@ -218,13 +170,13 @@ fun LoadingIndicator(
 
 @Preview(showBackground = true)
 @Composable
-private fun TransactionFormComponentsPreview() {
+private fun FormFormComponentsPreview() {
     PersonalFinanceTrackerTheme {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            TransactionFormInput(
+            FormInput(
                 label = "Title",
                 value = "Sample Transaction",
                 onValueChange = {},
@@ -236,10 +188,12 @@ private fun TransactionFormComponentsPreview() {
                 onTypeChanged = {}
             )
 
-            TransactionFormTextArea(
+            FormInput(
                 label = "Notes (Optional)",
                 value = "This is a sample note",
                 onValueChange = {},
+                maxLine = 5,
+                minLine = 3,
                 placeholder = "Add any additional notes..."
             )
         }

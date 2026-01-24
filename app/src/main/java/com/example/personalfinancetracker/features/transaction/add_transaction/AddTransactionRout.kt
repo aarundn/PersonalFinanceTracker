@@ -2,19 +2,18 @@ package com.example.personalfinancetracker.features.transaction.add_transaction
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.transaction.transactions.navigation.navigateToTransactionsScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddTransactionRoute(
-    modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: AddTransactionViewModel = koinViewModel()
 ) {
-    val state = viewModel.state.collectAsState().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     // Handle side effects
     LaunchedEffect(Unit) {
@@ -39,6 +38,5 @@ fun AddTransactionRoute(
     AddTransactionScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        modifier = modifier
     )
 }

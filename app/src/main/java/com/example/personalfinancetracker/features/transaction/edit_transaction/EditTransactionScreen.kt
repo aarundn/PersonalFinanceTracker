@@ -36,8 +36,7 @@ import com.example.core.components.CategorySelector
 import com.example.core.components.CurrencySelector
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.PaymentMethodSelector
-import com.example.core.components.TransactionFormInput
-import com.example.core.components.TransactionFormTextArea
+import com.example.core.components.FormInput
 import com.example.core.components.TransactionTypeToggle
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.ActionButtons
@@ -49,7 +48,6 @@ import com.example.personalfinancetracker.features.transaction.edit_transaction.
 fun EditTransactionScreen(
     state: EditTransactionContract.State,
     onEvent: (EditTransactionContract.Event) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     // Load transaction when screen is first displayed
     LaunchedEffect(Unit) {
@@ -139,7 +137,7 @@ fun EditTransactionScreen(
                         }
 
                         // Title Input
-                        TransactionFormInput(
+                        FormInput(
                             label = "Title",
                             value = state.title,
                             onValueChange = { onEvent(EditTransactionContract.Event.OnTitleChanged(it)) },
@@ -155,7 +153,7 @@ fun EditTransactionScreen(
                                 onCategorySelected = { onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) }
                             )
                         } else {
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Category",
                                 value = state.category,
                                 onValueChange = {},
@@ -183,7 +181,7 @@ fun EditTransactionScreen(
                                 onConvertCurrency = { onEvent(EditTransactionContract.Event.OnConvertCurrency) }
                             )
                         } else {
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Amount",
                                 value = "${if (state.isIncome) "+" else "-"}$${state.amount}",
                                 onValueChange = {},
@@ -193,7 +191,7 @@ fun EditTransactionScreen(
                         }
 
                         // Date Input
-                        TransactionFormInput(
+                        FormInput(
                             label = "Date",
                             value = state.date,
                             onValueChange = { onEvent(EditTransactionContract.Event.OnDateChanged(it)) },
@@ -203,14 +201,14 @@ fun EditTransactionScreen(
 
                         // Location Input (only show when editing)
                         if (state.isEditing) {
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Location (Optional)",
                                 value = state.location,
                                 onValueChange = { onEvent(EditTransactionContract.Event.OnLocationChanged(it)) },
                                 placeholder = "Where was this transaction made?"
                             )
                         } else if (state.location.isNotEmpty()) {
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Location",
                                 value = state.location,
                                 onValueChange = {},
@@ -226,7 +224,7 @@ fun EditTransactionScreen(
                                 onPaymentMethodSelected = { onEvent(EditTransactionContract.Event.OnPaymentMethodChanged(it)) }
                             )
                         } else if (state.paymentMethod.isNotEmpty()) {
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Payment Method",
                                 value = state.paymentMethod,
                                 onValueChange = {},
@@ -236,8 +234,10 @@ fun EditTransactionScreen(
                         }
 
                         // Notes Input
-                        TransactionFormTextArea(
+                        FormInput(
                             label = "Notes (Optional)",
+                            maxLine = 5,
+                            minLine = 3,
                             value = state.notes,
                             onValueChange = { onEvent(EditTransactionContract.Event.OnNotesChanged(it)) },
                             placeholder = "Add any additional notes...",
@@ -251,7 +251,7 @@ fun EditTransactionScreen(
                     ActionButtons(
                         onCancel = { onEvent(EditTransactionContract.Event.OnCancel) },
                         onSave = { onEvent(EditTransactionContract.Event.OnSave) },
-                        isLoading = state.isLoading,
+                        isLoading = false,
                         isSaveEnabled = state.title.isNotEmpty() && 
                                 state.category.isNotEmpty() && 
                                 state.amount.isNotEmpty()

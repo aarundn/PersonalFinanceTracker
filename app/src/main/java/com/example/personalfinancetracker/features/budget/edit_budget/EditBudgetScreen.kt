@@ -16,7 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,9 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.FormInput
 import com.example.core.components.LoadingIndicator
-import com.example.core.components.TransactionFormInput
-import com.example.core.components.TransactionFormTextArea
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.personalfinancetracker.features.budget.edit_budget.components.ActionButtons
@@ -105,7 +104,7 @@ fun EditBudgetScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
 
-                            TransactionFormInput(
+                            FormInput(
                                 label = "Budget Amount",
                                 value = state.budgetedAmountInput,
                                 onValueChange = { onEvent(EditBudgetContract.Event.OnBudgetAmountChanged(it)) },
@@ -118,8 +117,10 @@ fun EditBudgetScreen(
                                 onPeriodSelected = { onEvent(EditBudgetContract.Event.OnPeriodChanged(it)) }
                             )
 
-                            TransactionFormTextArea(
+                            FormInput(
                                 label = "Notes",
+                                minLine = 3,
+                                maxLine = 5,
                                 value = state.notesInput,
                                 onValueChange = { onEvent(EditBudgetContract.Event.OnNotesChanged(it)) },
                                 placeholder = "Add notes about this budget..."
@@ -147,14 +148,14 @@ fun EditBudgetScreen(
                                     value = "$${state.budgetedAmount.formatCurrency()}"
                                 )
 
-                                Divider()
+                                HorizontalDivider()
 
                                 InfoRow(
                                     label = "Period",
                                     value = EditBudgetContract.PeriodOptions.findById(state.periodInput).label
                                 )
 
-                                Divider()
+                                HorizontalDivider()
 
                                 InfoRow(
                                     label = "Daily Average",
@@ -162,7 +163,7 @@ fun EditBudgetScreen(
                                 )
 
                                 if (state.notesOriginal.isNotEmpty()) {
-                                    Divider()
+                                    HorizontalDivider()
                                     InfoRow(
                                         label = "Notes",
                                         value = state.notesOriginal,

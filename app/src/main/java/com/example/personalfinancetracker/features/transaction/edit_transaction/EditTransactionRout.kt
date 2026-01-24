@@ -2,8 +2,8 @@ package com.example.personalfinancetracker.features.transaction.edit_transaction
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
@@ -13,7 +13,7 @@ fun EditTransactionRoute(
     onNavigateToTransactions: () -> Unit,
     viewModel: EditTransactionViewModel = viewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     // Handle side effects
     LaunchedEffect(viewModel) {

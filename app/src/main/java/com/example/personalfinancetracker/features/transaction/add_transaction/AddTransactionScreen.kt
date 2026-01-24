@@ -25,8 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.components.AmountInput
 import com.example.core.components.CategorySelector
 import com.example.core.components.CurrencySelector
-import com.example.core.components.TransactionFormInput
-import com.example.core.components.TransactionFormTextArea
+import com.example.core.components.FormInput
 import com.example.core.components.TransactionTypeToggle
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.utils.parseDateString
@@ -37,7 +36,6 @@ import com.example.personalfinancetracker.features.transaction.add_transaction.c
 fun AddTransactionScreen(
     state: AddTransactionContract.State,
     onEvent: (AddTransactionContract.Event) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -102,7 +100,7 @@ fun AddTransactionScreen(
                         }
                     )
 
-                    TransactionFormInput(
+                    FormInput(
                         label = "Title",
                         value = state.title,
                         onValueChange = { onEvent(AddTransactionContract.Event.OnTitleChanged(it)) },
@@ -140,16 +138,18 @@ fun AddTransactionScreen(
                         onConvertCurrency = { onEvent(AddTransactionContract.Event.OnConvertCurrency) }
                     )
 
-                    TransactionFormInput(
+                    FormInput(
                         label = "Date",
                         value = parseDateString(state.date),
                         onValueChange = { onEvent(AddTransactionContract.Event.OnDateChanged(it)) },
                         placeholder = "Select date"
                     )
 
-                    TransactionFormTextArea(
+                    FormInput(
                         label = "Notes (Optional)",
                         value = state.notes,
+                        maxLine = 5,
+                        minLine = 3,
                         onValueChange = { onEvent(AddTransactionContract.Event.OnNotesChanged(it)) },
                         placeholder = "Add any additional notes..."
                     )
