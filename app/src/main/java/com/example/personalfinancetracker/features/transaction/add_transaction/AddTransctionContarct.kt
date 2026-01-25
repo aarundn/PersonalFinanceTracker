@@ -7,7 +7,7 @@ object AddTransactionContract {
         val title: String = "",
         val category: String = "",
         val amount: String = "",
-        val currency: String = "USD",
+        val currency: String = "",
         val date: Long = 0L,
         val notes: String = "",
         val convertedAmount: Double? = null,
@@ -35,38 +35,4 @@ object AddTransactionContract {
         data class ShowError(val message: String) : SideEffect()
         data class ShowSuccess(val message: String) : SideEffect()
     }
-
-    data class TransactionData(
-        val isIncome: Boolean,
-        val title: String,
-        val category: String,
-        val amount: Double,
-        val originalAmount: Double,
-        val currency: String,
-        val baseCurrency: String,
-        val date: String,
-        val notes: String
-    )
-
-
-    object PopularCurrencies {
-        val currencies = listOf(
-            CurrencyInfo("USD", "$", "US Dollar"),
-            CurrencyInfo("EUR", "€", "Euro"),
-            CurrencyInfo("GBP", "£", "British Pound"),
-            CurrencyInfo("JPY", "¥", "Japanese Yen"),
-            CurrencyInfo("CAD", "C$", "Canadian Dollar"),
-            CurrencyInfo("AUD", "A$", "Australian Dollar"),
-            CurrencyInfo("CHF", "CHF", "Swiss Franc"),
-            CurrencyInfo("CNY", "¥", "Chinese Yuan"),
-            CurrencyInfo("INR", "₹", "Indian Rupee"),
-            CurrencyInfo("BRL", "R$", "Brazilian Real")
-        )
-    }
-
-    data class CurrencyInfo(
-        val code: String,
-        val symbol: String,
-        val name: String
-    )
 }

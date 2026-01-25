@@ -137,14 +137,6 @@ class AddTransactionViewModel(
 
         Log.d("AddTransactionViewModel1", "Saving transaction with data: $currentState")
 
-        // Validate required fields
-        if (currentState.title.isEmpty()) {
-            viewModelScope.launch {
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Title is required"))
-            }
-            return
-        }
-
         if (currentState.category.isEmpty()) {
             viewModelScope.launch {
                 _effect.emit(AddTransactionContract.SideEffect.ShowError("Category is required"))

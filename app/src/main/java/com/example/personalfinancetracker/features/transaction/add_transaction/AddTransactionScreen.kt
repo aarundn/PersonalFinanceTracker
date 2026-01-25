@@ -1,35 +1,14 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.core.components.AmountInput
-import com.example.core.components.CategorySelector
-import com.example.core.components.CurrencySelector
-import com.example.core.components.FormInput
-import com.example.core.components.TransactionTypeToggle
+import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.utils.parseDateString
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.ActionButtons
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.HeaderSection
 
 @Composable
@@ -46,125 +25,25 @@ fun AddTransactionScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-
-            Card(
-                modifier = Modifier.padding(top = 16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                Icons.Outlined.Add,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = "Transaction Details",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-
-
-                    TransactionTypeToggle(
-                        isIncome = state.isIncome,
-                        onTypeChanged = {
-                            onEvent(
-                                AddTransactionContract.Event.OnTransactionTypeChanged(
-                                    it
-                                )
-                            )
-                        }
-                    )
-
-                    FormInput(
-                        label = "Title",
-                        value = state.title,
-                        onValueChange = { onEvent(AddTransactionContract.Event.OnTitleChanged(it)) },
-                        placeholder = "Enter transaction title"
-                    )
-
-                    CategorySelector(
-                        selectedCategory = state.category,
-                        isIncome = state.isIncome,
-                        onCategorySelected = {
-                            onEvent(
-                                AddTransactionContract.Event.OnCategoryChanged(
-                                    it
-                                )
-                            )
-                        }
-                    )
-
-                    CurrencySelector(
-                        selectedCurrency = state.currency,
-                        onCurrencySelected = {
-                            onEvent(
-                                AddTransactionContract.Event.OnCurrencyChanged(
-                                    it
-                                )
-                            )
-                        }
-                    )
-                    AmountInput(
-                        amount = state.amount,
-                        currency = state.currency,
-                        convertedAmount = state.convertedAmount,
-                        isConverting = state.isConverting,
-                        onAmountChanged = { onEvent(AddTransactionContract.Event.OnAmountChanged(it)) },
-                        onConvertCurrency = { onEvent(AddTransactionContract.Event.OnConvertCurrency) }
-                    )
-
-                    FormInput(
-                        label = "Date",
-                        value = parseDateString(state.date),
-                        onValueChange = { onEvent(AddTransactionContract.Event.OnDateChanged(it)) },
-                        placeholder = "Select date"
-                    )
-
-                    FormInput(
-                        label = "Notes (Optional)",
-                        value = state.notes,
-                        maxLine = 5,
-                        minLine = 3,
-                        onValueChange = { onEvent(AddTransactionContract.Event.OnNotesChanged(it)) },
-                        placeholder = "Add any additional notes..."
-                    )
-                }
-            }
-
-            ActionButtons(
-                onCancel = { onEvent(AddTransactionContract.Event.OnCancel) },
-                onSave = { onEvent(AddTransactionContract.Event.OnSave) },
-                isLoading = state.isLoading,
-                isSaveEnabled = state.title.isNotEmpty() &&
-                        state.category.isNotEmpty() &&
-                        state.amount.isNotEmpty()
-            )
-        }
+        TransactionInputForm(
+            modifier = Modifier.padding(innerPadding),
+            isIncome = state.isIncome,
+            onTypeChanged = { onEvent(AddTransactionContract.Event.OnTransactionTypeChanged(it)) },
+            selectedCategoryName = state.category,
+            onCategorySelected = { onEvent(AddTransactionContract.Event.OnCategoryChanged(it)) },
+            onDateChanged = { onEvent(AddTransactionContract.Event.OnDateChanged(it))},
+            onAmountChanged = { onEvent(AddTransactionContract.Event.OnAmountChanged(it)) },
+            onNotesChanged = { onEvent(AddTransactionContract.Event.OnNotesChanged(it)) },
+            onCurrencySelected = { onEvent(AddTransactionContract.Event.OnCurrencyChanged(it)) },
+            onSave = { onEvent(AddTransactionContract.Event.OnSave) },
+            onCancel = { onEvent(AddTransactionContract.Event.OnCancel) },
+            currency = state.currency,
+            isLoading = state.isLoading,
+            amount = state.amount,
+            date = state.date,
+            notes = state.notes,
+            isSaveEnabled = state.category.isNotEmpty() && state.amount.isNotEmpty()
+        )
     }
 }
 

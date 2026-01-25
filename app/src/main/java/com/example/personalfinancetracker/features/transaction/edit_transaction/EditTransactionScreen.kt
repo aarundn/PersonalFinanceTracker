@@ -31,12 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.components.AmountInput
 import com.example.core.components.CategorySelector
-import com.example.core.components.CurrencySelector
-import com.example.core.components.LoadingIndicator
-import com.example.core.components.PaymentMethodSelector
 import com.example.core.components.FormInput
+import com.example.core.components.LoadingIndicator
+import com.example.core.components.SUPPORTED_CURRENCIES
+import com.example.core.components.TransactionDropdown
 import com.example.core.components.TransactionTypeToggle
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.ActionButtons
@@ -164,21 +163,23 @@ fun EditTransactionScreen(
 
                         // Currency Selection (only show when editing)
                         if (state.isEditing) {
-                            CurrencySelector(
-                                selectedCurrency = state.currency,
-                                onCurrencySelected = { onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) }
+                            TransactionDropdown(
+                                label = "Currency",
+                                items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
+                                selectedItem = state.currency.ifEmpty {
+                                    "${SUPPORTED_CURRENCIES.first().first} (${SUPPORTED_CURRENCIES.first().second})"
+                                },
+                                onItemSelected = { onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) },
                             )
                         }
 
                         // Amount Input
                         if (state.isEditing) {
-                            AmountInput(
-                                amount = state.amount,
-                                currency = state.currency,
-                                convertedAmount = state.convertedAmount,
-                                isConverting = state.isConverting,
-                                onAmountChanged = { onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
-                                onConvertCurrency = { onEvent(EditTransactionContract.Event.OnConvertCurrency) }
+                            FormInput(
+                                label = "Amount (${state.currency})",
+                                value = state.amount,
+                                placeholder = "Enter amount",
+                                onValueChange = { onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
                             )
                         } else {
                             FormInput(
@@ -218,12 +219,7 @@ fun EditTransactionScreen(
                         }
 
                         // Payment Method Selector (only show when editing)
-                        if (state.isEditing) {
-                            PaymentMethodSelector(
-                                selectedPaymentMethod = state.paymentMethod,
-                                onPaymentMethodSelected = { onEvent(EditTransactionContract.Event.OnPaymentMethodChanged(it)) }
-                            )
-                        } else if (state.paymentMethod.isNotEmpty()) {
+                        if (state.paymentMethod.isNotEmpty()) {
                             FormInput(
                                 label = "Payment Method",
                                 value = state.paymentMethod,

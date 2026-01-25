@@ -1,4 +1,4 @@
-package com.example.personalfinancetracker.features.transaction.add_transaction.components
+package com.example.core.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -23,11 +23,11 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun ActionButtons(
+    modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     onSave: () -> Unit,
     isLoading: Boolean = false,
     isSaveEnabled: Boolean = true,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
