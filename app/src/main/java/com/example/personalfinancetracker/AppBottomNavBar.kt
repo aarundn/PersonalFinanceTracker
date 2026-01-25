@@ -1,6 +1,5 @@
 package com.example.personalfinancetracker
 
-import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -10,7 +9,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -53,12 +51,12 @@ fun shouldShowBottomBar(
     destination: NavDestination?
 ): Boolean {
 
-    val destination = destination ?: return true
+    val currentDestination = destination ?: return true
     return mainBottomItems.any { item ->
         when (item.route) {
-            is HomeRoutes.HomeRoute -> destination.hasRoute<HomeRoutes.HomeRoute>()
-            is TransactionRoutes.TransactionsRoute -> destination.hasRoute<TransactionRoutes.TransactionsRoute>()
-            is BudgetRoutes.BudgetsRoute -> destination.hasRoute<BudgetRoutes.BudgetsRoute>()
+            is HomeRoutes.HomeRoute -> currentDestination.hasRoute<HomeRoutes.HomeRoute>()
+            is TransactionRoutes.TransactionsRoute -> currentDestination.hasRoute<TransactionRoutes.TransactionsRoute>()
+            is BudgetRoutes.BudgetsRoute -> currentDestination.hasRoute<BudgetRoutes.BudgetsRoute>()
             else -> false
         }
     }
@@ -116,11 +114,7 @@ fun AppBottomBar(navController: NavHostController, destination: NavDestination?)
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     indicatorColor = Color.Transparent
                 ),
-                interactionSource = remember { MutableInteractionSource() }, // required
-                modifier = Modifier.indication(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                )
+                interactionSource = remember { MutableInteractionSource() },
             )
         }
     }
