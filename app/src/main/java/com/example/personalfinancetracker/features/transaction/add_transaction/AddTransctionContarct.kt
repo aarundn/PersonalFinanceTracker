@@ -1,8 +1,6 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
-object AddTransactionContract {
-
-    data class State(
+    data class TransactionState(
         val isIncome: Boolean = false,
         val title: String = "",
         val category: String = "",
@@ -16,23 +14,22 @@ object AddTransactionContract {
         val error: String? = null
     )
 
-    sealed class Event {
-        data class OnTransactionTypeChanged(val isIncome: Boolean) : Event()
-        data class OnTitleChanged(val title: String) : Event()
-        data class OnCategoryChanged(val category: String) : Event()
-        data class OnAmountChanged(val amount: String) : Event()
-        data class OnCurrencyChanged(val currency: String) : Event()
-        data class OnDateChanged(val date: String) : Event()
-        data class OnNotesChanged(val notes: String) : Event()
-        object OnConvertCurrency : Event()
-        object OnSave : Event()
-        object OnCancel : Event()
+    sealed class TransactionEvent {
+        data class OnTransactionTypeChanged(val isIncome: Boolean) : TransactionEvent()
+        data class OnTitleChanged(val title: String) : TransactionEvent()
+        data class OnCategoryChanged(val category: String) : TransactionEvent()
+        data class OnAmountChanged(val amount: String) : TransactionEvent()
+        data class OnCurrencyChanged(val currency: String) : TransactionEvent()
+        data class OnDateChanged(val date: String) : TransactionEvent()
+        data class OnNotesChanged(val notes: String) : TransactionEvent()
+        object OnConvertCurrency : TransactionEvent()
+        object OnSave : TransactionEvent()
+        object OnCancel : TransactionEvent()
     }
 
-    sealed class SideEffect {
-        object NavigateBack : SideEffect()
-        object NavigateToTransactions : SideEffect()
-        data class ShowError(val message: String) : SideEffect()
-        data class ShowSuccess(val message: String) : SideEffect()
+    sealed class TransactionSideEffect {
+        object NavigateBack : TransactionSideEffect()
+        object NavigateToTransactions : TransactionSideEffect()
+        data class ShowError(val message: String) : TransactionSideEffect()
+        data class ShowSuccess(val message: String) : TransactionSideEffect()
     }
-}

@@ -22,33 +22,33 @@ class AddTransactionViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
-        AddTransactionContract.State(
+        TransactionState(
             date = System.currentTimeMillis()
         )
     )
-    val state: StateFlow<AddTransactionContract.State> = _state.asStateFlow()
+    val state: StateFlow<TransactionState> = _state.asStateFlow()
 
-    private val _effect = MutableSharedFlow<AddTransactionContract.SideEffect>()
-    val effect: SharedFlow<AddTransactionContract.SideEffect> = _effect.asSharedFlow()
+    private val _effect = MutableSharedFlow<TransactionSideEffect>()
+    val effect: SharedFlow<TransactionSideEffect> = _effect.asSharedFlow()
 
-    fun onEvent(event: AddTransactionContract.Event) {
+    fun onEvent(event: TransactionEvent) {
         when (event) {
-            is AddTransactionContract.Event.OnTransactionTypeChanged -> {
+            is TransactionEvent.OnTransactionTypeChanged -> {
                 _state.value = _state.value.copy(
                     isIncome = event.isIncome,
                     category = "" // Reset category when type changes
                 )
             }
 
-            is AddTransactionContract.Event.OnTitleChanged -> {
+            is TransactionEvent.OnTitleChanged -> {
                 _state.value = _state.value.copy(title = event.title)
             }
 
-            is AddTransactionContract.Event.OnCategoryChanged -> {
+            is TransactionEvent.OnCategoryChanged -> {
                 _state.value = _state.value.copy(category = event.category)
             }
 
-            is AddTransactionContract.Event.OnAmountChanged -> {
+            is TransactionEvent.OnAmountChanged -> {
                 _state.value = _state.value.copy(amount = event.amount)
                 // Trigger currency conversion if needed
                 if (event.amount.isNotEmpty() && _state.value.currency != "USD") {
@@ -56,7 +56,7 @@ class AddTransactionViewModel(
                 }
             }
 
-            is AddTransactionContract.Event.OnCurrencyChanged -> {
+            is TransactionEvent.OnCurrencyChanged -> {
                 _state.value = _state.value.copy(currency = event.currency)
                 // Trigger currency conversion if amount exists
                 if (_state.value.amount.isNotEmpty() && event.currency != "USD") {
@@ -64,25 +64,25 @@ class AddTransactionViewModel(
                 }
             }
 
-            is AddTransactionContract.Event.OnDateChanged -> {
+            is TransactionEvent.OnDateChanged -> {
                 _state.value = _state.value.copy(date = event.date.toLong())
             }
 
-            is AddTransactionContract.Event.OnNotesChanged -> {
+            is TransactionEvent.OnNotesChanged -> {
                 _state.value = _state.value.copy(notes = event.notes)
             }
 
-            AddTransactionContract.Event.OnConvertCurrency -> {
+            TransactionEvent.OnConvertCurrency -> {
                 convertCurrency()
             }
 
-            AddTransactionContract.Event.OnSave -> {
+            TransactionEvent.OnSave -> {
                 saveTransaction()
             }
 
-            AddTransactionContract.Event.OnCancel -> {
+            TransactionEvent.OnCancel -> {
                 viewModelScope.launch {
-                    _effect.emit(AddTransactionContract.SideEffect.NavigateBack)
+                    _effect.emit(TransactionSideEffect.NavigateBack)
                 }
             }
         }
@@ -127,7 +127,7 @@ class AddTransactionViewModel(
                     isConverting = false,
                     error = "Currency conversion failed"
                 )
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Currency conversion failed"))
+                _effect.emit(TransactionSideEffect.ShowError("Currency conversion failed"))
             }
         }
     }
@@ -139,14 +139,14 @@ class AddTransactionViewModel(
 
         if (currentState.category.isEmpty()) {
             viewModelScope.launch {
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Category is required"))
+                _effect.emit(TransactionSideEffect.ShowError("Category is required"))
             }
             return
         }
 
         if (currentState.amount.isEmpty()) {
             viewModelScope.launch {
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Amount is required"))
+                _effect.emit(TransactionSideEffect.ShowError("Amount is required"))
             }
             return
         }
@@ -154,7 +154,7 @@ class AddTransactionViewModel(
         val amount = currentState.amount.toDoubleOrNull()
         if (amount == null || amount <= 0) {
             viewModelScope.launch {
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Please enter a valid amount"))
+                _effect.emit(TransactionSideEffect.ShowError("Please enter a valid amount"))
             }
             return
         }
@@ -185,14 +185,14 @@ class AddTransactionViewModel(
                         "Transaction saved successfully: $transactionData"
                     )
                     _state.value = currentState.copy(isLoading = false)
-                    _effect.emit(AddTransactionContract.SideEffect.NavigateBack)
+                    _effect.emit(TransactionSideEffect.NavigateBack)
                 }.onFailure {
                     _state.value = currentState.copy(
                         isLoading = false,
                         error = "Failed to save transaction"
                     )
                     Log.e("AddTransactionViewModel3", "Exception saving transaction ${it.message}")
-                    _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
+                    _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction"))
                 }
 
 
@@ -202,7 +202,7 @@ class AddTransactionViewModel(
                     error = "Failed to save transaction"
                 )
                 Log.e("AddTransactionViewModel3", "Exception saving transaction", e)
-                _effect.emit(AddTransactionContract.SideEffect.ShowError("Failed to save transaction"))
+                _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction"))
             }
         }
     }

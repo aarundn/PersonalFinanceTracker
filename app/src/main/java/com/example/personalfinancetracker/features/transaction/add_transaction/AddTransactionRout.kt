@@ -19,16 +19,16 @@ fun AddTransactionRoute(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is AddTransactionContract.SideEffect.NavigateBack -> {
+                is TransactionSideEffect.NavigateBack -> {
                     navController.popBackStack()
                 }
 
-                is AddTransactionContract.SideEffect.NavigateToTransactions -> navController.navigateToTransactionsScreen()
-                is AddTransactionContract.SideEffect.ShowError -> {
+                is TransactionSideEffect.NavigateToTransactions -> navController.navigateToTransactionsScreen()
+                is TransactionSideEffect.ShowError -> {
                     // Show error message using your preferred method (Snackbar, Toast, etc.)
                 }
 
-                is AddTransactionContract.SideEffect.ShowSuccess -> {
+                is TransactionSideEffect.ShowSuccess -> {
                     // Show success message using your preferred method (Snackbar, Toast, etc.)
                 }
             }
