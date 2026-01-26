@@ -18,7 +18,8 @@ fun CategorySelector(
     selectedCategory: String,
     onCategorySelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isIncome: Boolean
+    isIncome: Boolean,
+    enabled: Boolean = true
 ) {
 
     val currentType = if (isIncome) Type.INCOME else Type.EXPENSE
@@ -33,7 +34,8 @@ fun CategorySelector(
         items = categories.map { it.name.displayName() },
         selectedItem = selectedCategory,
         onItemSelected = onCategorySelected,
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     )
 }
 

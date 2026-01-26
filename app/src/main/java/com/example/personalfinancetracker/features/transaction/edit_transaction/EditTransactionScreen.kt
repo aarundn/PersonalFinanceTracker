@@ -1,9 +1,7 @@
 package com.example.personalfinancetracker.features.transaction.edit_transaction
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,8 +14,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,19 +22,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.components.CategorySelector
-import com.example.core.components.FormInput
 import com.example.core.components.LoadingIndicator
-import com.example.core.components.SUPPORTED_CURRENCIES
-import com.example.core.components.TransactionDropdown
-import com.example.core.components.TransactionTypeToggle
+import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.features.transaction.edit_transaction.components.ActionButtons
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.HeaderSection
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
 
@@ -81,178 +71,36 @@ fun EditTransactionScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Loading indicator
             if (state.isLoading) {
                 LoadingIndicator(modifier = Modifier.padding(vertical = 32.dp))
             } else {
-                // Transaction Overview Card
                 TransactionOverviewCard(
                     state = state,
                     modifier = Modifier.padding(top = 16.dp)
                 )
-                
-                // Transaction Details Card
-                Card(
+
+                // Transaction Details / Edit Form
+                TransactionInputForm(
                     modifier = Modifier.padding(top = 16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        // Card Header (only show when editing)
-                        if (state.isEditing) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Icon(
-                                        Icons.Outlined.Edit,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        text = "Transaction Details",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-                            }
-                        }
-                        // Transaction Type Toggle (only show when editing)
-                        if (state.isEditing) {
-                            TransactionTypeToggle(
-                                isIncome = state.isIncome,
-                                onTypeChanged = { onEvent(EditTransactionContract.Event.OnTransactionTypeChanged(it)) }
-                            )
-                        }
-
-                        // Title Input
-                        FormInput(
-                            label = "Title",
-                            value = state.title,
-                            onValueChange = { onEvent(EditTransactionContract.Event.OnTitleChanged(it)) },
-                            placeholder = "Enter transaction title",
-                            modifier = if (!state.isEditing) Modifier else Modifier
-                        )
-
-                        // Category Selector
-                        if (state.isEditing) {
-                            CategorySelector(
-                                isIncome = state.isIncome,
-                                selectedCategory = state.category,
-                                onCategorySelected = { onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) }
-                            )
-                        } else {
-                            FormInput(
-                                label = "Category",
-                                value = state.category,
-                                onValueChange = {},
-                                placeholder = "Category",
-                                modifier = Modifier
-                            )
-                        }
-
-                        // Currency Selection (only show when editing)
-                        if (state.isEditing) {
-                            TransactionDropdown(
-                                label = "Currency",
-                                items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
-                                selectedItem = state.currency.ifEmpty {
-                                    "${SUPPORTED_CURRENCIES.first().first} (${SUPPORTED_CURRENCIES.first().second})"
-                                },
-                                onItemSelected = { onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) },
-                            )
-                        }
-
-                        // Amount Input
-                        if (state.isEditing) {
-                            FormInput(
-                                label = "Amount (${state.currency})",
-                                value = state.amount,
-                                placeholder = "Enter amount",
-                                onValueChange = { onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
-                            )
-                        } else {
-                            FormInput(
-                                label = "Amount",
-                                value = "${if (state.isIncome) "+" else "-"}$${state.amount}",
-                                onValueChange = {},
-                                placeholder = "Amount",
-                                modifier = Modifier
-                            )
-                        }
-
-                        // Date Input
-                        FormInput(
-                            label = "Date",
-                            value = state.date,
-                            onValueChange = { onEvent(EditTransactionContract.Event.OnDateChanged(it)) },
-                            placeholder = "Select date",
-                            modifier = if (!state.isEditing) Modifier else Modifier
-                        )
-
-                        // Location Input (only show when editing)
-                        if (state.isEditing) {
-                            FormInput(
-                                label = "Location (Optional)",
-                                value = state.location,
-                                onValueChange = { onEvent(EditTransactionContract.Event.OnLocationChanged(it)) },
-                                placeholder = "Where was this transaction made?"
-                            )
-                        } else if (state.location.isNotEmpty()) {
-                            FormInput(
-                                label = "Location",
-                                value = state.location,
-                                onValueChange = {},
-                                placeholder = "Location",
-                                modifier = Modifier
-                            )
-                        }
-
-                        // Payment Method Selector (only show when editing)
-                        if (state.paymentMethod.isNotEmpty()) {
-                            FormInput(
-                                label = "Payment Method",
-                                value = state.paymentMethod,
-                                onValueChange = {},
-                                placeholder = "Payment Method",
-                                modifier = Modifier
-                            )
-                        }
-
-                        // Notes Input
-                        FormInput(
-                            label = "Notes (Optional)",
-                            maxLine = 5,
-                            minLine = 3,
-                            value = state.notes,
-                            onValueChange = { onEvent(EditTransactionContract.Event.OnNotesChanged(it)) },
-                            placeholder = "Add any additional notes...",
-                            modifier = if (!state.isEditing) Modifier else Modifier
-                        )
-                    }
-                }
-
-                // Action Buttons
-                if (state.isEditing) {
-                    ActionButtons(
-                        onCancel = { onEvent(EditTransactionContract.Event.OnCancel) },
-                        onSave = { onEvent(EditTransactionContract.Event.OnSave) },
-                        isLoading = false,
-                        isSaveEnabled = state.title.isNotEmpty() && 
-                                state.category.isNotEmpty() && 
-                                state.amount.isNotEmpty()
-                    )
-                }
+                    isIncome = state.isIncome,
+                    onTypeChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnTransactionTypeChanged(it)) },
+                    selectedCategoryName = state.category,
+                    onCategorySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) },
+                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnDateChanged(it)) },
+                    onAmountChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
+                    onNotesChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnNotesChanged(it)) },
+                    onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) },
+                    onSave = { onEvent(EditTransactionContract.Event.OnSave) },
+                    onCancel = { onEvent(EditTransactionContract.Event.OnCancel) },
+                    currency = state.currency,
+                    isLoading = false,
+                    amount = state.amount,
+                    date = state.date,
+                    notes = state.notes,
+                    isSaveEnabled = state.isEditing && state.title.isNotEmpty() && state.category.isNotEmpty() && state.amount.isNotEmpty(),
+                    isReadOnly = !state.isEditing,
+                    showTypeToggle = state.isEditing
+                )
 
                 // Delete Button (only show when not editing)
                 if (!state.isEditing) {

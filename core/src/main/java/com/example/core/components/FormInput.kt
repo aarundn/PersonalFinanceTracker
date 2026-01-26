@@ -29,6 +29,7 @@ fun FormInput(
     maxLine: Int = 1,
     minLine: Int = 1,
     keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true
 ) {
     Column(modifier = modifier) {
         Text(
@@ -41,8 +42,10 @@ fun FormInput(
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
+            enabled = enabled,
             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.onSurface
+                color = if (enabled) MaterialTheme.colorScheme.onSurface 
+                       else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             ),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),

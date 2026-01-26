@@ -4,11 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Card
@@ -22,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.utils.parseDateString
+
 
 @Composable
 fun TransactionInputForm(
@@ -31,29 +28,28 @@ fun TransactionInputForm(
     onTypeChanged: (Boolean) -> Unit,
     selectedCategoryName: String,
     onCategorySelected: (String) -> Unit,
-    onDateChanged:(String) -> Unit,
-    onAmountChanged:(String) -> Unit,
-    onNotesChanged:(String) -> Unit,
+    onDateChanged: (String) -> Unit,
+    onAmountChanged: (String) -> Unit,
+    onNotesChanged: (String) -> Unit,
     onCurrencySelected: (String) -> Unit,
-    onSave : () -> Unit,
-    onCancel : () -> Unit,
+    onSave: () -> Unit,
+    onCancel: () -> Unit,
     currency: String,
-    isLoading : Boolean,
+    isLoading: Boolean,
     amount: String,
-    date: Long,
+    date: String,
     notes: String,
-    isSaveEnabled: Boolean
+    isSaveEnabled: Boolean,
+    isReadOnly: Boolean = false,
+    showTypeToggle: Boolean = true
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState()),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
         Card(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
@@ -63,38 +59,20 @@ fun TransactionInputForm(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            Icons.Outlined.Add,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "Transaction Details",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                TransactionHeaderForm()
+
+                if (showTypeToggle) {
+                    TransactionTypeToggle(
+                        isIncome = isIncome,
+                        onTypeChanged = onTypeChanged,
+                    )
                 }
-
-
-                TransactionTypeToggle(
-                    isIncome = isIncome,
-                    onTypeChanged = onTypeChanged,
-                )
 
                 CategorySelector(
                     selectedCategory = selectedCategoryName,
                     isIncome = isIncome,
-                    onCategorySelected = onCategorySelected
+                    onCategorySelected = onCategorySelected,
+                    enabled = !isReadOnly
                 )
 
                 TransactionDropdown(
@@ -104,19 +82,22 @@ fun TransactionInputForm(
                         "select currency"
                     },
                     onItemSelected = onCurrencySelected,
+                    enabled = !isReadOnly
                 )
                 FormInput(
                     label = "Amount ($currency)",
                     value = amount,
                     placeholder = "Enter amount",
                     onValueChange = onAmountChanged,
+                    enabled = !isReadOnly
                 )
 
                 FormInput(
                     label = "Date",
-                    value = parseDateString(date),
+                    value = date,
                     onValueChange = onDateChanged,
-                    placeholder = "Select date"
+                    placeholder = "Select date",
+                    enabled = !isReadOnly
                 )
 
                 FormInput(
@@ -125,7 +106,8 @@ fun TransactionInputForm(
                     maxLine = 5,
                     minLine = 3,
                     onValueChange = onNotesChanged,
-                    placeholder = "Add any additional notes..."
+                    placeholder = "Add any additional notes...",
+                    enabled = !isReadOnly
                 )
             }
         }
@@ -135,6 +117,27 @@ fun TransactionInputForm(
             onSave = onSave,
             isLoading = isLoading,
             isSaveEnabled = isSaveEnabled
+        )
+    }
+}
+
+@Composable
+private fun TransactionHeaderForm() {
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Icon(
+            Icons.Outlined.Add,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = "Transaction Details",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

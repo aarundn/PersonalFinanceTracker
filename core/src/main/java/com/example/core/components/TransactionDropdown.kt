@@ -35,6 +35,7 @@ fun TransactionDropdown(
     selectedItem: String?,
     onItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -58,7 +59,7 @@ fun TransactionDropdown(
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable { expanded = true }
+                    .clickable(enabled = enabled) { expanded = true }
                     .padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
