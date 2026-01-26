@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.utils.SUPPORTED_CURRENCIES
 
 
 @Composable
@@ -34,7 +35,7 @@ fun TransactionInputForm(
     onCurrencySelected: (String) -> Unit,
     onSave: () -> Unit,
     onCancel: () -> Unit,
-    currency: String,
+    selectedCurrency: String,
     isLoading: Boolean,
     amount: String,
     date: String,
@@ -78,14 +79,12 @@ fun TransactionInputForm(
                 TransactionDropdown(
                     label = "Currency",
                     items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
-                    selectedItem = currency.ifEmpty {
-                        "select currency"
-                    },
+                    selectedItem = selectedCurrency,
                     onItemSelected = onCurrencySelected,
                     enabled = !isReadOnly
                 )
                 FormInput(
-                    label = "Amount ($currency)",
+                    label = "Amount ($selectedCurrency)",
                     value = amount,
                     placeholder = "Enter amount",
                     onValueChange = onAmountChanged,

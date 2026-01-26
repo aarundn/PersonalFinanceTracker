@@ -12,7 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.HeaderSection
+import com.example.core.components.HeaderSection
+import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnCancel
 import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnSave
 import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnDateChanged
@@ -53,10 +54,10 @@ fun AddTransactionScreen(
             onCurrencySelected = { onEvent(OnCurrencyChanged(it)) },
             onSave = { onEvent(OnSave) },
             onCancel = { onEvent(OnCancel) },
-            currency = state.currency,
+            selectedCurrency = state.currency,
             isLoading = state.isLoading,
             amount = state.amount,
-            date = com.example.core.utils.parseDateString(state.date),
+            date = parseDateString(state.date),
             notes = state.notes,
             isSaveEnabled = state.category.isNotEmpty() && state.amount.isNotEmpty()
         )

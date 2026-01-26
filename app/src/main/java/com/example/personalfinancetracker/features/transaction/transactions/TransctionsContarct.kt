@@ -24,7 +24,7 @@ object TransactionsContract {
 
     sealed interface SideEffect {
         data object NavigateToAddTransaction : SideEffect
-        data class NavigateToTransactionDetails(val transactionId: Int) : SideEffect
+        data class NavigateToTransactionDetails(val transactionId: String) : SideEffect
         data class ShowError(val message: String) : SideEffect
     }
 }

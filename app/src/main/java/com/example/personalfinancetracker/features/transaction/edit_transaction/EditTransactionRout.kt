@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditTransactionRoute(
-    transactionId: Int,
+    transactionId: String,
     onNavigateBack: () -> Unit,
     onNavigateToTransactions: () -> Unit,
-    viewModel: EditTransactionViewModel = viewModel()
+    viewModel: EditTransactionViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

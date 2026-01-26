@@ -1,25 +1,21 @@
 package com.example.personalfinancetracker.features.transaction.edit_transaction
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Type
+import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
 class EditTransactionViewModel (
-    // Add repository injection here when available
+    private val repository: TransactionRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(EditTransactionContract.State())
@@ -146,30 +142,22 @@ class EditTransactionViewModel (
         
         viewModelScope.launch {
             try {
-                // Simulate loading transaction data
-                kotlinx.coroutines.delay(500)
-                
-                // Here you would load the transaction from repository
-                // val transaction = repository.getTransactionById(transactionId)
-                // populateStateWithTransaction(transaction)
-                
-                // Mock data based on transaction ID - simulating different transactions
-                val mockTransaction = getMockTransactionById(_state.value.transactionId)
-                
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    isIncome = mockTransaction.amount > 0,
-                    title = mockTransaction.title,
-                    category = mockTransaction.category,
-                    amount = kotlin.math.abs(mockTransaction.amount).toString(),
-                    currency = "USD",
-                    date = mockTransaction.date,
-                    notes = mockTransaction.notes ?: "",
-                    location = mockTransaction.location ?: "",
-                    paymentMethod = mockTransaction.paymentMethod,
-                    icon = mockTransaction.icon,
-                    iconTint = mockTransaction.iconTint
-                )
+
+                val transaction = repository.getTransactionById(state.value.transactionId)
+
+                transaction?.let { transaction ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isIncome = transaction.type == Type.INCOME,
+                            category = transaction.category,
+                            amount = transaction.amount.toString(),
+                            currency = transaction.currency,
+                            date = transaction.date,
+                            notes = transaction.notes ?: "",
+                        )
+                    }
+                }
                 
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
@@ -182,123 +170,11 @@ class EditTransactionViewModel (
             }
         }
     }
-    
-    private fun getMockTransactionById(transactionId: Int): MockTransaction {
-        return when (transactionId) {
-            1 -> MockTransaction(
-                id = 1,
-                title = "Grocery Shopping",
-                category = "Food",
-                amount = -85.50,
-                date = "2024-03-15",
-                notes = "Weekly grocery shopping at Whole Foods",
-                location = "Whole Foods Market",
-                paymentMethod = "Credit Card",
-                icon = Icons.Outlined.ShoppingCart,
-                iconTint = Color(0xFFF97316) // Orange
-            )
-            2 -> MockTransaction(
-                id = 2,
-                title = "Freelance Work",
-                category = "Income",
-                amount = 800.0,
-                date = "2024-03-12",
-                notes = "Website development project",
-                paymentMethod = "Bank Transfer",
-                icon = Icons.Outlined.ShoppingCart,
-                iconTint = Color(0xFF22C55E) // Green
-            )
-            3 -> MockTransaction(
-                id = 3,
-                title = "Gas Station",
-                category = "Transport",
-                amount = -65.00,
-                date = "2024-03-14",
-                location = "Shell Gas Station",
-                paymentMethod = "Debit Card",
-                icon = Icons.Outlined.Home,
-                iconTint = Color(0xFF3B82F6) // Blue
-            )
-            4 -> MockTransaction(
-                id = 4,
-                title = "Electricity Bill",
-                category = "Bills",
-                amount = -120.00,
-                date = "2024-03-13",
-                notes = "Monthly electricity bill",
-                paymentMethod = "Bank Transfer",
-                icon = Icons.Outlined.Home,
-                iconTint = Color(0xFF9333EA) // Purple
-            )
-            5 -> MockTransaction(
-                id = 5,
-                title = "Coffee Shop",
-                category = "Food",
-                amount = -12.50,
-                date = "2024-03-13",
-                location = "Starbucks",
-                paymentMethod = "Digital Wallet",
-                icon = Icons.Outlined.Home,
-                iconTint = Color(0xFFF59E0B) // Amber
-            )
-            6 -> MockTransaction(
-                id = 6,
-                title = "Salary",
-                category = "Income",
-                amount = 5300.0,
-                date = "2024-03-15",
-                notes = "Monthly salary deposit",
-                paymentMethod = "Bank Transfer",
-                icon = Icons.Outlined.Check,
-                iconTint = Color(0xFF22C55E) // Green
-            )
-            else -> MockTransaction(
-                id = transactionId,
-                title = "Sample Transaction",
-                category = "Other",
-                amount = -25.50,
-                date = "2024-01-15",
-                notes = "Sample transaction",
-                location = "Sample Location",
-                paymentMethod = "Credit Card",
-                icon = Icons.Outlined.Place,
-                iconTint = Color(0xFF6B7280) // Gray
-            )
-        }
-    }
-    
-    private data class MockTransaction(
-        val id: Int,
-        val title: String,
-        val category: String,
-        val amount: Double,
-        val date: String,
-        val notes: String? = null,
-        val location: String? = null,
-        val paymentMethod: String,
-        val icon: ImageVector,
-        val iconTint: Color
-    )
 
-    private fun createTransactionData(): EditTransactionContract.TransactionData {
-        val currentState = _state.value
-        return EditTransactionContract.TransactionData(
-            id = currentState.transactionId,
-            isIncome = currentState.isIncome,
-            title = currentState.title,
-            category = currentState.category,
-            amount = currentState.amount.toDoubleOrNull() ?: 0.0,
-            originalAmount = currentState.amount.toDoubleOrNull() ?: 0.0,
-            currency = currentState.currency,
-            baseCurrency = "USD",
-            date = currentState.date,
-            notes = currentState.notes,
-            location = currentState.location,
-            paymentMethod = currentState.paymentMethod
-        )
-    }
 
-    fun setTransactionId(transactionId: Int) {
+
+
+    fun setTransactionId(transactionId: String) {
         _state.value = _state.value.copy(transactionId = transactionId)
     }
 }

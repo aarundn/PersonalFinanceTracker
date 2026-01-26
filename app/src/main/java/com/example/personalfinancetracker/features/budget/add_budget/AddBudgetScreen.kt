@@ -27,7 +27,7 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.budget.add_budget.components.ActionButtons
 import com.example.personalfinancetracker.features.budget.add_budget.components.BudgetPreviewCard
 import com.example.personalfinancetracker.features.budget.add_budget.components.CategorySelectionGrid
-import com.example.personalfinancetracker.features.budget.add_budget.components.HeaderSection
+import com.example.core.components.HeaderSection
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetPeriodSelector
 
 @Composable

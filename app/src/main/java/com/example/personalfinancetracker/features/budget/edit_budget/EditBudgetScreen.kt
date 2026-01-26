@@ -37,7 +37,7 @@ import com.example.personalfinancetracker.features.budget.edit_budget.components
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetInsightsCard
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetOverviewCard
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetPeriodSelector
-import com.example.personalfinancetracker.features.budget.edit_budget.components.HeaderSection
+import com.example.core.components.HeaderSection
 
 @Composable
 fun EditBudgetScreen(

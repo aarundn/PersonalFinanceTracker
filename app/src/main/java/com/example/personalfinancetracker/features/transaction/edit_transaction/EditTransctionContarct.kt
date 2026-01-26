@@ -8,13 +8,13 @@ object EditTransactionContract {
 
     @Immutable
     data class State(
-        val transactionId: Int = -1,
+        val transactionId: String = "",
         val isIncome: Boolean = false,
         val title: String = "",
         val category: String = "",
         val amount: String = "",
         val currency: String = "USD",
-        val date: String = "",
+        val date: Long = 0L,
         val notes: String = "",
         val location: String = "",
         val paymentMethod: String = "",
@@ -33,7 +33,7 @@ object EditTransactionContract {
         data class OnCategoryChanged(val category: String) : Event()
         data class OnAmountChanged(val amount: String) : Event()
         data class OnCurrencyChanged(val currency: String) : Event()
-        data class OnDateChanged(val date: String) : Event()
+        data class OnDateChanged(val date: Long) : Event()
         data class OnNotesChanged(val notes: String) : Event()
         data class OnLocationChanged(val location: String) : Event()
         data class OnPaymentMethodChanged(val paymentMethod: String) : Event()
@@ -50,7 +50,7 @@ object EditTransactionContract {
         object NavigateToTransactions : SideEffect()
         data class ShowError(val message: String) : SideEffect()
         data class ShowSuccess(val message: String) : SideEffect()
-        data class ShowDeleteConfirmation(val transactionId: Int) : SideEffect()
+        data class ShowDeleteConfirmation(val transactionId: String) : SideEffect()
     }
 
     data class TransactionData(

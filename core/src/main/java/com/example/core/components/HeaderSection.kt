@@ -1,4 +1,4 @@
-package com.example.personalfinancetracker.features.transaction.edit_transaction.components
+package com.example.core.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderSection(
-    onBackClick: () -> Unit,
-    title: String = "Transaction Details",
+    onBackClick: () -> Unit = {},
+    title: String = "Add Transaction",
     actions: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
@@ -78,3 +78,5 @@ private fun HeaderSectionPreview() {
         )
     }
 }
+
+

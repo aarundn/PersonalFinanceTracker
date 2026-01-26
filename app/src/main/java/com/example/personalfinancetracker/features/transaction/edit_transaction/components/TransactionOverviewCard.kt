@@ -31,6 +31,7 @@ import com.example.personalfinancetracker.features.transaction.edit_transaction.
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.core.utils.parseDateString
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -154,7 +155,7 @@ fun TransactionOverviewCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = formatDate(state.date),
+                        text = parseDateString(state.date),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -172,7 +173,7 @@ fun TransactionOverviewCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = formatTime(state.date),
+                        text = parseDateString(state.date),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -230,13 +231,13 @@ private fun TransactionOverviewCardPreview() {
     PersonalFinanceTrackerTheme {
         TransactionOverviewCard(
             state = EditTransactionContract.State(
-                transactionId = 1,
+                transactionId = "1",
                 isIncome = false,
                 title = "Grocery Shopping",
                 category = "Food",
                 amount = "85.50",
                 currency = "USD",
-                date = "2024-03-15",
+                date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
                 location = "Whole Foods Market",
                 paymentMethod = "Credit Card",

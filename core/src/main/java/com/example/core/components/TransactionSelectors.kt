@@ -1,6 +1,5 @@
 package com.example.core.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -39,42 +38,12 @@ fun CategorySelector(
     )
 }
 
-val SUPPORTED_CURRENCIES = listOf(
-    "DZD" to "DZD",
-    "USD" to "$",
-    "EUR" to "€",
-    "GBP" to "£",
-    "JPY" to "¥",
-    "CAD" to "C$",
-    "AUD" to "A$",
-    "CHF" to "CHF",
-    "CNY" to "¥",
-    "INR" to "₹",
-    "BRL" to "R$"
-)
-
-@Composable
-fun CurrencySelector(
-    selectedCurrency: String,
-    onCurrencySelected: (String) -> Unit,
-) {
-    TransactionDropdown(
-        label = "Currency",
-        items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
-        selectedItem = selectedCurrency.ifEmpty {
-            "${SUPPORTED_CURRENCIES.first().first} (${SUPPORTED_CURRENCIES.first().second})"
-        },
-        onItemSelected = onCurrencySelected,
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TransactionSelectorsPreview() {
     PersonalFinanceTrackerTheme {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             CategorySelector(
                 selectedCategory = "Food",
@@ -82,10 +51,6 @@ private fun TransactionSelectorsPreview() {
                 isIncome = false
             )
 
-            CurrencySelector(
-                selectedCurrency = "USD",
-                onCurrencySelected = {}
-            )
         }
     }
 }

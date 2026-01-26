@@ -26,10 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.features.transaction.edit_transaction.components.HeaderSection
+import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +39,6 @@ fun EditTransactionScreen(
     state: EditTransactionContract.State,
     onEvent: (EditTransactionContract.Event) -> Unit,
 ) {
-    // Load transaction when screen is first displayed
     LaunchedEffect(Unit) {
         onEvent(EditTransactionContract.Event.OnLoadTransaction)
     }
@@ -86,16 +86,16 @@ fun EditTransactionScreen(
                     onTypeChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnTransactionTypeChanged(it)) },
                     selectedCategoryName = state.category,
                     onCategorySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) },
-                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnDateChanged(it)) },
+                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnDateChanged(it.toLong())) },
                     onAmountChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
                     onNotesChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnNotesChanged(it)) },
                     onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) },
                     onSave = { onEvent(EditTransactionContract.Event.OnSave) },
                     onCancel = { onEvent(EditTransactionContract.Event.OnCancel) },
-                    currency = state.currency,
+                    selectedCurrency = state.currency,
                     isLoading = false,
                     amount = state.amount,
-                    date = state.date,
+                    date = parseDateString(state.date),
                     notes = state.notes,
                     isSaveEnabled = state.isEditing && state.title.isNotEmpty() && state.category.isNotEmpty() && state.amount.isNotEmpty(),
                     isReadOnly = !state.isEditing,
@@ -134,13 +134,13 @@ private fun EditTransactionScreenPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
             state = EditTransactionContract.State(
-                transactionId = 1,
+                transactionId = "",
                 isIncome = false,
                 title = "Grocery Shopping",
                 category = "Food",
                 amount = "85.50",
                 currency = "USD",
-                date = "2024-03-15",
+                date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
                 location = "Whole Foods Market",
                 paymentMethod = "Credit Card",
@@ -159,13 +159,13 @@ private fun EditTransactionScreenEditingPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
             state = EditTransactionContract.State(
-                transactionId = 2,
+                transactionId = "",
                 isIncome = true,
                 title = "Freelance Work",
                 category = "Income",
                 amount = "800.00",
                 currency = "USD",
-                date = "2024-03-12",
+                date = "2024-03-12".toLong(),
                 notes = "Website development project",
                 location = "",
                 paymentMethod = "Bank Transfer",

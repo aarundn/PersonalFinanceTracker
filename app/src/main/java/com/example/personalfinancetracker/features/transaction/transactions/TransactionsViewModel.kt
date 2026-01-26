@@ -31,7 +31,7 @@ class TransactionsViewModel(
             TransactionsContract.Event.LoadTransactions -> loadTransactions()
             is TransactionsContract.Event.OnTransactionClick -> {
                 viewModelScope.launch {
-                    _effects.emit(TransactionsContract.SideEffect.NavigateToTransactionDetails(event.transaction.id.toInt()))
+                    _effects.emit(TransactionsContract.SideEffect.NavigateToTransactionDetails(event.transaction.id))
                 }
             }
 
