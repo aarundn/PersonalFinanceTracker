@@ -6,6 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,18 +27,17 @@ import com.example.personalfinancetracker.features.transaction.add_transaction.T
 
 @Composable
 fun AddTransactionScreen(
+    snackBarHostState: SnackbarHostState,
     state: TransactionState,
     onEvent: (TransactionEvent) -> Unit,
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            HeaderSection(
-                onBackClick = { onEvent(OnCancel) }
-            )
-        }
+        topBar = { HeaderSection(onBackClick = { onEvent(OnCancel) }) }
     ) { innerPadding ->
+
         TransactionInputForm(
             modifier = Modifier
                 .padding(top = 16.dp)
@@ -44,6 +45,7 @@ fun AddTransactionScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
+            categories = state.categories,
             isIncome = state.isIncome,
             onTypeChanged = { onEvent(OnTransactionTypeChanged(it)) },
             selectedCategoryName = state.category,
@@ -79,7 +81,8 @@ private fun AddTransactionScreenPreview() {
                 date = 0L,
                 notes = "Lunch at restaurant"
             ),
-            onEvent = {}
+            onEvent = {},
+            snackBarHostState = SnackbarHostState()
         )
     }
 }

@@ -81,7 +81,7 @@ fun EditTransactionScreen(
 
                 // Transaction Details / Edit Form
                 TransactionInputForm(
-                    modifier = Modifier.padding(top = 16.dp),
+                    modifier = Modifier,
                     isIncome = state.isIncome,
                     onTypeChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnTransactionTypeChanged(it)) },
                     selectedCategoryName = state.category,
@@ -99,7 +99,8 @@ fun EditTransactionScreen(
                     notes = state.notes,
                     isSaveEnabled = state.isEditing && state.title.isNotEmpty() && state.category.isNotEmpty() && state.amount.isNotEmpty(),
                     isReadOnly = !state.isEditing,
-                    showTypeToggle = state.isEditing
+                    showTypeToggle = state.isEditing,
+                    categories = state.categories
                 )
 
                 // Delete Button (only show when not editing)

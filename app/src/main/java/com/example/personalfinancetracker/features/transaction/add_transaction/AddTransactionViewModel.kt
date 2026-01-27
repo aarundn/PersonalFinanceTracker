@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.features.transaction.add_transaction
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.model.Categories
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -21,23 +23,35 @@ class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(
-        TransactionState(
-            date = System.currentTimeMillis()
-        )
-    )
+    private val _state = MutableStateFlow(TransactionState())
     val state: StateFlow<TransactionState> = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<TransactionSideEffect>()
     val effect: SharedFlow<TransactionSideEffect> = _effect.asSharedFlow()
 
+
+    init {
+        getCategories()
+    }
+
+    private fun getCategories() {
+        val type = if (_state.value.isIncome) Type.INCOME else Type.EXPENSE
+        val categories = Categories.forType(type)
+        _state.update {
+            it.copy(
+                categories = categories,
+            )
+        }
+    }
+
     fun onEvent(event: TransactionEvent) {
         when (event) {
             is TransactionEvent.OnTransactionTypeChanged -> {
-                _state.value = _state.value.copy(
+                _state.update {  it.copy(
                     isIncome = event.isIncome,
-                    category = "" // Reset category when type changes
-                )
+                    category = ""
+                )}
+                getCategories()
             }
 
             is TransactionEvent.OnTitleChanged -> {
@@ -45,7 +59,11 @@ class AddTransactionViewModel(
             }
 
             is TransactionEvent.OnCategoryChanged -> {
-                _state.value = _state.value.copy(category = event.category)
+                _state.update {
+                    it.copy(
+                        category = event.category
+                    )
+                }
             }
 
             is TransactionEvent.OnAmountChanged -> {
@@ -127,7 +145,9 @@ class AddTransactionViewModel(
                     isConverting = false,
                     error = "Currency conversion failed"
                 )
-                _effect.emit(TransactionSideEffect.ShowError("Currency conversion failed"))
+                _effect.emit(
+                    TransactionSideEffect.ShowError("Currency conversion failed ${e.message}")
+                )
             }
         }
     }
@@ -177,22 +197,18 @@ class AddTransactionViewModel(
                     type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
                 )
 
-                Log.d("AddTransactionViewModel", "Attempting to save transaction: $transactionData")
-
                 addTransactionUseCase(transactionData).onSuccess {
-                    Log.d(
-                        "AddTransactionViewModel2",
-                        "Transaction saved successfully: $transactionData"
-                    )
-                    _state.value = currentState.copy(isLoading = false)
+
+                    _state.update { it.copy(isLoading = false) }
                     _effect.emit(TransactionSideEffect.NavigateBack)
+                    _effect.emit(TransactionSideEffect.ShowSuccess("Transaction saved successfully"))
+
                 }.onFailure {
                     _state.value = currentState.copy(
                         isLoading = false,
                         error = "Failed to save transaction"
                     )
-                    Log.e("AddTransactionViewModel3", "Exception saving transaction ${it.message}")
-                    _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction"))
+                    _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction ${it.message}"))
                 }
 
 
@@ -201,8 +217,9 @@ class AddTransactionViewModel(
                     isLoading = false,
                     error = "Failed to save transaction"
                 )
-                Log.e("AddTransactionViewModel3", "Exception saving transaction", e)
-                _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction"))
+                _effect.emit(
+                    TransactionSideEffect.ShowError("Failed to save transaction ${e.message}")
+                )
             }
         }
     }

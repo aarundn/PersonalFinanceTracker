@@ -2,6 +2,7 @@ package com.example.personalfinancetracker.features.transaction.edit_transaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.model.Categories
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class EditTransactionViewModel (
+class EditTransactionViewModel(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
@@ -27,32 +28,48 @@ class EditTransactionViewModel (
     fun onEvent(event: EditTransactionContract.Event) {
         when (event) {
             is EditTransactionContract.Event.OnTransactionTypeChanged -> {
-                _state.value = _state.value.copy(isIncome = event.isIncome)
+               _state.update { it.copy(isIncome = event.isIncome, category = "") }
+                getCategories()
+
+
             }
+
             is EditTransactionContract.Event.OnTitleChanged -> {
                 _state.value = _state.value.copy(title = event.title)
             }
+
             is EditTransactionContract.Event.OnCategoryChanged -> {
-                _state.value = _state.value.copy(category = event.category)
+                _state.update {
+                    it.copy(
+                        category = event.category
+                    )
+                }
             }
+
             is EditTransactionContract.Event.OnAmountChanged -> {
                 _state.value = _state.value.copy(amount = event.amount)
             }
+
             is EditTransactionContract.Event.OnCurrencyChanged -> {
                 _state.value = _state.value.copy(currency = event.currency)
             }
+
             is EditTransactionContract.Event.OnDateChanged -> {
                 _state.value = _state.value.copy(date = event.date)
             }
+
             is EditTransactionContract.Event.OnNotesChanged -> {
                 _state.value = _state.value.copy(notes = event.notes)
             }
+
             is EditTransactionContract.Event.OnLocationChanged -> {
                 _state.value = _state.value.copy(location = event.location)
             }
+
             is EditTransactionContract.Event.OnPaymentMethodChanged -> {
                 _state.value = _state.value.copy(paymentMethod = event.paymentMethod)
             }
+
             EditTransactionContract.Event.OnConvertCurrency -> {
                 // Handle currency conversion logic here
                 _state.value = _state.value.copy(isConverting = true)
@@ -61,18 +78,22 @@ class EditTransactionViewModel (
                     kotlinx.coroutines.delay(1000)
                     _state.value = _state.value.copy(
                         isConverting = false,
-                        convertedAmount = _state.value.amount.toDoubleOrNull()?.times(1.2) // Mock conversion
+                        convertedAmount = _state.value.amount.toDoubleOrNull()
+                            ?.times(1.2) // Mock conversion
                     )
                 }
             }
+
             EditTransactionContract.Event.OnSave -> {
                 saveTransaction()
             }
+
             EditTransactionContract.Event.OnCancel -> {
                 viewModelScope.launch {
                     _sideEffect.emit(EditTransactionContract.SideEffect.NavigateBack)
                 }
             }
+
             EditTransactionContract.Event.OnDelete -> {
                 viewModelScope.launch {
                     _sideEffect.emit(
@@ -82,18 +103,29 @@ class EditTransactionViewModel (
                     )
                 }
             }
+
             EditTransactionContract.Event.OnEdit -> {
                 _state.value = _state.value.copy(isEditing = true)
             }
+
             EditTransactionContract.Event.OnLoadTransaction -> {
                 loadTransaction()
             }
         }
     }
 
+    private fun getCategories() {
+        val type = if (_state.value.isIncome) Type.INCOME else Type.EXPENSE
+        val categories = Categories.forType(type)
+        _state.update {
+            it.copy(
+                categories = categories,
+            )
+        }
+    }
     private fun saveTransaction() {
         val currentState = _state.value
-        
+
         // Validate required fields
         if (currentState.title.isBlank() || currentState.category.isBlank() || currentState.amount.isBlank()) {
             viewModelScope.launch {
@@ -110,28 +142,30 @@ class EditTransactionViewModel (
             try {
                 // Simulate API call
                 kotlinx.coroutines.delay(1000)
-                
+
                 // Here you would call your repository to update the transaction
                 // repository.updateTransaction(createTransactionData())
-                
+
                 _state.value = currentState.copy(
                     isLoading = false,
                     isEditing = false
                 )
-                
+
                 _sideEffect.emit(
                     EditTransactionContract.SideEffect.ShowSuccess("Transaction updated successfully")
                 )
-                
+
                 _sideEffect.emit(EditTransactionContract.SideEffect.NavigateBack)
-                
+
             } catch (e: Exception) {
                 _state.value = currentState.copy(
                     isLoading = false,
                     error = e.message
                 )
                 _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowError(e.message ?: "Failed to update transaction")
+                    EditTransactionContract.SideEffect.ShowError(
+                        e.message ?: "Failed to update transaction"
+                    )
                 )
             }
         }
@@ -139,7 +173,7 @@ class EditTransactionViewModel (
 
     private fun loadTransaction() {
         _state.value = _state.value.copy(isLoading = true)
-        
+
         viewModelScope.launch {
             try {
 
@@ -158,20 +192,21 @@ class EditTransactionViewModel (
                         )
                     }
                 }
-                
+                getCategories()
+
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
                     error = e.message
                 )
                 _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowError(e.message ?: "Failed to load transaction")
+                    EditTransactionContract.SideEffect.ShowError(
+                        e.message ?: "Failed to load transaction"
+                    )
                 )
             }
         }
     }
-
-
 
 
     fun setTransactionId(transactionId: String) {

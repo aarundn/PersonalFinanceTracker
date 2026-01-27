@@ -18,12 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.Categories
+import com.example.core.model.Categories.Companion.displayName
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.utils.SUPPORTED_CURRENCIES
 
 
 @Composable
 fun TransactionInputForm(
+    categories: List<Categories>,
     isIncome: Boolean,
     modifier: Modifier = Modifier,
     onTypeChanged: (Boolean) -> Unit,
@@ -69,10 +72,11 @@ fun TransactionInputForm(
                     )
                 }
 
-                CategorySelector(
-                    selectedCategory = selectedCategoryName,
-                    isIncome = isIncome,
-                    onCategorySelected = onCategorySelected,
+                TransactionDropdown(
+                    label = "Category",
+                    items = categories.map { it.name.displayName() },
+                    selectedItem = selectedCategoryName,
+                    onItemSelected = onCategorySelected,
                     enabled = !isReadOnly
                 )
 

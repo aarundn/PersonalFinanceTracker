@@ -1,8 +1,10 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.transaction.transactions.navigation.navigateToTransactionsScreen
@@ -15,22 +17,21 @@ fun AddTransactionRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // Handle side effects
-    LaunchedEffect(Unit) {
+    val snackBarHostState = remember { SnackbarHostState() }
+
+
+    LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is TransactionSideEffect.NavigateBack -> {
-                    navController.popBackStack()
-                }
+                is TransactionSideEffect.NavigateBack -> navController.popBackStack()
 
-                is TransactionSideEffect.NavigateToTransactions -> navController.navigateToTransactionsScreen()
-                is TransactionSideEffect.ShowError -> {
-                    // Show error message using your preferred method (Snackbar, Toast, etc.)
-                }
+                is TransactionSideEffect.NavigateToTransactions ->
+                    navController.navigateToTransactionsScreen()
 
-                is TransactionSideEffect.ShowSuccess -> {
-                    // Show success message using your preferred method (Snackbar, Toast, etc.)
-                }
+                is TransactionSideEffect.ShowError -> snackBarHostState.showSnackbar(effect.message)
+
+                is TransactionSideEffect.ShowSuccess -> snackBarHostState.showSnackbar(effect.message)
+
             }
         }
     }
@@ -38,5 +39,6 @@ fun AddTransactionRoute(
     AddTransactionScreen(
         state = state,
         onEvent = viewModel::onEvent,
+        snackBarHostState = snackBarHostState
     )
 }

@@ -1,17 +1,20 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
-    data class TransactionState(
-        val isIncome: Boolean = false,
-        val title: String = "",
-        val category: String = "",
-        val amount: String = "",
-        val currency: String = "",
-        val date: Long = 0L,
-        val notes: String = "",
-        val convertedAmount: Double? = null,
-        val isConverting: Boolean = false,
-        val isLoading: Boolean = false,
-        val error: String? = null
+import com.example.core.model.Categories
+
+data class TransactionState(
+    val isIncome: Boolean = false,
+    val title: String = "",
+    val category: String = "",
+    val amount: String = "",
+    val currency: String = "",
+    val date: Long = System.currentTimeMillis(),
+    val notes: String = "",
+    val convertedAmount: Double? = null,
+    val categories : List<Categories> = emptyList(),
+    val isConverting: Boolean = false,
+    val isLoading: Boolean = false,
+    val error: String? = null
     )
 
     sealed class TransactionEvent {

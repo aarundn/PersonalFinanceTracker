@@ -34,12 +34,11 @@ fun TransactionDropdown(
     items: List<String>,
     selectedItem: String?,
     onItemSelected: (String) -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
+    Column {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,

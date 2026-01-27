@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.features.transaction.edit_transaction
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.core.model.Categories
 
 object EditTransactionContract {
 
@@ -24,7 +25,8 @@ object EditTransactionContract {
         val error: String? = null,
         val isEditing: Boolean = false,
         val icon: ImageVector? = null,
-        val iconTint: Color? = null
+        val iconTint: Color? = null,
+        val categories : List<Categories> = emptyList(),
     )
 
     sealed class Event {
@@ -52,49 +54,4 @@ object EditTransactionContract {
         data class ShowSuccess(val message: String) : SideEffect()
         data class ShowDeleteConfirmation(val transactionId: String) : SideEffect()
     }
-
-    data class TransactionData(
-        val id: Int,
-        val isIncome: Boolean,
-        val title: String,
-        val category: String,
-        val amount: Double,
-        val originalAmount: Double,
-        val currency: String,
-        val baseCurrency: String,
-        val date: String,
-        val notes: String,
-        val location: String,
-        val paymentMethod: String
-    )
-
-    object Categories {
-        val incomeCategories = listOf("Salary", "Freelance", "Investment", "Gift", "Other")
-        val expenseCategories = listOf("Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Other")
-    }
-
-    object PaymentMethods {
-        val methods = listOf("Cash", "Credit Card", "Debit Card", "Bank Transfer", "Digital Wallet", "Other")
-    }
-
-    object PopularCurrencies {
-        val currencies = listOf(
-            CurrencyInfo("USD", "$", "US Dollar"),
-            CurrencyInfo("EUR", "€", "Euro"),
-            CurrencyInfo("GBP", "£", "British Pound"),
-            CurrencyInfo("JPY", "¥", "Japanese Yen"),
-            CurrencyInfo("CAD", "C$", "Canadian Dollar"),
-            CurrencyInfo("AUD", "A$", "Australian Dollar"),
-            CurrencyInfo("CHF", "CHF", "Swiss Franc"),
-            CurrencyInfo("CNY", "¥", "Chinese Yuan"),
-            CurrencyInfo("INR", "₹", "Indian Rupee"),
-            CurrencyInfo("BRL", "R$", "Brazilian Real")
-        )
-    }
-
-    data class CurrencyInfo(
-        val code: String,
-        val symbol: String,
-        val name: String
-    )
 }
