@@ -4,8 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -24,6 +29,15 @@ fun CustomProgressBar(
     progressColor: Color = ProgressPrimary,
     height: Dp = 8.dp
 ) {
+    val animatedProgress = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        animatedProgress.animateTo(
+            targetValue = progress.coerceIn(0f, 1f),
+            animationSpec = tween(durationMillis = 800, easing = FastOutLinearInEasing))
+
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -33,7 +47,7 @@ fun CustomProgressBar(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(progress.coerceIn(0f, 1f))
+                .fillMaxWidth(animatedProgress.value)
                 .height(height)
                 .clip(RoundedCornerShape(4.dp))
                 .background(progressColor)
