@@ -1,185 +1,83 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.model.Categories
+import com.example.core.common.BaseTransactionUiEvent
+import com.example.core.common.BaseTransactionUiSideEffect
+import com.example.core.common.BaseTransactionViewModel
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-
 class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
-) : ViewModel() {
+) : BaseTransactionViewModel<TransactionState, BaseTransactionUiEvent, BaseTransactionUiSideEffect>() {
 
-    private val _state = MutableStateFlow(TransactionState())
-    val state: StateFlow<TransactionState> = _state.asStateFlow()
+    override val _uiState = MutableStateFlow(TransactionState())
 
-    private val _effect = MutableSharedFlow<TransactionSideEffect>()
-    val effect: SharedFlow<TransactionSideEffect> = _effect.asSharedFlow()
-
+    val effect = uiSideEffect
 
     init {
-        getCategories()
+        refreshCategories()
     }
 
-    private fun getCategories() {
-        val type = if (_state.value.isIncome) Type.INCOME else Type.EXPENSE
-        val categories = Categories.forType(type)
-        _state.update {
-            it.copy(
-                categories = categories,
-            )
-        }
+    private fun refreshCategories() {
+        val categories = getCategoriesForType(_uiState.value.isIncome)
+        setState { copy(categories = categories) }
     }
 
     fun onEvent(event: TransactionEvent) {
         when (event) {
             is TransactionEvent.OnTransactionTypeChanged -> {
-                _state.update {  it.copy(
-                    isIncome = event.isIncome,
-                    category = ""
-                )}
-                getCategories()
+                setState { copy(isIncome = event.isIncome, category = "") }
+                refreshCategories()
             }
-
-            is TransactionEvent.OnTitleChanged -> {
-                _state.value = _state.value.copy(title = event.title)
-            }
-
-            is TransactionEvent.OnCategoryChanged -> {
-                _state.update {
-                    it.copy(
-                        category = event.category
-                    )
-                }
-            }
-
+            is TransactionEvent.OnCategoryChanged -> setState { copy(category = event.category) }
             is TransactionEvent.OnAmountChanged -> {
-                _state.value = _state.value.copy(amount = event.amount)
-                // Trigger currency conversion if needed
-                if (event.amount.isNotEmpty() && _state.value.currency != "USD") {
-                    convertCurrency()
-                }
+                setState { copy(amount = event.amount) }
             }
-
             is TransactionEvent.OnCurrencyChanged -> {
-                _state.value = _state.value.copy(currency = event.currency)
-                // Trigger currency conversion if amount exists
-                if (_state.value.amount.isNotEmpty() && event.currency != "USD") {
-                    convertCurrency()
-                }
+                setState { copy(currency = event.currency) }
             }
-
-            is TransactionEvent.OnDateChanged -> {
-                _state.value = _state.value.copy(date = event.date.toLong())
-            }
-
-            is TransactionEvent.OnNotesChanged -> {
-                _state.value = _state.value.copy(notes = event.notes)
-            }
-
-            TransactionEvent.OnConvertCurrency -> {
-                convertCurrency()
-            }
-
-            TransactionEvent.OnSave -> {
-                saveTransaction()
-            }
-
-            TransactionEvent.OnCancel -> {
-                viewModelScope.launch {
-                    _effect.emit(TransactionSideEffect.NavigateBack)
-                }
-            }
+            is TransactionEvent.OnDateChanged -> setState { copy(date = event.date) }
+            is TransactionEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
+            TransactionEvent.OnSave -> saveTransaction()
+            TransactionEvent.OnCancel -> navigateBack()
         }
     }
 
-    private fun convertCurrency() {
-        val currentState = _state.value
-        if (currentState.amount.isEmpty() || currentState.currency == "USD") {
-            _state.value = currentState.copy(convertedAmount = null)
-            return
-        }
 
-        _state.value = currentState.copy(isConverting = true)
-
+    private fun navigateBack() {
         viewModelScope.launch {
-            try {
-                // Simulate currency conversion API call
-                delay(1000)
-
-                val amount = currentState.amount.toDoubleOrNull() ?: 0.0
-                // Mock conversion rate (in real app, this would be from API)
-                val conversionRate = when (currentState.currency) {
-                    "EUR" -> 0.85
-                    "GBP" -> 0.73
-                    "JPY" -> 110.0
-                    "CAD" -> 1.25
-                    "AUD" -> 1.35
-                    "CHF" -> 0.92
-                    "CNY" -> 6.45
-                    "INR" -> 74.0
-                    "BRL" -> 5.2
-                    else -> 1.0
-                }
-
-                val convertedAmount = amount / conversionRate
-                _state.value = currentState.copy(
-                    convertedAmount = convertedAmount,
-                    isConverting = false
-                )
-            } catch (e: Exception) {
-                _state.value = currentState.copy(
-                    isConverting = false,
-                    error = "Currency conversion failed"
-                )
-                _effect.emit(
-                    TransactionSideEffect.ShowError("Currency conversion failed ${e.message}")
-                )
-            }
+            emitSideEffect(TransactionSideEffect.NavigateBack)
         }
     }
 
     private fun saveTransaction() {
-        val currentState = _state.value
+        val currentState = _uiState.value
 
         Log.d("AddTransactionViewModel1", "Saving transaction with data: $currentState")
 
         if (currentState.category.isEmpty()) {
-            viewModelScope.launch {
-                _effect.emit(TransactionSideEffect.ShowError("Category is required"))
-            }
+            showError("Category is required")
             return
         }
 
         if (currentState.amount.isEmpty()) {
-            viewModelScope.launch {
-                _effect.emit(TransactionSideEffect.ShowError("Amount is required"))
-            }
+            showError("Amount is required")
             return
         }
 
         val amount = currentState.amount.toDoubleOrNull()
         if (amount == null || amount <= 0) {
-            viewModelScope.launch {
-                _effect.emit(TransactionSideEffect.ShowError("Please enter a valid amount"))
-            }
+            showError("Please enter a valid amount")
             return
         }
 
-        _state.value = currentState.copy(isLoading = true)
+        setState { copy(isLoading = true) }
 
         viewModelScope.launch {
             try {
@@ -198,29 +96,25 @@ class AddTransactionViewModel(
                 )
 
                 addTransactionUseCase(transactionData).onSuccess {
+                    setState { copy(isLoading = false) }
+                    emitSideEffect(TransactionSideEffect.NavigateBack)
+                    emitSideEffect(TransactionSideEffect.ShowSuccess("Transaction saved successfully"))
 
-                    _state.update { it.copy(isLoading = false) }
-                    _effect.emit(TransactionSideEffect.NavigateBack)
-                    _effect.emit(TransactionSideEffect.ShowSuccess("Transaction saved successfully"))
-
-                }.onFailure {
-                    _state.value = currentState.copy(
-                        isLoading = false,
-                        error = "Failed to save transaction"
-                    )
-                    _effect.emit(TransactionSideEffect.ShowError("Failed to save transaction ${it.message}"))
+                }.onFailure { e ->
+                    setState { copy(isLoading = false, error = "Failed to save transaction") }
+                    emitSideEffect(TransactionSideEffect.ShowError("Failed to save transaction ${e.message}"))
                 }
 
-
             } catch (e: Exception) {
-                _state.value = currentState.copy(
-                    isLoading = false,
-                    error = "Failed to save transaction"
-                )
-                _effect.emit(
-                    TransactionSideEffect.ShowError("Failed to save transaction ${e.message}")
-                )
+                setState { copy(isLoading = false, error = "Failed to save transaction") }
+                emitSideEffect(TransactionSideEffect.ShowError("Failed to save transaction ${e.message}"))
             }
+        }
+    }
+
+    private fun showError(message: String) {
+        viewModelScope.launch {
+            emitSideEffect(TransactionSideEffect.ShowError(message))
         }
     }
 }

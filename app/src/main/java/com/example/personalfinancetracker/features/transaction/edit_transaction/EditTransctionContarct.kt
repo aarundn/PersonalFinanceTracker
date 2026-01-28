@@ -3,6 +3,9 @@ package com.example.personalfinancetracker.features.transaction.edit_transaction
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.core.common.BaseTransactionState
+import com.example.core.common.BaseTransactionUiEvent
+import com.example.core.common.BaseTransactionUiSideEffect
 import com.example.core.model.Categories
 
 object EditTransactionContract {
@@ -27,9 +30,9 @@ object EditTransactionContract {
         val icon: ImageVector? = null,
         val iconTint: Color? = null,
         val categories : List<Categories> = emptyList(),
-    )
+    ) : BaseTransactionState
 
-    sealed class Event {
+    sealed class Event : BaseTransactionUiEvent {
         data class OnTransactionTypeChanged(val isIncome: Boolean) : Event()
         data class OnTitleChanged(val title: String) : Event()
         data class OnCategoryChanged(val category: String) : Event()
@@ -47,7 +50,7 @@ object EditTransactionContract {
         object OnLoadTransaction : Event()
     }
 
-    sealed class SideEffect {
+    sealed class SideEffect : BaseTransactionUiSideEffect {
         object NavigateBack : SideEffect()
         object NavigateToTransactions : SideEffect()
         data class ShowError(val message: String) : SideEffect()

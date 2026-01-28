@@ -50,7 +50,7 @@ fun AddTransactionScreen(
             onTypeChanged = { onEvent(OnTransactionTypeChanged(it)) },
             selectedCategoryName = state.category,
             onCategorySelected = { onEvent(OnCategoryChanged(it)) },
-            onDateChanged = { onEvent(OnDateChanged(it)) },
+            onDateChanged = { onEvent(OnDateChanged(it.toLongOrNull() ?: 0L)) },
             onAmountChanged = { onEvent(OnAmountChanged(it)) },
             onNotesChanged = { onEvent(OnNotesChanged(it)) },
             onCurrencySelected = { onEvent(OnCurrencyChanged(it)) },

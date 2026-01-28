@@ -149,6 +149,24 @@ private fun TransactionHeaderForm() {
 @Composable
 private fun TransactionInputFormPreview() {
     PersonalFinanceTrackerTheme {
-
+        TransactionInputForm(
+            categories = emptyList(),
+            isIncome = true,
+            onTypeChanged = {},
+            selectedCategoryName = "",
+            onCategorySelected = {},
+            onDateChanged = {},
+            onAmountChanged = {},
+            onNotesChanged = {},
+            onCurrencySelected = {},
+            onSave = {},
+            onCancel = {},
+            selectedCurrency = "",
+            isLoading = false,
+            amount = "",
+            date = "",
+            notes = "",
+            isSaveEnabled = false,
+        )
     }
 }

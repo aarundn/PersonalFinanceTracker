@@ -1,142 +1,115 @@
 package com.example.personalfinancetracker.features.transaction.edit_transaction
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.model.Categories
+import com.example.core.common.BaseTransactionUiEvent
+import com.example.core.common.BaseTransactionViewModel
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 class EditTransactionViewModel(
     private val repository: TransactionRepository
-) : ViewModel() {
+) : BaseTransactionViewModel<EditTransactionContract.State, BaseTransactionUiEvent, EditTransactionContract.SideEffect>() {
 
-    private val _state = MutableStateFlow(EditTransactionContract.State())
-    val state: StateFlow<EditTransactionContract.State> = _state.asStateFlow()
+    override val _uiState = MutableStateFlow(EditTransactionContract.State())
 
-    private val _sideEffect = MutableSharedFlow<EditTransactionContract.SideEffect>()
-    val sideEffect: SharedFlow<EditTransactionContract.SideEffect> = _sideEffect.asSharedFlow()
+    val sideEffect = uiSideEffect
+
+    init {
+        // Intentionally empty, load logic triggered by event or ID set
+    }
 
     fun onEvent(event: EditTransactionContract.Event) {
         when (event) {
             is EditTransactionContract.Event.OnTransactionTypeChanged -> {
-               _state.update { it.copy(isIncome = event.isIncome, category = "") }
-                getCategories()
-
-
+                setState { copy(isIncome = event.isIncome, category = "") }
+                refreshCategories()
             }
-
-            is EditTransactionContract.Event.OnTitleChanged -> {
-                _state.value = _state.value.copy(title = event.title)
-            }
-
-            is EditTransactionContract.Event.OnCategoryChanged -> {
-                _state.update {
-                    it.copy(
-                        category = event.category
-                    )
-                }
-            }
-
-            is EditTransactionContract.Event.OnAmountChanged -> {
-                _state.value = _state.value.copy(amount = event.amount)
-            }
-
-            is EditTransactionContract.Event.OnCurrencyChanged -> {
-                _state.value = _state.value.copy(currency = event.currency)
-            }
-
-            is EditTransactionContract.Event.OnDateChanged -> {
-                _state.value = _state.value.copy(date = event.date)
-            }
-
-            is EditTransactionContract.Event.OnNotesChanged -> {
-                _state.value = _state.value.copy(notes = event.notes)
-            }
-
-            is EditTransactionContract.Event.OnLocationChanged -> {
-                _state.value = _state.value.copy(location = event.location)
-            }
-
-            is EditTransactionContract.Event.OnPaymentMethodChanged -> {
-                _state.value = _state.value.copy(paymentMethod = event.paymentMethod)
-            }
-
-            EditTransactionContract.Event.OnConvertCurrency -> {
-                // Handle currency conversion logic here
-                _state.value = _state.value.copy(isConverting = true)
-                // Simulate conversion
-                viewModelScope.launch {
-                    kotlinx.coroutines.delay(1000)
-                    _state.value = _state.value.copy(
-                        isConverting = false,
-                        convertedAmount = _state.value.amount.toDoubleOrNull()
-                            ?.times(1.2) // Mock conversion
-                    )
-                }
-            }
-
-            EditTransactionContract.Event.OnSave -> {
-                saveTransaction()
-            }
-
-            EditTransactionContract.Event.OnCancel -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(EditTransactionContract.SideEffect.NavigateBack)
-                }
-            }
+            is EditTransactionContract.Event.OnTitleChanged -> setState { copy(title = event.title) }
+            is EditTransactionContract.Event.OnCategoryChanged -> setState { copy(category = event.category) }
+            is EditTransactionContract.Event.OnAmountChanged -> setState { copy(amount = event.amount) }
+            is EditTransactionContract.Event.OnCurrencyChanged -> setState { copy(currency = event.currency) }
+            is EditTransactionContract.Event.OnDateChanged -> setState { copy(date = event.date) }
+            is EditTransactionContract.Event.OnNotesChanged -> setState { copy(notes = event.notes) }
+            
+            is EditTransactionContract.Event.OnLocationChanged -> setState { copy(location = event.location) }
+            is EditTransactionContract.Event.OnPaymentMethodChanged -> setState { copy(paymentMethod = event.paymentMethod) }
+            
+            EditTransactionContract.Event.OnConvertCurrency -> convertCurrency()
+            
+            EditTransactionContract.Event.OnSave -> saveTransaction()
+            EditTransactionContract.Event.OnCancel -> navigateBack()
 
             EditTransactionContract.Event.OnDelete -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(
-                        EditTransactionContract.SideEffect.ShowDeleteConfirmation(
-                            _state.value.transactionId
-                        )
-                    )
+                 viewModelScope.launch {
+                    emitSideEffect(EditTransactionContract.SideEffect.ShowDeleteConfirmation(_uiState.value.transactionId))
                 }
             }
+            EditTransactionContract.Event.OnEdit -> setState { copy(isEditing = true) }
+            EditTransactionContract.Event.OnLoadTransaction -> loadTransaction()
+        }
+    }
 
-            EditTransactionContract.Event.OnEdit -> {
-                _state.value = _state.value.copy(isEditing = true)
-            }
+    private fun refreshCategories() {
+        val categories = getCategoriesForType(_uiState.value.isIncome)
+        setState { copy(categories = categories) }
+    }
 
-            EditTransactionContract.Event.OnLoadTransaction -> {
-                loadTransaction()
+    private fun convertCurrency() {
+        viewModelScope.launch {
+            try {
+                setState { copy(isConverting = true) }
+                val result = calculateCurrencyConversion(_uiState.value.amount, _uiState.value.currency)
+                setState { copy(convertedAmount = result, isConverting = false) }
+            } catch (e: Exception) {
+                setState { copy(isConverting = false, error = "Currency conversion failed") }
+                showError("Currency conversion failed ${e.message}")
             }
         }
     }
 
-    private fun getCategories() {
-        val type = if (_state.value.isIncome) Type.INCOME else Type.EXPENSE
-        val categories = Categories.forType(type)
-        _state.update {
-            it.copy(
-                categories = categories,
-            )
+    private fun loadTransaction() {
+        setState { copy(isLoading = true) }
+
+        viewModelScope.launch {
+            try {
+                val transaction = repository.getTransactionById(_uiState.value.transactionId)
+
+                transaction?.let { txn ->
+                    val isIncome = txn.type == Type.INCOME
+                    setState {
+                        copy(
+                            isLoading = false,
+                            isIncome = isIncome,
+                            category = txn.category,
+                            amount = txn.amount.toString(),
+                            currency = txn.currency,
+                            date = txn.date,
+                            notes = txn.notes ?: "",
+                            categories = getCategoriesForType(isIncome)
+                        )
+                    }
+                } ?: run {
+                    setState { copy(isLoading = false) }
+                }
+            } catch (e: Exception) {
+                setState { copy(isLoading = false, error = e.message) }
+                showError(e.message ?: "Failed to load transaction")
+            }
         }
     }
+
     private fun saveTransaction() {
-        val currentState = _state.value
+        val currentState = _uiState.value
 
         // Validate required fields
         if (currentState.title.isBlank() || currentState.category.isBlank() || currentState.amount.isBlank()) {
-            viewModelScope.launch {
-                _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowError("Please fill in all required fields")
-                )
-            }
+            showError("Please fill in all required fields")
             return
         }
 
-        _state.value = currentState.copy(isLoading = true)
+        setState { copy(isLoading = true) }
 
         viewModelScope.launch {
             try {
@@ -146,70 +119,30 @@ class EditTransactionViewModel(
                 // Here you would call your repository to update the transaction
                 // repository.updateTransaction(createTransactionData())
 
-                _state.value = currentState.copy(
-                    isLoading = false,
-                    isEditing = false
-                )
-
-                _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowSuccess("Transaction updated successfully")
-                )
-
-                _sideEffect.emit(EditTransactionContract.SideEffect.NavigateBack)
+                setState { copy(isLoading = false, isEditing = false) }
+                emitSideEffect(EditTransactionContract.SideEffect.ShowSuccess("Transaction updated successfully"))
+                emitSideEffect(EditTransactionContract.SideEffect.NavigateBack)
 
             } catch (e: Exception) {
-                _state.value = currentState.copy(
-                    isLoading = false,
-                    error = e.message
-                )
-                _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowError(
-                        e.message ?: "Failed to update transaction"
-                    )
-                )
+                setState { copy(isLoading = false, error = e.message) }
+                showError(e.message ?: "Failed to update transaction")
             }
         }
     }
 
-    private fun loadTransaction() {
-        _state.value = _state.value.copy(isLoading = true)
+    private fun navigateBack() {
+         viewModelScope.launch {
+            emitSideEffect(EditTransactionContract.SideEffect.NavigateBack)
+        }
+    }
 
+    private fun showError(message: String) {
         viewModelScope.launch {
-            try {
-
-                val transaction = repository.getTransactionById(state.value.transactionId)
-
-                transaction?.let { transaction ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isIncome = transaction.type == Type.INCOME,
-                            category = transaction.category,
-                            amount = transaction.amount.toString(),
-                            currency = transaction.currency,
-                            date = transaction.date,
-                            notes = transaction.notes ?: "",
-                        )
-                    }
-                }
-                getCategories()
-
-            } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    error = e.message
-                )
-                _sideEffect.emit(
-                    EditTransactionContract.SideEffect.ShowError(
-                        e.message ?: "Failed to load transaction"
-                    )
-                )
-            }
+             emitSideEffect(EditTransactionContract.SideEffect.ShowError(message))
         }
     }
-
-
+    
     fun setTransactionId(transactionId: String) {
-        _state.value = _state.value.copy(transactionId = transactionId)
+        setState { copy(transactionId = transactionId) }
     }
 }
