@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.features.transaction.di
 
+import com.example.core.common.TransactionOperations
 import com.example.core.navigation.features.TransactionFeature
 import com.example.personalfinancetracker.features.transaction.add_transaction.AddTransactionViewModel
 import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionViewModel
@@ -12,7 +13,7 @@ import org.koin.dsl.module
 
 val transactionsModule = module {
     singleOf(::TransactionFeatureImpl) bind TransactionFeature::class
-
+    singleOf(::TransactionOperations)
 
     // view models
     viewModelOf(::AddTransactionViewModel)

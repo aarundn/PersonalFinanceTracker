@@ -36,23 +36,22 @@ import com.example.personalfinancetracker.features.transaction.edit_transaction.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTransactionScreen(
-    state: EditTransactionContract.State,
-    onEvent: (EditTransactionContract.Event) -> Unit,
+    state: EditTransactionState,
+    onEvent: (EditTransactionEvent) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        onEvent(EditTransactionContract.Event.OnLoadTransaction)
-    }
+    // No LaunchedEffect needed - cold flow loads data automatically when collected
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             HeaderSection(
-                onBackClick = { onEvent(EditTransactionContract.Event.OnCancel) },
+                onBackClick = { onEvent(EditTransactionEvent.OnCancel) },
                 title = if (state.isEditing) "Edit Transaction" else "Transaction Details",
                 actions = {
                     if (!state.isEditing) {
-                        IconButton(onClick = { onEvent(EditTransactionContract.Event.OnEdit) }) {
+                        IconButton(onClick = { onEvent(EditTransactionEvent.OnEdit) }) {
                             Icon(
                                 imageVector = Icons.Outlined.Edit,
                                 contentDescription = "Edit"
@@ -83,15 +82,15 @@ fun EditTransactionScreen(
                 TransactionInputForm(
                     modifier = Modifier,
                     isIncome = state.isIncome,
-                    onTypeChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnTransactionTypeChanged(it)) },
+                    onTypeChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnTransactionTypeChanged(it)) },
                     selectedCategoryName = state.category,
-                    onCategorySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCategoryChanged(it)) },
-                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnDateChanged(it.toLong())) },
-                    onAmountChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnAmountChanged(it)) },
-                    onNotesChanged = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnNotesChanged(it)) },
-                    onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionContract.Event.OnCurrencyChanged(it)) },
-                    onSave = { onEvent(EditTransactionContract.Event.OnSave) },
-                    onCancel = { onEvent(EditTransactionContract.Event.OnCancel) },
+                    onCategorySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCategoryChanged(it)) },
+                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnDateChanged(it.toLong())) },
+                    onAmountChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnAmountChanged(it)) },
+                    onNotesChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnNotesChanged(it)) },
+                    onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCurrencyChanged(it)) },
+                    onSave = { onEvent(EditTransactionEvent.OnSave) },
+                    onCancel = { onEvent(EditTransactionEvent.OnCancel) },
                     selectedCurrency = state.currency,
                     isLoading = false,
                     amount = state.amount,
@@ -106,7 +105,7 @@ fun EditTransactionScreen(
                 // Delete Button (only show when not editing)
                 if (!state.isEditing) {
                     Button(
-                        onClick = { onEvent(EditTransactionContract.Event.OnDelete) },
+                        onClick = { onEvent(EditTransactionEvent.OnDelete) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
@@ -134,7 +133,7 @@ fun EditTransactionScreen(
 private fun EditTransactionScreenPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
-            state = EditTransactionContract.State(
+            state = EditTransactionState(
                 transactionId = "",
                 isIncome = false,
                 title = "Grocery Shopping",
@@ -159,7 +158,7 @@ private fun EditTransactionScreenPreview() {
 private fun EditTransactionScreenEditingPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
-            state = EditTransactionContract.State(
+            state = EditTransactionState(
                 transactionId = "",
                 isIncome = true,
                 title = "Freelance Work",

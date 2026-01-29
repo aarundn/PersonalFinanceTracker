@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.personalfinancetracker.features.transaction.transactions.navigation.navigateToTransactionsScreen
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -15,22 +16,22 @@ fun AddTransactionRoute(
     navController: NavController,
     viewModel: AddTransactionViewModel = koinViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHostState = remember { SnackbarHostState() }
 
 
-    LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is TransactionSideEffect.NavigateBack -> navController.popBackStack()
+                is AddTransactionSideEffect.NavigateBack -> navController.popBackStack()
 
-                is TransactionSideEffect.NavigateToTransactions ->
+                is AddTransactionSideEffect.NavigateToTransactions ->
                     navController.navigateToTransactionsScreen()
 
-                is TransactionSideEffect.ShowError -> snackBarHostState.showSnackbar(effect.message)
+                is AddTransactionSideEffect.ShowError -> snackBarHostState.showSnackbar(effect.message)
 
-                is TransactionSideEffect.ShowSuccess -> snackBarHostState.showSnackbar(effect.message)
+                is AddTransactionSideEffect.ShowSuccess -> snackBarHostState.showSnackbar(effect.message)
 
             }
         }

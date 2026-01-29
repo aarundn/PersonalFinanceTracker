@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionContract
+import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionState
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
@@ -37,7 +37,7 @@ import java.util.Locale
 
 @Composable
 fun TransactionOverviewCard(
-    state: EditTransactionContract.State,
+    state: EditTransactionState,
     modifier: Modifier = Modifier
 ) {
     val categoryIcon = state.icon ?: getCategoryIcon(state.category)
@@ -230,7 +230,7 @@ private fun formatTime(dateString: String): String {
 private fun TransactionOverviewCardPreview() {
     PersonalFinanceTrackerTheme {
         TransactionOverviewCard(
-            state = EditTransactionContract.State(
+            state = EditTransactionState(
                 transactionId = "1",
                 isIncome = false,
                 title = "Grocery Shopping",

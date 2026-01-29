@@ -1,7 +1,0 @@
-package com.example.core.common
-
-interface BaseTransactionState
-
-interface BaseTransactionUiEvent
-
-interface BaseTransactionUiSideEffect

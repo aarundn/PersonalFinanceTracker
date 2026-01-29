@@ -1,11 +1,13 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
-import com.example.core.common.BaseTransactionState
-import com.example.core.common.BaseTransactionUiEvent
-import com.example.core.common.BaseTransactionUiSideEffect
+import androidx.compose.runtime.Immutable
+import com.example.core.common.MVIState
+import com.example.core.common.MVIUiEvent
+import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Categories
 
-data class TransactionState(
+@Immutable
+data class AddTransactionState(
     val isIncome: Boolean = false,
     val title: String = "",
     val category: String = "",
@@ -14,26 +16,28 @@ data class TransactionState(
     val date: Long = System.currentTimeMillis(),
     val notes: String = "",
     val convertedAmount: Double? = null,
-    val categories : List<Categories> = emptyList(),
+    val categories: List<Categories> = emptyList(),
     val isConverting: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null
-    ) : BaseTransactionState
+) : MVIState
 
-sealed class TransactionEvent : BaseTransactionUiEvent {
-    data class OnTransactionTypeChanged(val isIncome: Boolean) : TransactionEvent()
-    data class OnCategoryChanged(val category: String) : TransactionEvent()
-    data class OnAmountChanged(val amount: String) : TransactionEvent()
-    data class OnCurrencyChanged(val currency: String) : TransactionEvent()
-    data class OnDateChanged(val date: Long) : TransactionEvent()
-    data class OnNotesChanged(val notes: String) : TransactionEvent()
-    object OnSave : TransactionEvent()
-    object OnCancel : TransactionEvent()
+sealed class AddTransactionEvent : MVIUiEvent {
+    data class OnTransactionTypeChanged(val isIncome: Boolean) : AddTransactionEvent()
+    data class OnTitleChanged(val title: String) : AddTransactionEvent()
+    data class OnCategoryChanged(val category: String) : AddTransactionEvent()
+    data class OnAmountChanged(val amount: String) : AddTransactionEvent()
+    data class OnCurrencyChanged(val currency: String) : AddTransactionEvent()
+    data class OnDateChanged(val date: Long) : AddTransactionEvent()
+    data class OnNotesChanged(val notes: String) : AddTransactionEvent()
+    object OnConvertCurrency : AddTransactionEvent()
+    object OnSave : AddTransactionEvent()
+    object OnCancel : AddTransactionEvent()
 }
 
-sealed class TransactionSideEffect : BaseTransactionUiSideEffect {
-    object NavigateBack : TransactionSideEffect()
-    object NavigateToTransactions : TransactionSideEffect()
-    data class ShowError(val message: String) : TransactionSideEffect()
-    data class ShowSuccess(val message: String) : TransactionSideEffect()
+sealed class AddTransactionSideEffect : MVIUiSideEffect {
+    object NavigateBack : AddTransactionSideEffect()
+    object NavigateToTransactions : AddTransactionSideEffect()
+    data class ShowError(val message: String) : AddTransactionSideEffect()
+    data class ShowSuccess(val message: String) : AddTransactionSideEffect()
 }

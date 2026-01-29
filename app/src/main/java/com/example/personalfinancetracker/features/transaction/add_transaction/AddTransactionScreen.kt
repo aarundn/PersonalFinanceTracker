@@ -16,26 +16,18 @@ import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
 import com.example.core.utils.parseDateString
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnCancel
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnSave
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnDateChanged
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnAmountChanged
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnNotesChanged
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnCurrencyChanged
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnCategoryChanged
-import com.example.personalfinancetracker.features.transaction.add_transaction.TransactionEvent.OnTransactionTypeChanged
 
 @Composable
 fun AddTransactionScreen(
     snackBarHostState: SnackbarHostState,
-    state: TransactionState,
-    onEvent: (TransactionEvent) -> Unit,
+    state: AddTransactionState,
+    onEvent: (AddTransactionEvent) -> Unit,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { HeaderSection(onBackClick = { onEvent(OnCancel) }) }
+        topBar = { HeaderSection(onBackClick = { onEvent(AddTransactionEvent.OnCancel) }) }
     ) { innerPadding ->
 
         TransactionInputForm(
@@ -47,15 +39,15 @@ fun AddTransactionScreen(
                 .verticalScroll(rememberScrollState()),
             categories = state.categories,
             isIncome = state.isIncome,
-            onTypeChanged = { onEvent(OnTransactionTypeChanged(it)) },
+            onTypeChanged = { onEvent(AddTransactionEvent.OnTransactionTypeChanged(it)) },
             selectedCategoryName = state.category,
-            onCategorySelected = { onEvent(OnCategoryChanged(it)) },
-            onDateChanged = { onEvent(OnDateChanged(it.toLongOrNull() ?: 0L)) },
-            onAmountChanged = { onEvent(OnAmountChanged(it)) },
-            onNotesChanged = { onEvent(OnNotesChanged(it)) },
-            onCurrencySelected = { onEvent(OnCurrencyChanged(it)) },
-            onSave = { onEvent(OnSave) },
-            onCancel = { onEvent(OnCancel) },
+            onCategorySelected = { onEvent(AddTransactionEvent.OnCategoryChanged(it)) },
+            onDateChanged = { onEvent(AddTransactionEvent.OnDateChanged(it.toLongOrNull() ?: 0L)) },
+            onAmountChanged = { onEvent(AddTransactionEvent.OnAmountChanged(it)) },
+            onNotesChanged = { onEvent(AddTransactionEvent.OnNotesChanged(it)) },
+            onCurrencySelected = { onEvent(AddTransactionEvent.OnCurrencyChanged(it)) },
+            onSave = { onEvent(AddTransactionEvent.OnSave) },
+            onCancel = { onEvent(AddTransactionEvent.OnCancel) },
             selectedCurrency = state.currency,
             isLoading = state.isLoading,
             amount = state.amount,
@@ -72,7 +64,7 @@ fun AddTransactionScreen(
 private fun AddTransactionScreenPreview() {
     PersonalFinanceTrackerTheme {
         AddTransactionScreen(
-            state = TransactionState(
+            state = AddTransactionState(
                 isIncome = false,
                 title = "Sample Transaction",
                 category = "Food",

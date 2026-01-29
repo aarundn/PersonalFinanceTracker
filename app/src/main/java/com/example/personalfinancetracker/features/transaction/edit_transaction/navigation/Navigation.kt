@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.features.transaction.edit_transaction.navigation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -11,12 +12,8 @@ fun NavController.navigateToEditTransaction(transactionId: String) {
 }
 
 fun NavGraphBuilder.editTransactionRoute(navController: NavController) {
-    composable<TransactionRoutes.EditTransactionRoute> { backStackEntry ->
-        val transactionId =
-            backStackEntry.arguments?.getString("transactionId") ?: ""
-
+    composable<TransactionRoutes.EditTransactionRoute> {
         EditTransactionRoute(
-            transactionId = transactionId,
             onNavigateBack = { navController.popBackStack() },
             onNavigateToTransactions = {
                 navController.navigate(TransactionRoutes.TransactionsRoute) {
