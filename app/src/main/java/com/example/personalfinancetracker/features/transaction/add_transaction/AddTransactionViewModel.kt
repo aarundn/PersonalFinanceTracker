@@ -45,7 +45,7 @@ class AddTransactionViewModel(
     }
 
     private fun refreshCategories() {
-        val categories = Categories.forType(if (_uiState.value.isIncome) Type.INCOME else Type.EXPENSE)
+        val categories = Categories.getCategories(_uiState.value.isIncome)
         setState { copy(categories = categories) }
     }
 

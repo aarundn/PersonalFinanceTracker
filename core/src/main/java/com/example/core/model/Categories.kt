@@ -33,6 +33,11 @@ enum class Categories(val icon: Int, val color: Color, val Type: Type) {
         fun forType(Type: Type): List<Categories> =
             entries.filter { it.Type == Type }
 
+        fun getCategories(isIncome: Boolean): List<Categories> {
+            val type = if (isIncome) Type.INCOME else Type.EXPENSE
+            return forType(type)
+        }
+
         fun fromName(name: String): Categories? =
              entries.find { it.name.equals(name, ignoreCase = true) }
     }
