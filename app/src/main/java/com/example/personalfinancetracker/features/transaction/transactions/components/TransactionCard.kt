@@ -30,14 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.ProgressError
-import com.example.core.utils.parseDateString
-import com.example.domain.model.Transaction
 import com.example.domain.model.Type
+import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlin.math.abs
 
 @Composable
 fun TransactionCard(
-    transaction: Transaction,
+    transaction: TransactionUi,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -91,7 +90,7 @@ fun TransactionCard(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${stringResource(category.nameResId)} • ${parseDateString(transaction.date)}",
+                        text = "${stringResource(category.nameResId)} • ${transaction.formattedDate}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         overflow = TextOverflow.Ellipsis,

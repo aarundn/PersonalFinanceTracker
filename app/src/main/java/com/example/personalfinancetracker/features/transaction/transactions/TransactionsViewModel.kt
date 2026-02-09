@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetTransactionsUseCase
+import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -54,7 +55,7 @@ class TransactionsViewModel(
                  getTransactionsUseCase().collect { transactions ->
                      Log.d("TransactionsViewModel", "Transactions: ${transactions.size}")
                     _state.update {  it.copy(
-                        transactions = transactions,
+                        transactions = transactions.toTransactionUi(),
                         isLoading = false,
                         error = null
                     )

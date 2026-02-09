@@ -10,8 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
@@ -39,8 +37,6 @@ fun EditTransactionScreen(
     state: EditTransactionState,
     onEvent: (EditTransactionEvent) -> Unit,
 ) {
-    // No LaunchedEffect needed - cold flow loads data automatically when collected
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -75,7 +71,8 @@ fun EditTransactionScreen(
             } else {
                 TransactionOverviewCard(
                     state = state,
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp),
+                    category = DefaultCategories.fromId(state.category) ?: DefaultCategories.OTHER
                 )
 
                 // Transaction Details / Edit Form
@@ -96,7 +93,7 @@ fun EditTransactionScreen(
                     amount = state.amount,
                     date = parseDateString(state.date),
                     notes = state.notes,
-                    isSaveEnabled = state.isEditing && state.title.isNotEmpty() && state.category.isNotEmpty() && state.amount.isNotEmpty(),
+                    isSaveEnabled = state.isEditing && state.category.isNotEmpty() && state.amount.isNotEmpty(),
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
                     categories = state.categories
@@ -136,17 +133,12 @@ private fun EditTransactionScreenPreview() {
             state = EditTransactionState(
                 transactionId = "",
                 isIncome = false,
-                title = "Grocery Shopping",
                 category = "Food",
                 amount = "85.50",
                 currency = "USD",
                 date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
-                location = "Whole Foods Market",
-                paymentMethod = "Credit Card",
                 isEditing = false,
-                icon = Icons.Outlined.ShoppingCart,
-                iconTint = Color(0xFFF97316)
             ),
             onEvent = {}
         )
@@ -161,17 +153,12 @@ private fun EditTransactionScreenEditingPreview() {
             state = EditTransactionState(
                 transactionId = "",
                 isIncome = true,
-                title = "Freelance Work",
                 category = "Income",
                 amount = "800.00",
                 currency = "USD",
                 date = "2024-03-12".toLong(),
                 notes = "Website development project",
-                location = "",
-                paymentMethod = "Bank Transfer",
                 isEditing = true,
-                icon = Icons.Outlined.Home,
-                iconTint = Color(0xFF22C55E)
             ),
             onEvent = {}
         )

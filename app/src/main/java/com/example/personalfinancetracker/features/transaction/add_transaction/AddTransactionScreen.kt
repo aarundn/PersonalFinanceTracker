@@ -66,7 +66,6 @@ private fun AddTransactionScreenPreview() {
         AddTransactionScreen(
             state = AddTransactionState(
                 isIncome = false,
-                title = "Sample Transaction",
                 category = "Food",
                 amount = "25.50",
                 currency = "USD",

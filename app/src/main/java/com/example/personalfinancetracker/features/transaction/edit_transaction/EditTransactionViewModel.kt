@@ -6,9 +6,9 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
-import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -44,19 +44,18 @@ class EditTransactionViewModel(
                 val transaction = repository.getTransactionById(transactionId)
 
                 transaction?.let { txn ->
-                    val isIncome = txn.type == Type.INCOME
-                    val categories = DefaultCategories.getCategories(isIncome)
+                    val uiModel = txn.toTransactionUi()
+                    val categories = DefaultCategories.getCategories(uiModel.isIncome)
                     updateState {
                         copy(
                             transactionId = transactionId,
                             isLoading = false,
-                            isIncome = isIncome,
-                            title = txn.category,
-                            category = txn.category,
-                            amount = txn.amount.toString(),
-                            currency = txn.currency,
-                            date = txn.date,
-                            notes = txn.notes ?: "",
+                            isIncome = uiModel.isIncome,
+                            category = uiModel.category,
+                            amount = uiModel.amount.toString(),
+                            currency = uiModel.currency,
+                            date = uiModel.date,
+                            notes = uiModel.notes ?: "",
                             categories = categories
                         )
                     }
@@ -69,23 +68,19 @@ class EditTransactionViewModel(
             }
         }
     }
-     override fun handleEvent(event: MVIUiEvent) {
+
+    override fun handleEvent(event: MVIUiEvent) {
         when (event) {
             is EditTransactionEvent.OnTransactionTypeChanged -> {
                 updateState { copy(isIncome = event.isIncome, category = "") }
                 refreshCategories()
             }
 
-            is EditTransactionEvent.OnTitleChanged -> updateState { copy(title = event.title) }
             is EditTransactionEvent.OnCategoryChanged -> updateState { copy(category = event.category) }
             is EditTransactionEvent.OnAmountChanged -> updateState { copy(amount = event.amount) }
             is EditTransactionEvent.OnCurrencyChanged -> updateState { copy(currency = event.currency) }
             is EditTransactionEvent.OnDateChanged -> updateState { copy(date = event.date) }
             is EditTransactionEvent.OnNotesChanged -> updateState { copy(notes = event.notes) }
-
-            is EditTransactionEvent.OnLocationChanged -> updateState { copy(location = event.location) }
-            is EditTransactionEvent.OnPaymentMethodChanged -> updateState { copy(paymentMethod = event.paymentMethod) }
-
 
             EditTransactionEvent.OnSave -> saveTransaction()
             EditTransactionEvent.OnCancel -> navigateBack()
@@ -98,8 +93,6 @@ class EditTransactionViewModel(
 
             EditTransactionEvent.OnEdit -> updateState { copy(isEditing = true) }
 
-            // No longer needed - loading happens automatically when state is collected
-            EditTransactionEvent.OnLoadTransaction -> { }
         }
     }
 
@@ -126,7 +119,7 @@ class EditTransactionViewModel(
             currency = currentState.currency,
             date = currentState.date
         )
-        
+
         if (validationResult is ValidationResult.Error) {
             showError(validationResult.message)
             return
@@ -160,8 +153,4 @@ class EditTransactionViewModel(
             triggerSideEffect(EditTransactionSideEffect.ShowError(message))
         }
     }
-
-
-
-
 }

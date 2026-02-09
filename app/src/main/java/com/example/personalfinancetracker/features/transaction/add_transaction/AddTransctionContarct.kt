@@ -9,7 +9,6 @@ import com.example.core.model.Category
 @Immutable
 data class AddTransactionState(
     val isIncome: Boolean = false,
-    val title: String = "",
     val category: String = "",
     val amount: String = "",
     val currency: String = "",
@@ -24,7 +23,6 @@ data class AddTransactionState(
 
 sealed class AddTransactionEvent : MVIUiEvent {
     data class OnTransactionTypeChanged(val isIncome: Boolean) : AddTransactionEvent()
-    data class OnTitleChanged(val title: String) : AddTransactionEvent()
     data class OnCategoryChanged(val category: String) : AddTransactionEvent()
     data class OnAmountChanged(val amount: String) : AddTransactionEvent()
     data class OnCurrencyChanged(val currency: String) : AddTransactionEvent()

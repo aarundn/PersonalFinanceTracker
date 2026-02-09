@@ -22,26 +22,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionState
+import com.example.core.R
+import com.example.core.model.Category
+import com.example.core.ui.theme.CategoryShopping
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.domain.model.Type
+import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionState
 
 @Composable
 fun TransactionOverviewCard(
     state: EditTransactionState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    category: Category
 ) {
-    val categoryIcon = state.icon ?: getCategoryIcon(state.category)
-    val categoryColor = state.iconTint ?: getCategoryColor(state.category, state.isIncome)
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -64,16 +66,15 @@ fun TransactionOverviewCard(
                     modifier = Modifier
                         .size(58.dp)
                         .background(
-                            color = state.iconTint?.copy(0.1f)
-                                ?: MaterialTheme.colorScheme.primary.copy(0.1f),
+                            color = category.color.copy(0.1f),
                             shape = CircleShape
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = categoryIcon,
+                        imageVector = ImageVector.vectorResource(category.icon),
                         contentDescription = null,
-                        tint = categoryColor,
+                        tint = category.color,
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -83,13 +84,13 @@ fun TransactionOverviewCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = state.title,
+                        text = stringResource(category.nameResId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = state.category,
+                        text = stringResource(category.nameResId),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -103,7 +104,7 @@ fun TransactionOverviewCard(
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = if (state.isIncome)
-                                state.iconTint ?: MaterialTheme.colorScheme.primary
+                                category.color
                             else
                                 ProgressError
                         ),
@@ -183,48 +184,6 @@ fun TransactionOverviewCard(
     }
 }
 
-private fun getCategoryIcon(category: String): ImageVector {
-    return when (category.lowercase()) {
-        "salary", "freelance", "investment", "gift" -> Icons.Outlined.Home
-        "food", "restaurant" -> Icons.Outlined.Home
-        "transport", "gas" -> Icons.Outlined.Home
-        "shopping" -> Icons.Outlined.Home
-        "bills", "utilities" -> Icons.Outlined.Home
-        else -> Icons.Outlined.Home
-    }
-}
-
-@Composable
-private fun getCategoryColor(category: String, isIncome: Boolean): Color {
-    return if (isIncome) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        when (category.lowercase()) {
-            "food", "restaurant" -> MaterialTheme.colorScheme.tertiary
-            "transport", "gas" -> MaterialTheme.colorScheme.secondary
-            "shopping" -> MaterialTheme.colorScheme.primary
-            "bills", "utilities" -> MaterialTheme.colorScheme.error
-            else -> MaterialTheme.colorScheme.error
-        }
-    }
-}
-
-private fun formatDate(dateString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
-    return try {
-        val date = inputFormat.parse(dateString)
-        outputFormat.format(date!!)
-    } catch (_: Exception) {
-        dateString
-    }
-}
-
-private fun formatTime(dateString: String): String {
-    // Since we only have date, we'll show a default time
-    return "12:00 AM"
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TransactionOverviewCardPreview() {
@@ -233,15 +192,20 @@ private fun TransactionOverviewCardPreview() {
             state = EditTransactionState(
                 transactionId = "1",
                 isIncome = false,
-                title = "Grocery Shopping",
                 category = "Food",
                 amount = "85.50",
                 currency = "USD",
                 date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
-                location = "Whole Foods Market",
-                paymentMethod = "Credit Card",
-                isEditing = false
+                isEditing = false,
+
+                ),
+            category = Category(
+                "shopping",
+                R.string.category_shopping,
+                R.drawable.shopping_bag,
+                CategoryShopping,
+                Type.EXPENSE
             )
         )
     }
