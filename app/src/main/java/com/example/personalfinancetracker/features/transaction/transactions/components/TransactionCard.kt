@@ -27,8 +27,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.core.model.Categories
-import com.example.core.model.Categories.Companion.displayName
+import androidx.compose.ui.res.stringResource
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
 import com.example.domain.model.Transaction
@@ -41,7 +41,7 @@ fun TransactionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val category = Categories.valueOf(transaction.category.uppercase())
+    val category = DefaultCategories.fromId(transaction.category) ?: DefaultCategories.OTHER
 
     Card(
         modifier = modifier
@@ -85,13 +85,13 @@ fun TransactionCard(
 
                 Column {
                     Text(
-                        text = category.name.displayName(),
+                        text = stringResource(category.nameResId),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${category.name.displayName()} • ${parseDateString(transaction.date)}",
+                        text = "${stringResource(category.nameResId)} • ${parseDateString(transaction.date)}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         overflow = TextOverflow.Ellipsis,

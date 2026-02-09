@@ -3,7 +3,7 @@ package com.example.personalfinancetracker.features.transaction.add_transaction
 import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
-import com.example.core.model.Categories
+import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
@@ -18,9 +18,13 @@ class AddTransactionViewModel(
 ) : BaseViewModel<AddTransactionState, MVIUiEvent, AddTransactionSideEffect>() {
 
 
-
     init {
         refreshCategories()
+    }
+
+    private fun refreshCategories() {
+        val categories = DefaultCategories.getCategories(_uiState.value.isIncome)
+        setState { copy(categories = categories) }
     }
 
     override fun createInitialState() = AddTransactionState()
@@ -44,10 +48,6 @@ class AddTransactionViewModel(
         }
     }
 
-    private fun refreshCategories() {
-        val categories = Categories.getCategories(_uiState.value.isIncome)
-        setState { copy(categories = categories) }
-    }
 
     private fun navigateBack() {
         viewModelScope.launch {
@@ -64,7 +64,7 @@ class AddTransactionViewModel(
             currency = currentState.currency,
             date = currentState.date
         )
-        
+
         if (validationResult is ValidationResult.Error) {
             showError(validationResult.message)
             return

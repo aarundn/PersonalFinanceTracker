@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.example.core.common.MVIState
 import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
-import com.example.core.model.Categories
+import com.example.core.model.Category
 
 @Immutable
 data class AddTransactionState(
@@ -16,7 +16,7 @@ data class AddTransactionState(
     val date: Long = System.currentTimeMillis(),
     val notes: String = "",
     val convertedAmount: Double? = null,
-    val categories: List<Categories> = emptyList(),
+    val categories: List<Category> = emptyList(),
     val isConverting: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null

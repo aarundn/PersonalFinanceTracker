@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
-import com.example.core.model.Categories
+import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
@@ -45,7 +45,7 @@ class EditTransactionViewModel(
 
                 transaction?.let { txn ->
                     val isIncome = txn.type == Type.INCOME
-                    val categories = Categories.forType(txn.type)
+                    val categories = DefaultCategories.getCategories(isIncome)
                     updateState {
                         copy(
                             transactionId = transactionId,
@@ -111,7 +111,7 @@ class EditTransactionViewModel(
     }
 
     private fun refreshCategories() {
-        val categories = Categories.getCategories(_uiState.value.isIncome)
+        val categories = DefaultCategories.getCategories(_uiState.value.isIncome)
         updateState { copy(categories = categories) }
     }
 

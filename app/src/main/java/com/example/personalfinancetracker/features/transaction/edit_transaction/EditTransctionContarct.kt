@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.core.common.MVIState
 import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
-import com.example.core.model.Categories
+import com.example.core.model.Category
 
 @Immutable
 data class EditTransactionState(
@@ -27,7 +27,7 @@ data class EditTransactionState(
     val isEditing: Boolean = false,
     val icon: ImageVector? = null,
     val iconTint: Color? = null,
-    val categories: List<Categories> = emptyList(),
+    val categories: List<Category> = emptyList(),
 ) : MVIState
 
 sealed class EditTransactionEvent : MVIUiEvent {
