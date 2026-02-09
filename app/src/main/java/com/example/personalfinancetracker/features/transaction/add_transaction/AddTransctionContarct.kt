@@ -30,7 +30,6 @@ sealed class AddTransactionEvent : MVIUiEvent {
     data class OnCurrencyChanged(val currency: String) : AddTransactionEvent()
     data class OnDateChanged(val date: Long) : AddTransactionEvent()
     data class OnNotesChanged(val notes: String) : AddTransactionEvent()
-    object OnConvertCurrency : AddTransactionEvent()
     object OnSave : AddTransactionEvent()
     object OnCancel : AddTransactionEvent()
 }

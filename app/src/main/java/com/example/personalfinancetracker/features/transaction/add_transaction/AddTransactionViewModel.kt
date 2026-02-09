@@ -1,6 +1,5 @@
 package com.example.personalfinancetracker.features.transaction.add_transaction
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
@@ -40,7 +39,6 @@ class AddTransactionViewModel(
             is AddTransactionEvent.OnCurrencyChanged -> setState { copy(currency = event.currency) }
             is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date) }
             is AddTransactionEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
-            AddTransactionEvent.OnConvertCurrency -> convertCurrency()
             AddTransactionEvent.OnSave -> saveTransaction()
             AddTransactionEvent.OnCancel -> navigateBack()
         }
@@ -51,21 +49,6 @@ class AddTransactionViewModel(
         setState { copy(categories = categories) }
     }
 
-    private fun convertCurrency() {
-        viewModelScope.launch {
-            try {
-                setState { copy(isConverting = true) }
-                // Placeholder - returns same amount as Double
-                // In real implementation, inject a CurrencyConverterUseCase
-                val result = _uiState.value.amount.toDoubleOrNull() ?: 0.0
-                setState { copy(convertedAmount = result, isConverting = false) }
-            } catch (e: Exception) {
-                setState { copy(isConverting = false, error = "Currency conversion failed") }
-                showError("Currency conversion failed: ${e.message}")
-            }
-        }
-    }
-
     private fun navigateBack() {
         viewModelScope.launch {
             triggerSideEffect(AddTransactionSideEffect.NavigateBack)
@@ -74,8 +57,6 @@ class AddTransactionViewModel(
 
     private fun saveTransaction() {
         val currentState = _uiState.value
-
-        Log.d("AddTransactionViewModel", "Saving transaction with data: $currentState")
 
         val validationResult = validateInputsUseCase(
             category = currentState.category,
@@ -128,6 +109,5 @@ class AddTransactionViewModel(
             triggerSideEffect(AddTransactionSideEffect.ShowError(message))
         }
     }
-
 
 }

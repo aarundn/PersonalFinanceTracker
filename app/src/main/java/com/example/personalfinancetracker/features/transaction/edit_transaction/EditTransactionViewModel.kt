@@ -5,13 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.Categories
+import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-import com.example.domain.ValidationResult
 
 class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
