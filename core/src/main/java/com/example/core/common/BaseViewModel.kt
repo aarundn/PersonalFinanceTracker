@@ -16,10 +16,6 @@ import kotlinx.coroutines.launch
  * This class ONLY handles:
  * - State management (MutableStateFlow)
  * - Side effects (Channel-based one-time events)
- * 
- * Business logic (validation, currency conversion, categories) is handled
- * by TransactionOperations which is injected into child ViewModels.
- * This follows "Composition over Inheritance" principle.
  */
 abstract class BaseViewModel<
         S : MVIState,

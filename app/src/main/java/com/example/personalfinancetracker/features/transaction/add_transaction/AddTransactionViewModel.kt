@@ -2,21 +2,20 @@ package com.example.personalfinancetracker.features.transaction.add_transaction
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.example.core.common.MVIUiEvent
 import com.example.core.common.BaseViewModel
-import com.example.core.common.TransactionOperations
+import com.example.core.common.MVIUiEvent
+import com.example.core.model.Categories
+import com.example.domain.ValidationResult
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
-    private val validateInputsUseCase: ValidateTransactionInputsUseCase,
-    private val transactionOps: TransactionOperations = TransactionOperations()
+    private val validateInputsUseCase: ValidateTransactionInputsUseCase
 ) : BaseViewModel<AddTransactionState, MVIUiEvent, AddTransactionSideEffect>() {
 
 
@@ -48,7 +47,7 @@ class AddTransactionViewModel(
     }
 
     private fun refreshCategories() {
-        val categories = transactionOps.getCategoriesForType(_uiState.value.isIncome)
+        val categories = Categories.forType(if (_uiState.value.isIncome) Type.INCOME else Type.EXPENSE)
         setState { copy(categories = categories) }
     }
 
@@ -56,10 +55,9 @@ class AddTransactionViewModel(
         viewModelScope.launch {
             try {
                 setState { copy(isConverting = true) }
-                val result = transactionOps.convertCurrency(
-                    _uiState.value.amount,
-                    _uiState.value.currency
-                )
+                // Placeholder - returns same amount as Double
+                // In real implementation, inject a CurrencyConverterUseCase
+                val result = _uiState.value.amount.toDoubleOrNull() ?: 0.0
                 setState { copy(convertedAmount = result, isConverting = false) }
             } catch (e: Exception) {
                 setState { copy(isConverting = false, error = "Currency conversion failed") }
@@ -79,17 +77,18 @@ class AddTransactionViewModel(
 
         Log.d("AddTransactionViewModel", "Saving transaction with data: $currentState")
 
-        // Use validation use case
-        val validationError = validateInputsUseCase.getValidationError(
-            currentState.category,
-            currentState.amount
+        val validationResult = validateInputsUseCase(
+            category = currentState.category,
+            amount = currentState.amount,
+            currency = currentState.currency,
+            date = currentState.date
         )
-        if (validationError != null) {
-            showError(validationError)
+        
+        if (validationResult is ValidationResult.Error) {
+            showError(validationResult.message)
             return
         }
 
-        val amount = transactionOps.parseAmount(currentState.amount)
 
         setState { copy(isLoading = true) }
 
@@ -98,7 +97,7 @@ class AddTransactionViewModel(
                 val transactionData = Transaction(
                     id = UUID.randomUUID().toString(),
                     userId = "A1", // TODO: Get actual user ID
-                    amount = amount,
+                    amount = currentState.amount.toDoubleOrNull() ?: 0.0,
                     currency = currentState.currency,
                     category = currentState.category,
                     date = currentState.date,

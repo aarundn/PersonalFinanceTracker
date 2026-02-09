@@ -4,18 +4,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
-import com.example.core.common.TransactionOperations
+import com.example.core.model.Categories
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+import com.example.domain.ValidationResult
+
 class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val repository: TransactionRepository,
-    private val validateInputsUseCase: ValidateTransactionInputsUseCase,
-    private val transactionOps: TransactionOperations
+    private val validateInputsUseCase: ValidateTransactionInputsUseCase
 ) : BaseViewModel<EditTransactionState, MVIUiEvent, EditTransactionSideEffect>() {
 
     companion object {
@@ -45,6 +46,7 @@ class EditTransactionViewModel(
 
                 transaction?.let { txn ->
                     val isIncome = txn.type == Type.INCOME
+                    val categories = Categories.forType(txn.type)
                     updateState {
                         copy(
                             transactionId = transactionId,
@@ -56,7 +58,7 @@ class EditTransactionViewModel(
                             currency = txn.currency,
                             date = txn.date,
                             notes = txn.notes ?: "",
-                            categories = transactionOps.getCategoriesForType(isIncome)
+                            categories = categories
                         )
                     }
                 } ?: run {
@@ -68,7 +70,7 @@ class EditTransactionViewModel(
             }
         }
     }
-    override fun handleEvent(event: MVIUiEvent) {
+     override fun handleEvent(event: MVIUiEvent) {
         when (event) {
             is EditTransactionEvent.OnTransactionTypeChanged -> {
                 updateState { copy(isIncome = event.isIncome, category = "") }
@@ -102,10 +104,6 @@ class EditTransactionViewModel(
         }
     }
 
-    fun onEvent(event: EditTransactionEvent) {
-
-    }
-
     /**
      * Update internal state - this is for UI interactions after initial load.
      */
@@ -114,7 +112,7 @@ class EditTransactionViewModel(
     }
 
     private fun refreshCategories() {
-        val categories = transactionOps.getCategoriesForType(_uiState.value.isIncome)
+        val categories = Categories.forType(if (_uiState.value.isIncome) Type.INCOME else Type.EXPENSE)
         updateState { copy(categories = categories) }
     }
 
@@ -123,12 +121,15 @@ class EditTransactionViewModel(
         val currentState = _uiState.value
 
         // Use validation use case
-        val validationError = validateInputsUseCase.getValidationError(
-            currentState.category,
-            currentState.amount
+        val validationResult = validateInputsUseCase(
+            category = currentState.category,
+            amount = currentState.amount,
+            currency = currentState.currency,
+            date = currentState.date
         )
-        if (validationError != null) {
-            showError(validationError)
+        
+        if (validationResult is ValidationResult.Error) {
+            showError(validationResult.message)
             return
         }
 
