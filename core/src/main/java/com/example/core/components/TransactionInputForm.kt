@@ -29,8 +29,8 @@ fun TransactionInputForm(
     isIncome: Boolean,
     modifier: Modifier = Modifier,
     onTypeChanged: (Boolean) -> Unit,
-    selectedCategoryName: String, // This is actually the ID now
-    onCategorySelected: (String) -> Unit,
+    selectedCategory: Category?,
+    onCategorySelected: (Category) -> Unit,
     onDateChanged: (String) -> Unit,
     onAmountChanged: (String) -> Unit,
     onNotesChanged: (String) -> Unit,
@@ -71,21 +71,12 @@ fun TransactionInputForm(
                     )
                 }
 
-                // Map Category ID to Localized Name
-                val categoryMap = categories.associate { stringResource(it.nameResId) to it.id }
-                val displayNames = categoryMap.keys.toList()
-                
-                // Find display name for selected ID
-                val selectedDisplayName = categories.find { it.id == selectedCategoryName }?.let { stringResource(it.nameResId) } ?: ""
-
                 TransactionDropdown(
                     label = "Category",
-                    items = displayNames,
-                    selectedItem = selectedDisplayName,
-                    onItemSelected = { name -> 
-                        val id = categoryMap[name] ?: ""
-                        onCategorySelected(id) 
-                    },
+                    items = categories,
+                    selectedItem = selectedCategory,
+                    onItemSelected = onCategorySelected,
+                    itemLabel = { stringResource(it.nameResId) },
                     enabled = !isReadOnly
                 )
 
@@ -94,6 +85,7 @@ fun TransactionInputForm(
                     items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
                     selectedItem = selectedCurrency,
                     onItemSelected = onCurrencySelected,
+                    itemLabel = { it },
                     enabled = !isReadOnly
                 )
                 FormInput(
@@ -162,7 +154,7 @@ private fun TransactionInputFormPreview() {
             categories = emptyList(),
             isIncome = true,
             onTypeChanged = {},
-            selectedCategoryName = "",
+            selectedCategory = null,
             onCategorySelected = {},
             onDateChanged = {},
             onAmountChanged = {},

@@ -10,7 +10,7 @@ import com.example.core.model.Category
 data class EditTransactionState(
     val transactionId: String = "",
     val isIncome: Boolean = false,
-    val category: String = "",
+    val selectedCategory: Category? = null,
     val amount: String = "",
     val currency: String = "USD",
     val date: Long = 0L,
@@ -23,7 +23,7 @@ data class EditTransactionState(
 
 sealed class EditTransactionEvent : MVIUiEvent {
     data class OnTransactionTypeChanged(val isIncome: Boolean) : EditTransactionEvent()
-    data class OnCategoryChanged(val category: String) : EditTransactionEvent()
+    data class OnCategoryChanged(val category: Category) : EditTransactionEvent()
     data class OnAmountChanged(val amount: String) : EditTransactionEvent()
     data class OnCurrencyChanged(val currency: String) : EditTransactionEvent()
     data class OnDateChanged(val date: Long) : EditTransactionEvent()

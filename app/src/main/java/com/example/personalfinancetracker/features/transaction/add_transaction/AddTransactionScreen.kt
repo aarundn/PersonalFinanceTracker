@@ -40,7 +40,7 @@ fun AddTransactionScreen(
             categories = state.categories,
             isIncome = state.isIncome,
             onTypeChanged = { onEvent(AddTransactionEvent.OnTransactionTypeChanged(it)) },
-            selectedCategoryName = state.category,
+            selectedCategory = state.selectedCategory,
             onCategorySelected = { onEvent(AddTransactionEvent.OnCategoryChanged(it)) },
             onDateChanged = { onEvent(AddTransactionEvent.OnDateChanged(it.toLongOrNull() ?: 0L)) },
             onAmountChanged = { onEvent(AddTransactionEvent.OnAmountChanged(it)) },
@@ -53,7 +53,7 @@ fun AddTransactionScreen(
             amount = state.amount,
             date = parseDateString(state.date),
             notes = state.notes,
-            isSaveEnabled = state.category.isNotEmpty() && state.amount.isNotEmpty()
+            isSaveEnabled = state.selectedCategory != null && state.amount.isNotEmpty()
         )
     }
 }
@@ -66,11 +66,11 @@ private fun AddTransactionScreenPreview() {
         AddTransactionScreen(
             state = AddTransactionState(
                 isIncome = false,
-                category = "Food",
                 amount = "25.50",
                 currency = "USD",
                 date = 0L,
-                notes = "Lunch at restaurant"
+                notes = "Lunch at restaurant",
+                selectedCategory = null
             ),
             onEvent = {},
             snackBarHostState = SnackbarHostState()

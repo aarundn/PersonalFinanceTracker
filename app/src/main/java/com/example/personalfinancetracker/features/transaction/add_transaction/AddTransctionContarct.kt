@@ -9,7 +9,7 @@ import com.example.core.model.Category
 @Immutable
 data class AddTransactionState(
     val isIncome: Boolean = false,
-    val category: String = "",
+    val selectedCategory: Category? = null,
     val amount: String = "",
     val currency: String = "",
     val date: Long = System.currentTimeMillis(),
@@ -23,7 +23,7 @@ data class AddTransactionState(
 
 sealed class AddTransactionEvent : MVIUiEvent {
     data class OnTransactionTypeChanged(val isIncome: Boolean) : AddTransactionEvent()
-    data class OnCategoryChanged(val category: String) : AddTransactionEvent()
+    data class OnCategoryChanged(val category: Category) : AddTransactionEvent()
     data class OnAmountChanged(val amount: String) : AddTransactionEvent()
     data class OnCurrencyChanged(val currency: String) : AddTransactionEvent()
     data class OnDateChanged(val date: Long) : AddTransactionEvent()

@@ -29,11 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TransactionDropdown(
+fun <T> TransactionDropdown(
     label: String,
-    items: List<String>,
-    selectedItem: String?,
-    onItemSelected: (String) -> Unit,
+    items: List<T>,
+    selectedItem: T?,
+    onItemSelected: (T) -> Unit,
+    itemLabel: @Composable (T) -> String,
     enabled: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -63,15 +64,15 @@ fun TransactionDropdown(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                selectedItem?.ifEmpty { "Select $label" }?.let {
-                    Text(
-                        text = it ,
-                        color = if (selectedItem.isEmpty())
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        else
-                            MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                val displayText = selectedItem?.let { itemLabel(it) } ?: ""
+
+                Text(
+                    text = displayText.ifEmpty { "Select $label" },
+                    color = if (selectedItem == null)
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
+                        MaterialTheme.colorScheme.onSurface
+                )
 
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -85,6 +86,7 @@ fun TransactionDropdown(
                 onDismissRequest = { expanded = false }
             ) {
                 items.forEach { item ->
+                    val text = itemLabel(item)
                     DropdownMenuItem(
                         text = {
                             Row(
@@ -92,7 +94,7 @@ fun TransactionDropdown(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(item)
+                                Text(text)
                                 if (item == selectedItem) {
                                     Icon(
                                         Icons.Default.Check,

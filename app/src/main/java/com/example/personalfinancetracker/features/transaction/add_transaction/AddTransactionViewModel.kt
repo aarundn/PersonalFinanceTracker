@@ -5,11 +5,10 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
+import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
-import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
-import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -17,7 +16,6 @@ class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
     private val validateInputsUseCase: ValidateTransactionInputsUseCase
 ) : BaseViewModel<AddTransactionState, MVIUiEvent, AddTransactionSideEffect>() {
-
 
     init {
         refreshCategories()
@@ -34,10 +32,10 @@ class AddTransactionViewModel(
 
         when (event) {
             is AddTransactionEvent.OnTransactionTypeChanged -> {
-                setState { copy(isIncome = event.isIncome, category = "") }
+                setState { copy(isIncome = event.isIncome, selectedCategory = null) }
                 refreshCategories()
             }
-            is AddTransactionEvent.OnCategoryChanged -> setState { copy(category = event.category) }
+            is AddTransactionEvent.OnCategoryChanged -> setState { copy(selectedCategory = event.category) }
             is AddTransactionEvent.OnAmountChanged -> setState { copy(amount = event.amount) }
             is AddTransactionEvent.OnCurrencyChanged -> setState { copy(currency = event.currency) }
             is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date) }
@@ -58,7 +56,7 @@ class AddTransactionViewModel(
         val currentState = _uiState.value
 
         val validationResult = validateInputsUseCase(
-            category = currentState.category,
+            category = currentState.selectedCategory?.id ?: "",
             amount = currentState.amount,
             currency = currentState.currency,
             date = currentState.date
@@ -74,18 +72,18 @@ class AddTransactionViewModel(
 
         viewModelScope.launch {
             try {
-                val transactionData = TransactionUi(
+                val transactionData = Transaction(
                     id = UUID.randomUUID().toString(),
                     userId = "A1", // TODO: Get actual user ID
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
                     currency = currentState.currency,
-                    category = currentState.category,
+                    category = currentState.selectedCategory?.id ?: "",
                     date = currentState.date,
                     notes = currentState.notes,
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis(),
                     type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
-                ).toTransaction()
+                )
 
                 addTransactionUseCase(transactionData).onSuccess {
                     setState { copy(isLoading = false) }

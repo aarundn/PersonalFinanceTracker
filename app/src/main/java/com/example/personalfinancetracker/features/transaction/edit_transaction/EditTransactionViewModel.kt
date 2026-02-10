@@ -6,9 +6,9 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
+import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
-import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -44,18 +44,20 @@ class EditTransactionViewModel(
                 val transaction = repository.getTransactionById(transactionId)
 
                 transaction?.let { txn ->
-                    val uiModel = txn.toTransactionUi()
-                    val categories = DefaultCategories.getCategories(uiModel.isIncome)
+                    val isIncome = txn.type == Type.INCOME
+                    val categories = DefaultCategories.getCategories(isIncome)
+                    val selectedCategory = DefaultCategories.fromId(txn.category)
+                    
                     updateState {
                         copy(
                             transactionId = transactionId,
                             isLoading = false,
-                            isIncome = uiModel.isIncome,
-                            category = uiModel.category,
-                            amount = uiModel.amount.toString(),
-                            currency = uiModel.currency,
-                            date = uiModel.date,
-                            notes = uiModel.notes ?: "",
+                            isIncome = isIncome,
+                            selectedCategory = selectedCategory,
+                            amount = txn.amount.toString(),
+                            currency = txn.currency,
+                            date = txn.date,
+                            notes = txn.notes ?: "",
                             categories = categories
                         )
                     }
@@ -68,20 +70,18 @@ class EditTransactionViewModel(
             }
         }
     }
-
     override fun handleEvent(event: MVIUiEvent) {
         when (event) {
             is EditTransactionEvent.OnTransactionTypeChanged -> {
-                updateState { copy(isIncome = event.isIncome, category = "") }
+                updateState { copy(isIncome = event.isIncome, selectedCategory = null) }
                 refreshCategories()
             }
 
-            is EditTransactionEvent.OnCategoryChanged -> updateState { copy(category = event.category) }
+            is EditTransactionEvent.OnCategoryChanged -> updateState { copy(selectedCategory = event.category) }
             is EditTransactionEvent.OnAmountChanged -> updateState { copy(amount = event.amount) }
             is EditTransactionEvent.OnCurrencyChanged -> updateState { copy(currency = event.currency) }
             is EditTransactionEvent.OnDateChanged -> updateState { copy(date = event.date) }
             is EditTransactionEvent.OnNotesChanged -> updateState { copy(notes = event.notes) }
-
             EditTransactionEvent.OnSave -> saveTransaction()
             EditTransactionEvent.OnCancel -> navigateBack()
 
@@ -90,9 +90,7 @@ class EditTransactionViewModel(
                     triggerSideEffect(EditTransactionSideEffect.ShowDeleteConfirmation(_uiState.value.transactionId))
                 }
             }
-
             EditTransactionEvent.OnEdit -> updateState { copy(isEditing = true) }
-
         }
     }
 
@@ -114,7 +112,7 @@ class EditTransactionViewModel(
 
         // Use validation use case
         val validationResult = validateInputsUseCase(
-            category = currentState.category,
+            category = currentState.selectedCategory?.id ?: "",
             amount = currentState.amount,
             currency = currentState.currency,
             date = currentState.date

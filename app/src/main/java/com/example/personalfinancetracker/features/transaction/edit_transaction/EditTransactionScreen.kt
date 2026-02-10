@@ -72,7 +72,7 @@ fun EditTransactionScreen(
                 TransactionOverviewCard(
                     state = state,
                     modifier = Modifier.padding(top = 16.dp),
-                    category = DefaultCategories.fromId(state.category) ?: DefaultCategories.OTHER
+                    category = state.selectedCategory ?: DefaultCategories.OTHER
                 )
 
                 // Transaction Details / Edit Form
@@ -80,7 +80,7 @@ fun EditTransactionScreen(
                     modifier = Modifier,
                     isIncome = state.isIncome,
                     onTypeChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnTransactionTypeChanged(it)) },
-                    selectedCategoryName = state.category,
+                    selectedCategory = state.selectedCategory,
                     onCategorySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCategoryChanged(it)) },
                     onDateChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnDateChanged(it.toLong())) },
                     onAmountChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnAmountChanged(it)) },
@@ -93,7 +93,7 @@ fun EditTransactionScreen(
                     amount = state.amount,
                     date = parseDateString(state.date),
                     notes = state.notes,
-                    isSaveEnabled = state.isEditing && state.category.isNotEmpty() && state.amount.isNotEmpty(),
+                    isSaveEnabled = state.isEditing && state.selectedCategory != null && state.amount.isNotEmpty(),
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
                     categories = state.categories
@@ -133,7 +133,7 @@ private fun EditTransactionScreenPreview() {
             state = EditTransactionState(
                 transactionId = "",
                 isIncome = false,
-                category = "Food",
+                selectedCategory = DefaultCategories.FOOD,
                 amount = "85.50",
                 currency = "USD",
                 date = "2024-03-15".toLong(),
@@ -153,7 +153,7 @@ private fun EditTransactionScreenEditingPreview() {
             state = EditTransactionState(
                 transactionId = "",
                 isIncome = true,
-                category = "Income",
+                selectedCategory = DefaultCategories.SALARY,
                 amount = "800.00",
                 currency = "USD",
                 date = "2024-03-12".toLong(),

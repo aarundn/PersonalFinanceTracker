@@ -192,7 +192,7 @@ private fun TransactionOverviewCardPreview() {
             state = EditTransactionState(
                 transactionId = "1",
                 isIncome = false,
-                category = "Food",
+                selectedCategory = null,
                 amount = "85.50",
                 currency = "USD",
                 date = "2024-03-15".toLong(),
