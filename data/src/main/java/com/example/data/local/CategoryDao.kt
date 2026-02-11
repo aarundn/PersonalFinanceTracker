@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.data.local.model.CategoryEntity
 import kotlinx.coroutines.flow.Flow
-
+// for future use if we add add a functionality to edit categories
 @Dao
 interface CategoryDao {
     @Query("SELECT * FROM categories ORDER BY name ASC")
