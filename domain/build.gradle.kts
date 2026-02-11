@@ -38,9 +38,31 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    // Local Tests
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.mockk)
+    debugImplementation(libs.ui.test.manifest)
+
+    // Instrumented Tests
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.core.ktx)
+    androidTestImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.mockk.android)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
 
     //koin DI
     implementation(libs.koin.androidx.compose)
