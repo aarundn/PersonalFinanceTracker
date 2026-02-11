@@ -5,10 +5,11 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
-import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.usecase.AddTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
+import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -72,7 +73,7 @@ class AddTransactionViewModel(
 
         viewModelScope.launch {
             try {
-                val transactionData = Transaction(
+                val transactionData = TransactionUi(
                     id = UUID.randomUUID().toString(),
                     userId = "A1", // TODO: Get actual user ID
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
@@ -83,7 +84,7 @@ class AddTransactionViewModel(
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis(),
                     type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
-                )
+                ).toTransaction()
 
                 addTransactionUseCase(transactionData).onSuccess {
                     setState { copy(isLoading = false) }

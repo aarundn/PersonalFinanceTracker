@@ -28,6 +28,7 @@ import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
 
@@ -75,7 +76,6 @@ fun EditTransactionScreen(
                     category = state.selectedCategory ?: DefaultCategories.OTHER
                 )
 
-                // Transaction Details / Edit Form
                 TransactionInputForm(
                     modifier = Modifier,
                     isIncome = state.isIncome,
@@ -99,7 +99,6 @@ fun EditTransactionScreen(
                     categories = state.categories
                 )
 
-                // Delete Button (only show when not editing)
                 if (!state.isEditing) {
                     Button(
                         onClick = { onEvent(EditTransactionEvent.OnDelete) },
@@ -107,7 +106,7 @@ fun EditTransactionScreen(
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFDC2626), // Red-600
+                            containerColor = ProgressError,
                             contentColor = Color.White
                         )
                     ) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
+@Suppress("ParamsComparedByRef")
 @Composable
 fun EditTransactionRoute(
     onNavigateBack: () -> Unit,
@@ -15,7 +16,6 @@ fun EditTransactionRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Handle side effects
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
@@ -38,7 +38,6 @@ fun EditTransactionRoute(
         }
     }
 
-    // Transaction ID is now retrieved from SavedStateHandle - no LaunchedEffect needed
 
     EditTransactionScreen(
         state = state,

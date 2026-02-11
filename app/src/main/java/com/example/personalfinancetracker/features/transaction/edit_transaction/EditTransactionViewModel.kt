@@ -6,9 +6,9 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
-import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -41,11 +41,10 @@ class EditTransactionViewModel(
 
         viewModelScope.launch {
             try {
-                val transaction = repository.getTransactionById(transactionId)
+                val transactionUi = repository.getTransactionById(transactionId)?.toTransactionUi()
+                transactionUi?.let { txn ->
 
-                transaction?.let { txn ->
-                    val isIncome = txn.type == Type.INCOME
-                    val categories = DefaultCategories.getCategories(isIncome)
+                    val categories = DefaultCategories.getCategories(txn.isIncome)
                     val selectedCategory = DefaultCategories.fromId(txn.category)
                     
                     updateState {
@@ -110,7 +109,6 @@ class EditTransactionViewModel(
     private fun saveTransaction() {
         val currentState = _uiState.value
 
-        // Use validation use case
         val validationResult = validateInputsUseCase(
             category = currentState.selectedCategory?.id ?: "",
             amount = currentState.amount,
