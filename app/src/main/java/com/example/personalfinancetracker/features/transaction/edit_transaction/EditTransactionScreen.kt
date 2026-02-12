@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -41,12 +43,14 @@ import com.example.personalfinancetracker.features.transaction.edit_transaction.
 fun EditTransactionScreen(
     state: EditTransactionState,
     onEvent: (EditTransactionEvent) -> Unit,
+    snackBarHostState: SnackbarHostState,
 ) {
 
 
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             HeaderSection(
@@ -157,7 +161,8 @@ private fun EditTransactionScreenPreview() {
                 notes = "Weekly grocery shopping at Whole Foods",
                 isEditing = false,
             ),
-            onEvent = {}
+            onEvent = {},
+            snackBarHostState = SnackbarHostState()
         )
     }
 }
@@ -177,7 +182,9 @@ private fun EditTransactionScreenEditingPreview() {
                 notes = "Website development project",
                 isEditing = true,
             ),
-            onEvent = {}
+            onEvent = {},
+            snackBarHostState = SnackbarHostState()
+
         )
     }
 }
