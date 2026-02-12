@@ -6,15 +6,20 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
+import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
+import com.example.domain.usecase.UpdateTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
+import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val repository: TransactionRepository,
+    private val updateTransactionUseCase: UpdateTransactionUseCase,
     private val validateInputsUseCase: ValidateTransactionInputsUseCase
 ) : BaseViewModel<EditTransactionState, MVIUiEvent, EditTransactionSideEffect>() {
 
@@ -51,7 +56,7 @@ class EditTransactionViewModel(
                         copy(
                             transactionId = transactionId,
                             isLoading = false,
-                            isIncome = isIncome,
+                            isIncome = txn.isIncome,
                             selectedCategory = selectedCategory,
                             amount = txn.amount.toString(),
                             currency = txn.currency,
@@ -93,9 +98,7 @@ class EditTransactionViewModel(
         }
     }
 
-    /**
-     * Update internal state - this is for UI interactions after initial load.
-     */
+
     private fun updateState(update: EditTransactionState.() -> EditTransactionState) {
         _uiState.update { it.update() }
     }
@@ -107,7 +110,7 @@ class EditTransactionViewModel(
 
 
     private fun saveTransaction() {
-        val currentState = _uiState.value
+        val currentState = uiState.value
 
         val validationResult = validateInputsUseCase(
             category = currentState.selectedCategory?.id ?: "",
@@ -125,11 +128,28 @@ class EditTransactionViewModel(
 
         viewModelScope.launch {
             try {
-                // TODO: Call repository.updateTransaction(...)
 
-                updateState { copy(isLoading = false, isEditing = false) }
-                triggerSideEffect(EditTransactionSideEffect.ShowSuccess("Transaction updated successfully"))
-                triggerSideEffect(EditTransactionSideEffect.NavigateBack)
+                val transactionData = TransactionUi(
+                    id = transactionId,
+                    userId = "A1", // TODO: Get actual user ID
+                    amount = currentState.amount.toDoubleOrNull() ?: 0.0,
+                    currency = currentState.currency,
+                    category = currentState.selectedCategory?.id ?: "",
+                    date = System.currentTimeMillis(),
+                    notes = currentState.notes,
+                    createdAt = currentState.date,
+                    updatedAt = System.currentTimeMillis(),
+                    type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
+                ).toTransaction()
+
+                updateTransactionUseCase(transactionData).onSuccess {
+                    updateState { copy(isLoading = false, isEditing = false) }
+                    triggerSideEffect(EditTransactionSideEffect.ShowSuccess("Transaction updated successfully"))
+                    triggerSideEffect(EditTransactionSideEffect.NavigateBack)
+                }.onFailure { e ->
+                    updateState { copy(isLoading = false, error = "Failed to update transaction") }
+                    triggerSideEffect(EditTransactionSideEffect.ShowError("Failed to update transaction: ${e.message}"))
+                }
 
             } catch (e: Exception) {
                 updateState { copy(isLoading = false, error = e.message) }
