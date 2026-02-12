@@ -21,8 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.R
+import com.example.core.components.ConfirmationDialog
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
@@ -38,6 +42,8 @@ fun EditTransactionScreen(
     state: EditTransactionState,
     onEvent: (EditTransactionEvent) -> Unit,
 ) {
+
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -119,6 +125,18 @@ fun EditTransactionScreen(
                     }
                 }
             }
+        }
+
+        if (state.showDeleteConfirmation) {
+            ConfirmationDialog(
+                title = "Delete Transaction",
+                message = "Are you sure you want to delete this transaction? This action cannot be undone.",
+                confirmText = "Delete",
+                dismissText = "Cancel",
+                icon = ImageVector.vectorResource(id = R.drawable.shopping_basket),
+                onConfirm = { onEvent(EditTransactionEvent.OnConfirmDelete) },
+                onDismiss = { onEvent(EditTransactionEvent.OnDismissDelete) }
+            )
         }
     }
 }

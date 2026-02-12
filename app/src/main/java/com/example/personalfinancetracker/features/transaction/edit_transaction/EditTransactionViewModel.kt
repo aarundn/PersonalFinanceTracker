@@ -8,6 +8,7 @@ import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
+import com.example.domain.usecase.DeleteTransactionUseCase
 import com.example.domain.usecase.UpdateTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
@@ -20,6 +21,7 @@ class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val repository: TransactionRepository,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
+    private val deleteTransactionUseCase: DeleteTransactionUseCase,
     private val validateInputsUseCase: ValidateTransactionInputsUseCase
 ) : BaseViewModel<EditTransactionState, MVIUiEvent, EditTransactionSideEffect>() {
 
@@ -89,11 +91,9 @@ class EditTransactionViewModel(
             EditTransactionEvent.OnSave -> saveTransaction()
             EditTransactionEvent.OnCancel -> navigateBack()
 
-            EditTransactionEvent.OnDelete -> {
-                viewModelScope.launch {
-                    triggerSideEffect(EditTransactionSideEffect.ShowDeleteConfirmation(_uiState.value.transactionId))
-                }
-            }
+            EditTransactionEvent.OnDelete -> updateState { copy(showDeleteConfirmation = true) }
+            EditTransactionEvent.OnDismissDelete -> updateState { copy(showDeleteConfirmation = false) }
+            EditTransactionEvent.OnConfirmDelete -> deleteTransaction()
             EditTransactionEvent.OnEdit -> updateState { copy(isEditing = true) }
         }
     }
@@ -154,6 +154,21 @@ class EditTransactionViewModel(
             } catch (e: Exception) {
                 updateState { copy(isLoading = false, error = e.message) }
                 showError(e.message ?: "Failed to update transaction")
+            }
+        }
+    }
+
+    private fun deleteTransaction() {
+        updateState { copy(showDeleteConfirmation = false, isLoading = true) }
+
+        viewModelScope.launch {
+            deleteTransactionUseCase(transactionId).onSuccess {
+                updateState { copy(isLoading = false) }
+                triggerSideEffect(EditTransactionSideEffect.ShowSuccess("Transaction deleted successfully"))
+                triggerSideEffect(EditTransactionSideEffect.NavigateBack)
+            }.onFailure { e ->
+                updateState { copy(isLoading = false, error = "Failed to delete transaction") }
+                triggerSideEffect(EditTransactionSideEffect.ShowError("Failed to delete transaction: ${e.message}"))
             }
         }
     }

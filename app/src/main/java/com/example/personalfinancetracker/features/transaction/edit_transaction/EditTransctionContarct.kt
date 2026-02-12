@@ -18,6 +18,7 @@ data class EditTransactionState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isEditing: Boolean = false,
+    val showDeleteConfirmation: Boolean = false,
     val categories: List<Category> = emptyList(),
 ) : MVIState
 
@@ -31,6 +32,8 @@ sealed class EditTransactionEvent : MVIUiEvent {
     object OnSave : EditTransactionEvent()
     object OnCancel : EditTransactionEvent()
     object OnDelete : EditTransactionEvent()
+    object OnDismissDelete : EditTransactionEvent()
+    object OnConfirmDelete : EditTransactionEvent()
     object OnEdit : EditTransactionEvent()
 }
 
@@ -39,5 +42,4 @@ sealed class EditTransactionSideEffect : MVIUiSideEffect {
     object NavigateToTransactions : EditTransactionSideEffect()
     data class ShowError(val message: String) : EditTransactionSideEffect()
     data class ShowSuccess(val message: String) : EditTransactionSideEffect()
-    data class ShowDeleteConfirmation(val transactionId: String) : EditTransactionSideEffect()
 }

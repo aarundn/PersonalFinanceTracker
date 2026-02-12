@@ -24,8 +24,8 @@ class TransactionRepositoryImp(
         transactionDB.transactionDao().updateTransaction(transaction.toEntity())
     }
 
-    override suspend fun deleteTransaction(transaction: Transaction) {
-        transactionDB.transactionDao().deleteTransaction(transaction.toEntity())
+    override suspend fun deleteTransactionById(id: String) {
+        transactionDB.transactionDao().deleteTransactionById(id)
     }
 
     override suspend fun getTransactionById(id: String): Transaction? {

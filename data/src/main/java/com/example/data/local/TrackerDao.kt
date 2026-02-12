@@ -1,7 +1,6 @@
 package com.example.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -24,8 +23,8 @@ interface TransactionDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTransaction(transaction: TransactionEntity)
 
-    @Delete
-    suspend fun deleteTransaction(transaction: TransactionEntity)
+    @Query("DELETE FROM transactions WHERE id = :id")
+    suspend fun deleteTransactionById(id: String)
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransactionById(id: String): TransactionEntity?

@@ -26,18 +26,14 @@ fun EditTransactionRoute(
                     onNavigateToTransactions()
                 }
                 is EditTransactionSideEffect.ShowError -> {
-                    // Handle error display (could be a snackbar or dialog)
+
                 }
                 is EditTransactionSideEffect.ShowSuccess -> {
-                    // Handle success display (could be a snackbar)
-                }
-                is EditTransactionSideEffect.ShowDeleteConfirmation -> {
-                    // Handle delete confirmation dialog
+
                 }
             }
         }
     }
-
 
     EditTransactionScreen(
         state = state,
