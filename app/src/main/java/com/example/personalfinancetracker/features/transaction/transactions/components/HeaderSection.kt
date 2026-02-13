@@ -15,6 +15,7 @@ fun HeaderSection(
 ) {
     Row(
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
