@@ -1,71 +1,38 @@
 package com.example.personalfinancetracker.features.budget.add_budget
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.core.common.MVIState
+import com.example.core.common.MVIUiEvent
+import com.example.core.common.MVIUiSideEffect
+import com.example.core.model.Category
+import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
 
-object AddBudgetContract {
+@Immutable
+data class AddBudgetState(
+    val selectedCategory: Category? = null,
+    val amountInput: String = "",
+    val currency: String = "",
+    val periodId: String = BudgetPeriodOptions.default.id,
+    val notes: String = "",
+    val isSaving: Boolean = false,
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val categories: List<Category> = emptyList(),
+    val isSaveEnabled: Boolean = false
+) : MVIState
 
-    @Immutable
-    data class State(
-        val categoryId: String = "",
-        val amountInput: String = "",
-        val periodId: String = PeriodOptions.default.id,
-        val notes: String = "",
-        val isSaving: Boolean = false,
-        val isLoading: Boolean = false,
-        val error: String? = null,
-        val categories: List<Category> = emptyList()
-    ) {
-        val amount: Double get() = amountInput.toDoubleOrNull() ?: 0.0
-        val isSaveEnabled: Boolean get() = categoryId.isNotBlank() && amount > 0.0 && !isSaving
-        val selectedCategory: Category? get() = categories.find { it.id == categoryId }
-        val period: PeriodOption get() = PeriodOptions.findById(periodId)
-        val dailyAverage: Double
-            get() = if (period.days > 0 && amount > 0) amount / period.days else 0.0
-    }
+sealed class AddBudgetEvent : MVIUiEvent {
+    data class OnCategorySelected(val category: Category) : AddBudgetEvent()
+    data class OnAmountChanged(val amount: String) : AddBudgetEvent()
+    data class OnCurrencyChanged(val currency: String) : AddBudgetEvent()
+    data class OnPeriodChanged(val periodId: String) : AddBudgetEvent()
+    data class OnNotesChanged(val notes: String) : AddBudgetEvent()
+    data object OnSave : AddBudgetEvent()
+    data object OnCancel : AddBudgetEvent()
+}
 
-    @Immutable
-    data class Category(
-        val id: String,
-        val name: String,
-        val icon: ImageVector,
-        val iconTint: Color,
-        val iconBackground: Color
-    )
-
-    @Immutable
-    data class PeriodOption(
-        val id: String,
-        val label: String,
-        val days: Int
-    )
-
-    object PeriodOptions {
-        val Weekly = PeriodOption(id = "weekly", label = "Weekly", days = 7)
-        val Monthly = PeriodOption(id = "monthly", label = "Monthly", days = 30)
-        val Quarterly = PeriodOption(id = "quarterly", label = "Quarterly", days = 90)
-        val Yearly = PeriodOption(id = "yearly", label = "Yearly", days = 365)
-
-        val all = listOf(Weekly, Monthly, Quarterly, Yearly)
-        val default = Monthly
-
-        fun findById(id: String): PeriodOption = all.find { it.id == id } ?: default
-    }
-
-    sealed interface Event {
-        data object OnLoad : Event
-        data class OnCategorySelected(val categoryId: String) : Event
-        data class OnAmountChanged(val amount: String) : Event
-        data class OnPeriodChanged(val periodId: String) : Event
-        data class OnNotesChanged(val notes: String) : Event
-        data object OnSave : Event
-        data object OnCancel : Event
-    }
-
-    sealed interface SideEffect {
-        data object NavigateBack : SideEffect
-        data class ShowError(val message: String) : SideEffect
-        data class ShowSuccess(val message: String) : SideEffect
-    }
+sealed class AddBudgetSideEffect : MVIUiSideEffect {
+    data object NavigateBack : AddBudgetSideEffect()
+    data class ShowError(val message: String) : AddBudgetSideEffect()
+    data class ShowSuccess(val message: String) : AddBudgetSideEffect()
 }

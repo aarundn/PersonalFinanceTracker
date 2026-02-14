@@ -1,6 +1,7 @@
 package com.example.core.model
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.example.core.R
 import com.example.core.ui.theme.CategoryBills
@@ -14,8 +15,9 @@ import com.example.domain.model.Type
  * Note: Domain layer uses String for categories to allow future custom categories.
  * This class maps those Strings to UI resources.
  */
+@Immutable
 data class Category(
-    val id: String, // Unique identifier (e.g., "shopping")
+    val id: String,
     @StringRes val nameResId: Int,
     val icon: Int,
     val color: Color,

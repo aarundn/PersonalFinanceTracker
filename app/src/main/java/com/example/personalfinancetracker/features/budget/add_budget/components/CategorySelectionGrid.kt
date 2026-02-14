@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,15 +22,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.Category
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.features.budget.add_budget.AddBudgetContract
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategorySelectionGrid(
-    categories: List<AddBudgetContract.Category>,
+    categories: List<Category>,
     selectedCategoryId: String,
     onCategorySelected: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -74,13 +77,13 @@ fun CategorySelectionGrid(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconWrapper(
-                            background = category.iconBackground,
-                            tint = category.iconTint
+                            background = category.color.copy(alpha = 0.12f),
+                            tint = category.color
                         ) {
                             Icon(
-                                imageVector = category.icon,
+                                imageVector = ImageVector.vectorResource(category.icon),
                                 contentDescription = null,
-                                tint = category.iconTint,
+                                tint = category.color,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -89,7 +92,7 @@ fun CategorySelectionGrid(
                             verticalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             Text(
-                                text = category.name,
+                                text = stringResource(category.nameResId),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -107,8 +110,8 @@ fun CategorySelectionGrid(
 }
 @Composable
 private fun IconWrapper(
-    background: androidx.compose.ui.graphics.Color,
-    tint: androidx.compose.ui.graphics.Color,
+    background: Color,
+    tint: Color,
     content: @Composable () -> Unit
 ) {
     Box(
@@ -128,20 +131,8 @@ private fun CategorySelectionGridPreview() {
     PersonalFinanceTrackerTheme {
         CategorySelectionGrid(
             categories = listOf(
-                AddBudgetContract.Category(
-                    id = "food",
-                    name = "Food & Dining",
-                    icon = Icons.Filled.Home,
-                    iconTint = MaterialTheme.colorScheme.primary,
-                    iconBackground = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                ),
-                AddBudgetContract.Category(
-                    id = "transport",
-                    name = "Transport",
-                    icon = Icons.Filled.Home,
-                    iconTint = MaterialTheme.colorScheme.primary,
-                    iconBackground = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                )
+                DefaultCategories.FOOD,
+                DefaultCategories.TRANSPORT
             ),
             selectedCategoryId = "",
             onCategorySelected = {}
