@@ -2,7 +2,7 @@ package com.example.personalfinancetracker.features.transaction.transactions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.GetTransactionsUseCase
+import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted

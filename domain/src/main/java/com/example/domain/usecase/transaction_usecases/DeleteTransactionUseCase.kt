@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.transaction_usecases
 
 import com.example.domain.repo.TransactionRepository
 

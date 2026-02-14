@@ -8,8 +8,8 @@ import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
-import com.example.domain.usecase.DeleteTransactionUseCase
-import com.example.domain.usecase.UpdateTransactionUseCase
+import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
+import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi

@@ -6,7 +6,7 @@ import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
-import com.example.domain.usecase.AddTransactionUseCase
+import com.example.domain.usecase.transaction_usecases.AddTransactionUseCase
 import com.example.domain.usecase.ValidateTransactionInputsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi

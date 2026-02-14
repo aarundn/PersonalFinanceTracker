@@ -2,7 +2,9 @@ package com.example.data.di
 
 import androidx.room.Room
 import com.example.data.local.TrackerDatabase
+import com.example.data.repository.BudgetRepositoryImp
 import com.example.data.repository.TransactionRepositoryImp
+import com.example.domain.repo.BudgetRepository
 import com.example.domain.repo.TransactionRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,5 +25,6 @@ val dataModule = module {
     }
 
     singleOf(::TransactionRepositoryImp) { bind<TransactionRepository>() }
+    singleOf(::BudgetRepositoryImp) { bind<BudgetRepository>() }
 
 }
