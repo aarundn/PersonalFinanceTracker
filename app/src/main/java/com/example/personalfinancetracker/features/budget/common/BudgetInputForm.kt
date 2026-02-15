@@ -24,9 +24,10 @@ import com.example.core.components.ActionButtons
 import com.example.core.components.FormInput
 import com.example.core.components.TransactionDropdown
 import com.example.core.model.Category
+import com.example.core.model.Currency
 import com.example.core.model.DefaultCategories
+import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.utils.SUPPORTED_CURRENCIES
 
 @Composable
 fun BudgetInputForm(
@@ -35,12 +36,12 @@ fun BudgetInputForm(
     selectedPeriodId: String,
     amount: String,
     notes: String,
-    selectedCurrency: String,
+    selectedCurrency: Currency?,
     modifier: Modifier = Modifier,
     onCategorySelected: (Category) -> Unit,
     onPeriodSelected: (String) -> Unit,
     onAmountChanged: (String) -> Unit,
-    onCurrencySelected: (String) -> Unit,
+    onCurrencySelected: (Currency) -> Unit,
     onNotesChanged: (String) -> Unit,
     onSave: () -> Unit,
     onCancel: () -> Unit,
@@ -76,15 +77,15 @@ fun BudgetInputForm(
 
                 TransactionDropdown(
                     label = "Currency",
-                    items = SUPPORTED_CURRENCIES.map { "${it.first} (${it.second})" },
+                    items = DefaultCurrencies.all,
                     selectedItem = selectedCurrency,
                     onItemSelected = onCurrencySelected,
-                    itemLabel = { it },
+                    itemLabel = { "${it.id} (${it.symbol})" },
                     enabled = !isReadOnly
                 )
 
                 FormInput(
-                    label = "Budget Amount ($selectedCurrency)",
+                    label = "Budget Amount (${selectedCurrency?.symbol ?: ""})",
                     value = amount,
                     placeholder = "Enter budget amount",
                     onValueChange = onAmountChanged,
@@ -154,7 +155,7 @@ private fun BudgetInputFormPreview() {
             selectedPeriodId = BudgetPeriodOptions.Monthly.id,
             amount = "500.00",
             notes = "",
-            selectedCurrency = "USD (US Dollar)",
+            selectedCurrency = DefaultCurrencies.USD,
             onCategorySelected = {},
             onPeriodSelected = {},
             onAmountChanged = {},

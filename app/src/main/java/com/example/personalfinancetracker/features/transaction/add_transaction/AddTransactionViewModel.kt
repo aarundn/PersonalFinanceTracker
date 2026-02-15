@@ -38,7 +38,7 @@ class AddTransactionViewModel(
             }
             is AddTransactionEvent.OnCategoryChanged -> setState { copy(selectedCategory = event.category) }
             is AddTransactionEvent.OnAmountChanged -> setState { copy(amount = event.amount) }
-            is AddTransactionEvent.OnCurrencyChanged -> setState { copy(currency = event.currency) }
+            is AddTransactionEvent.OnCurrencyChanged -> setState { copy(selectedCurrency = event.currency) }
             is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date) }
             is AddTransactionEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
             AddTransactionEvent.OnSave -> saveTransaction()
@@ -59,7 +59,7 @@ class AddTransactionViewModel(
         val validationResult = validateInputsUseCase(
             category = currentState.selectedCategory?.id ?: "",
             amount = currentState.amount,
-            currency = currentState.currency,
+            currency = currentState.selectedCurrency?.id ?: "",
             date = currentState.date
         )
 
@@ -77,8 +77,8 @@ class AddTransactionViewModel(
                     id = UUID.randomUUID().toString(),
                     userId = "A1", // TODO: Get actual user ID
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
-                    currency = currentState.currency,
-                    category = currentState.selectedCategory?.id ?: "",
+                    currency = currentState.selectedCurrency?.id ?: "",
+                    categoryId = currentState.selectedCategory?.id ?: "",
                     date = currentState.date,
                     notes = currentState.notes,
                     createdAt = System.currentTimeMillis(),

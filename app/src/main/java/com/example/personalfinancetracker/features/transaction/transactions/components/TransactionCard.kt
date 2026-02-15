@@ -23,12 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.stringResource
-import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.ProgressError
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -40,7 +39,6 @@ fun TransactionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val category = DefaultCategories.fromId(transaction.category) ?: DefaultCategories.OTHER
 
     Card(
         modifier = modifier
@@ -71,26 +69,26 @@ fun TransactionCard(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(category.color.copy(alpha = 0.1f)),
+                        .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(category.icon),
+                        imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
                         contentDescription = null,
-                        tint = category.color,
+                        tint = transaction.currentCategory.color,
                         modifier = Modifier.size(24.dp)
                     )
                 }
 
                 Column {
                     Text(
-                        text = stringResource(category.nameResId),
+                        text = stringResource(transaction.currentCategory.nameResId),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${stringResource(category.nameResId)} • ${transaction.formattedDate}",
+                        text = "${stringResource(transaction.currentCategory.nameResId)} • ${transaction.formattedDate}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         overflow = TextOverflow.Ellipsis,
@@ -100,12 +98,12 @@ fun TransactionCard(
             }
 
             Text(
-                text = formatAmount(transaction.type, transaction.amount),
+                text = formatAmount(transaction.type, transaction.amount, transaction.currencySymbol),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = if (transaction.type == Type.INCOME)
-                    category.color
+                    transaction.currentCategory.color
                 else
                     ProgressError
             )
@@ -115,7 +113,8 @@ fun TransactionCard(
 
 
 @SuppressLint("DefaultLocale")
-private fun formatAmount(type: Type, amount: Double): String {
-    return if (type == Type.EXPENSE) "-$${String.format("%.2f", amount)}"
-    else "+$${String.format("%.2f", abs(amount))}"
+private fun formatAmount(type: Type, amount: Double, currencySymbol: String): String {
+
+    return if (type == Type.EXPENSE) "-${currencySymbol} ${String.format("%.2f", amount)}"
+    else "+${currencySymbol} ${String.format("%.2f", abs(amount))}"
 }

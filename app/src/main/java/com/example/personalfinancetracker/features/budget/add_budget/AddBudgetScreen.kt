@@ -54,7 +54,7 @@ fun AddBudgetScreen(
                 selectedPeriodId = state.periodId,
                 amount = state.amountInput,
                 notes = state.notes,
-                selectedCurrency = state.currency,
+                selectedCurrency = state.selectedCurrency,
                 onCategorySelected = { onEvent(AddBudgetEvent.OnCategorySelected(it)) },
                 onPeriodSelected = { onEvent(AddBudgetEvent.OnPeriodChanged(it)) },
                 onAmountChanged = { onEvent(AddBudgetEvent.OnAmountChanged(it)) },

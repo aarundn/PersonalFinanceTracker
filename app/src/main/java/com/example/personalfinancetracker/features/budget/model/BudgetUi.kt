@@ -1,6 +1,9 @@
 package com.example.personalfinancetracker.features.budget.model
 
 import androidx.compose.runtime.Immutable
+import com.example.core.model.Category
+import com.example.core.model.DefaultCategories
+import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
 
 @Immutable
@@ -15,9 +18,9 @@ data class BudgetUi(
     val notes: String?,
     val createdAt: Long,
     val updatedAt: Long,
+    val currentCategory: Category = DefaultCategories.fromId(category) ?: DefaultCategories.OTHER,
     val formattedCreatedDate: String = parseDateString(createdAt),
-    val periodLabel: String = period.replaceFirstChar { it.uppercase() },
-    val currencySymbol: String = currency.substringBefore(")").substringAfter("(")
+    val currencySymbol: String = DefaultCurrencies.fromId(currency)?.symbol ?: currency,
 ) {
     val percentage: Float get() = if (amount == 0.0) 0f else (spent / amount).toFloat().coerceIn(0f, 1f)
     val  remaining: Double get() = (amount - spent).coerceAtLeast(0.0)

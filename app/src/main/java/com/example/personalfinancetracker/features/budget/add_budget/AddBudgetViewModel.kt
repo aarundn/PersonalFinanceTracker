@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.features.budget.add_budget
 import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.model.Category
+import com.example.core.model.Currency
 import com.example.core.model.DefaultCategories
 import com.example.domain.model.Budget
 import com.example.domain.usecase.budget_usecases.AddBudgetUseCase
@@ -55,8 +56,8 @@ class AddBudgetViewModel(
         setState { copy(amountInput = sanitized).derived() }
     }
 
-    private fun updateCurrency(currency: String) {
-        setState { copy(currency = currency).derived() }
+    private fun updateCurrency(currency: Currency) {
+        setState { copy(selectedCurrency = currency).derived() }
     }
 
     private fun saveBudget() {
@@ -72,7 +73,7 @@ class AddBudgetViewModel(
                     userId = "A1", // TODO: Get actual user ID
                     category = currentState.selectedCategory?.id ?: "",
                     amount = currentState.amountInput.toDoubleOrNull() ?: 0.0,
-                    currency = currentState.currency,
+                    currency = currentState.selectedCurrency?.id ?: "",
                     period = currentState.periodId,
                     notes = currentState.notes.ifBlank { null },
                     createdAt = System.currentTimeMillis(),
@@ -99,12 +100,12 @@ class AddBudgetViewModel(
             triggerSideEffect(AddBudgetSideEffect.NavigateBack)
         }
     }
-
+    // todo do it in the ui model not in the viewmodel
     private fun AddBudgetState.derived(): AddBudgetState {
         val amount = amountInput.toDoubleOrNull() ?: 0.0
         val isEnabled = selectedCategory != null &&
                 amount > 0.0 &&
-                currency.isNotEmpty() &&
+                selectedCurrency != null &&
                 !isSaving
         return copy(isSaveEnabled = isEnabled)
     }

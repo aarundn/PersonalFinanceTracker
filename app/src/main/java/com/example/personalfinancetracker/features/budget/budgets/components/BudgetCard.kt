@@ -2,7 +2,6 @@ package com.example.personalfinancetracker.features.budget.budgets.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomProgressBar
-import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
@@ -43,8 +41,7 @@ fun BudgetCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val category = DefaultCategories.fromId(budget.category)
-    val iconTint = category?.color ?: MaterialTheme.colorScheme.primary
+    val iconTint = budget.currentCategory.color
     val iconBackground = iconTint.copy(alpha = 0.12f)
 
     val progressColor = when {
@@ -54,9 +51,9 @@ fun BudgetCard(
     }
 
     Card(
+        onClick = onClick,
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -83,31 +80,23 @@ fun BudgetCard(
                             .background(iconBackground),
                         contentAlignment = Alignment.Center
                     ) {
-                        category?.let {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(it.icon),
-                                contentDescription = null,
-                                tint = iconTint,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+                        Icon(
+                            imageVector = ImageVector.vectorResource(budget.currentCategory.icon),
+                            contentDescription = null,
+                            tint = iconTint,
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
 
                     Column {
                         Text(
-                            text = category?.let { stringResource(it.nameResId) }
-                                ?: budget.category,
+                            text = stringResource(budget.currentCategory.nameResId),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "${budget.currencySymbol} ${
-                                String.format(
-                                    "%.0f",
-                                    budget.spent
-                                )
-                            } of ${budget.currencySymbol} ${String.format("%.0f", budget.amount)}",
+                            text = "${budget.currencySymbol} ${budget.spent} of ${budget.currencySymbol} ${budget.amount}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -130,19 +119,9 @@ fun BudgetCard(
 
                     Text(
                         text = if (budget.isOverBudget) {
-                            "${budget.currencySymbol} ${
-                                String.format(
-                                    "%.0f",
-                                    budget.overBudget
-                                )
-                            } over"
+                            "${budget.currencySymbol} ${budget.overBudget} over"
                         } else {
-                            "${budget.currencySymbol} ${
-                                String.format(
-                                    "%.0f",
-                                    budget.remaining
-                                )
-                            } left"
+                            "${budget.currencySymbol} ${budget.remaining} left"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
@@ -172,7 +151,7 @@ fun BudgetCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${budget.currencySymbol}${String.format("%.0f", budget.amount)}",
+                        text = "${budget.currencySymbol}${budget.amount}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

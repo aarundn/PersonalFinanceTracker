@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
+import com.example.core.model.DefaultCurrencies
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
@@ -52,7 +53,7 @@ class EditTransactionViewModel(
                 transactionUi?.let { txn ->
 
                     val categories = DefaultCategories.getCategories(txn.isIncome)
-                    val selectedCategory = DefaultCategories.fromId(txn.category)
+                    val selectedCategory = DefaultCategories.fromId(txn.categoryId)
                     
                     updateState {
                         copy(
@@ -61,7 +62,7 @@ class EditTransactionViewModel(
                             isIncome = txn.isIncome,
                             selectedCategory = selectedCategory,
                             amount = txn.amount.toString(),
-                            currency = txn.currency,
+                            selectedCurrency = DefaultCurrencies.fromId(txn.currency),
                             date = txn.date,
                             notes = txn.notes ?: "",
                             categories = categories
@@ -85,7 +86,7 @@ class EditTransactionViewModel(
 
             is EditTransactionEvent.OnCategoryChanged -> updateState { copy(selectedCategory = event.category) }
             is EditTransactionEvent.OnAmountChanged -> updateState { copy(amount = event.amount) }
-            is EditTransactionEvent.OnCurrencyChanged -> updateState { copy(currency = event.currency) }
+            is EditTransactionEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
             is EditTransactionEvent.OnDateChanged -> updateState { copy(date = event.date) }
             is EditTransactionEvent.OnNotesChanged -> updateState { copy(notes = event.notes) }
             EditTransactionEvent.OnSave -> saveTransaction()
@@ -115,7 +116,7 @@ class EditTransactionViewModel(
         val validationResult = validateInputsUseCase(
             category = currentState.selectedCategory?.id ?: "",
             amount = currentState.amount,
-            currency = currentState.currency,
+            currency = currentState.selectedCurrency?.id ?: "",
             date = currentState.date
         )
 
@@ -133,8 +134,8 @@ class EditTransactionViewModel(
                     id = transactionId,
                     userId = "A1", // TODO: Get actual user ID
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
-                    currency = currentState.currency,
-                    category = currentState.selectedCategory?.id ?: "",
+                    currency = currentState.selectedCurrency?.id ?: "",
+                    categoryId = currentState.selectedCategory?.id ?: "",
                     date = System.currentTimeMillis(),
                     notes = currentState.notes,
                     createdAt = currentState.date,

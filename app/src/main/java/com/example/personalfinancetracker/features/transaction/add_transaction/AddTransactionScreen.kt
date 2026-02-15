@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
+import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
 
 @Composable
@@ -48,7 +49,7 @@ fun AddTransactionScreen(
             onCurrencySelected = { onEvent(AddTransactionEvent.OnCurrencyChanged(it)) },
             onSave = { onEvent(AddTransactionEvent.OnSave) },
             onCancel = { onEvent(AddTransactionEvent.OnCancel) },
-            selectedCurrency = state.currency,
+            selectedCurrency = state.selectedCurrency,
             isLoading = state.isLoading,
             amount = state.amount,
             date = parseDateString(state.date),
@@ -67,7 +68,7 @@ private fun AddTransactionScreenPreview() {
             state = AddTransactionState(
                 isIncome = false,
                 amount = "25.50",
-                currency = "USD",
+                selectedCurrency = DefaultCurrencies.USD,
                 date = 0L,
                 notes = "Lunch at restaurant",
                 selectedCategory = null

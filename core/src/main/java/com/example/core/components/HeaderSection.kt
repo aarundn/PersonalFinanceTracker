@@ -23,10 +23,10 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderSection(
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     title: String = "Add Transaction",
     actions: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
         title = {

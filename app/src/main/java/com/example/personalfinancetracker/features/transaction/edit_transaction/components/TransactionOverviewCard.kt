@@ -35,6 +35,7 @@ import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
+import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.transaction.edit_transaction.EditTransactionState
 
@@ -121,7 +122,7 @@ fun TransactionOverviewCard(
 
                     // Amount
                     Text(
-                        text = "${if (state.isIncome) "+" else "-"}$${
+                        text = "${if (state.isIncome) "+" else "-"}${state.selectedCurrency?.symbol ?: "$"}${
                             String.format(
                                 "%.2f",
                                 state.amount.toDoubleOrNull() ?: 0.0
@@ -194,7 +195,7 @@ private fun TransactionOverviewCardPreview() {
                 isIncome = false,
                 selectedCategory = null,
                 amount = "85.50",
-                currency = "USD",
+                selectedCurrency = DefaultCurrencies.USD,
                 date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
                 isEditing = false,

@@ -34,6 +34,7 @@ import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
@@ -98,7 +99,7 @@ fun EditTransactionScreen(
                     onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCurrencyChanged(it)) },
                     onSave = { onEvent(EditTransactionEvent.OnSave) },
                     onCancel = { onEvent(EditTransactionEvent.OnCancel) },
-                    selectedCurrency = state.currency,
+                    selectedCurrency = state.selectedCurrency,
                     isLoading = false,
                     amount = state.amount,
                     date = parseDateString(state.date),
@@ -156,7 +157,7 @@ private fun EditTransactionScreenPreview() {
                 isIncome = false,
                 selectedCategory = DefaultCategories.FOOD,
                 amount = "85.50",
-                currency = "USD",
+                selectedCurrency = DefaultCurrencies.USD,
                 date = "2024-03-15".toLong(),
                 notes = "Weekly grocery shopping at Whole Foods",
                 isEditing = false,
@@ -177,7 +178,7 @@ private fun EditTransactionScreenEditingPreview() {
                 isIncome = true,
                 selectedCategory = DefaultCategories.SALARY,
                 amount = "800.00",
-                currency = "USD",
+                selectedCurrency = DefaultCurrencies.USD,
                 date = "2024-03-12".toLong(),
                 notes = "Website development project",
                 isEditing = true,

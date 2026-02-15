@@ -9,7 +9,7 @@ fun Transaction.toTransactionUi(): TransactionUi {
         userId = userId,
         amount = amount,
         currency = currency,
-        category = category,
+        categoryId = category,
         date = date,
         notes = notes,
         createdAt = createdAt,
@@ -24,7 +24,7 @@ fun TransactionUi.toTransaction(): Transaction {
         userId = userId,
         amount = amount,
         currency = currency,
-        category = category,
+        category = categoryId,
         date = date,
         notes = notes,
         createdAt = createdAt,
@@ -34,5 +34,3 @@ fun TransactionUi.toTransaction(): Transaction {
 }
 
 fun List<Transaction>.toTransactionUi(): List<TransactionUi> = map { it.toTransactionUi() }
-
-fun List<TransactionUi>.toTransaction(): List<Transaction> = map { it.toTransaction() }

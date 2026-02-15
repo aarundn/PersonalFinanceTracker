@@ -5,13 +5,14 @@ import com.example.core.common.MVIState
 import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
+import com.example.core.model.Currency
 
 @Immutable
 data class AddTransactionState(
     val isIncome: Boolean = false,
     val selectedCategory: Category? = null,
     val amount: String = "",
-    val currency: String = "",
+    val selectedCurrency: Currency? = null,
     val date: Long = System.currentTimeMillis(),
     val notes: String = "",
     val convertedAmount: Double? = null,
@@ -25,7 +26,7 @@ sealed class AddTransactionEvent : MVIUiEvent {
     data class OnTransactionTypeChanged(val isIncome: Boolean) : AddTransactionEvent()
     data class OnCategoryChanged(val category: Category) : AddTransactionEvent()
     data class OnAmountChanged(val amount: String) : AddTransactionEvent()
-    data class OnCurrencyChanged(val currency: String) : AddTransactionEvent()
+    data class OnCurrencyChanged(val currency: Currency) : AddTransactionEvent()
     data class OnDateChanged(val date: Long) : AddTransactionEvent()
     data class OnNotesChanged(val notes: String) : AddTransactionEvent()
     object OnSave : AddTransactionEvent()

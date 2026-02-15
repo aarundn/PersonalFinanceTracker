@@ -5,13 +5,14 @@ import com.example.core.common.MVIState
 import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
+import com.example.core.model.Currency
 import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
 
 @Immutable
 data class AddBudgetState(
     val selectedCategory: Category? = null,
     val amountInput: String = "",
-    val currency: String = "",
+    val selectedCurrency: Currency? = null,
     val periodId: String = BudgetPeriodOptions.default.id,
     val notes: String = "",
     val isSaving: Boolean = false,
@@ -24,7 +25,7 @@ data class AddBudgetState(
 sealed class AddBudgetEvent : MVIUiEvent {
     data class OnCategorySelected(val category: Category) : AddBudgetEvent()
     data class OnAmountChanged(val amount: String) : AddBudgetEvent()
-    data class OnCurrencyChanged(val currency: String) : AddBudgetEvent()
+    data class OnCurrencyChanged(val currency: Currency) : AddBudgetEvent()
     data class OnPeriodChanged(val periodId: String) : AddBudgetEvent()
     data class OnNotesChanged(val notes: String) : AddBudgetEvent()
     data object OnSave : AddBudgetEvent()
