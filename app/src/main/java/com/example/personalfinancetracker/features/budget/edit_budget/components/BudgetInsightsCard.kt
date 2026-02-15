@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
 import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetContract
 
 @Composable
@@ -103,7 +104,7 @@ private fun InsightRow(
 private fun Double.formatCurrency(): String = String.format("%,.2f", this)
 
 private fun periodLabel(id: String): String =
-    EditBudgetContract.PeriodOptions.findById(id).label
+    BudgetPeriodOptions.findById(id).label
 
 @Preview(showBackground = true)
 @Composable
@@ -116,7 +117,7 @@ private fun BudgetInsightsCardPreview() {
                 spentAmount = 320.0,
                 daysElapsed = 12,
                 daysInPeriod = 30,
-                periodInput = EditBudgetContract.PeriodOptions.Monthly.id
+                periodInput = BudgetPeriodOptions.Monthly.id
             )
         )
     }

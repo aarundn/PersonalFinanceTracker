@@ -24,25 +24,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.budget.budgets.BudgetContract
 import com.example.core.components.CustomProgressBar
+import com.example.core.model.DefaultCategories
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
 @Composable
 fun BudgetCard(
-    budget: BudgetContract.Budget,
+    budget: BudgetUi,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val category = DefaultCategories.fromId(budget.category)
+    val iconTint = category?.color ?: MaterialTheme.colorScheme.primary
+    val iconBackground = iconTint.copy(alpha = 0.12f)
+
+    val progressColor = when {
+        budget.isOverBudget -> ProgressError
+        budget.isWarning -> Warning
+        else -> iconTint
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
@@ -52,7 +67,6 @@ fun BudgetCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -62,125 +76,88 @@ fun BudgetCard(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Icon
                     Box(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
-                            .background(budget.iconTint.copy(alpha = 0.1f)),
+                            .background(iconBackground),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = budget.icon,
-                            contentDescription = null,
-                            tint = budget.iconTint,
-                            modifier = Modifier.size(24.dp)
-                        )
+                        category?.let {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(it.icon),
+                                contentDescription = null,
+                                tint = iconTint,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
                     }
 
-                    // Category and Amount
                     Column {
                         Text(
-                            text = budget.category,
+                            text = category?.let { stringResource(it.nameResId) }
+                                ?: budget.category,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = "$${String.format("%.0f", budget.spent)} of $${String.format("%.0f", budget.budgeted)}",
+                            text = "${budget.currencySymbol} ${
+                                String.format(
+                                    "%.0f",
+                                    budget.spent
+                                )
+                            } of ${budget.currencySymbol} ${String.format("%.0f", budget.amount)}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
-
-                // Status and Remaining
                 Column(
                     horizontalAlignment = Alignment.End
                 ) {
-                    // Status Badge
                     if (budget.isOverBudget) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = ProgressError.copy(alpha = 0.1f),
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Warning,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(12.dp),
-                                    tint = ProgressError
-                                )
-                                Text(
-                                    text = "Over Budget",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = ProgressError
-                                )
-                            }
-                        }
+                        StatusBadge(
+                            text = "Over Budget",
+                            color = ProgressError
+                        )
                     } else if (budget.isWarning) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Warning.copy(alpha = 0.1f), // Yellow-100
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Warning,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(12.dp),
-                                    tint = Warning
-                                )
-                                Text(
-                                    text = "Almost Full",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = Warning
-                                )
-                            }
-                        }
+                        StatusBadge(
+                            text = "Almost Full",
+                            color = Warning
+                        )
                     }
 
-                    // Remaining/Over amount
                     Text(
                         text = if (budget.isOverBudget) {
-                            "$${String.format("%.0f", budget.overBudget)} over"
+                            "${budget.currencySymbol} ${
+                                String.format(
+                                    "%.0f",
+                                    budget.overBudget
+                                )
+                            } over"
                         } else {
-                            "$${String.format("%.0f", budget.remaining)} left"
+                            "${budget.currencySymbol} ${
+                                String.format(
+                                    "%.0f",
+                                    budget.remaining
+                                )
+                            } left"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
-                        color = if (budget.isOverBudget)
-                            ProgressError
-                        else if (budget.isWarning)
-                            Warning
-                        else
-                            MaterialTheme.colorScheme.primary
+                        color = progressColor
                     )
                 }
             }
 
-            // Progress Bar
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 CustomProgressBar(
-                    progress = budget.percentage.coerceIn(0f, 1f),
+                    progress = budget.percentage,
                     modifier = Modifier.fillMaxWidth(),
-                    progressColor = if (budget.isOverBudget)
-                        ProgressError
-                    else if (budget.isWarning)
-                        Warning
-                    else
-                        MaterialTheme.colorScheme.primary,
+                    progressColor = progressColor,
                     backgroundColor = MaterialTheme.colorScheme.surfaceVariant
                 )
 
@@ -195,7 +172,7 @@ fun BudgetCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "$${String.format("%.0f", budget.budgeted)}",
+                        text = "${budget.currencySymbol}${String.format("%.0f", budget.amount)}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -203,4 +180,58 @@ fun BudgetCard(
             }
         }
     }
+}
+
+@Composable
+private fun StatusBadge(
+    text: String,
+    color: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = color.copy(alpha = 0.1f),
+        modifier = modifier.padding(bottom = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Warning,
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = color
+            )
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelSmall,
+                color = color
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun BudgetCardPreview() {
+    PersonalFinanceTrackerTheme {
+        BudgetCard(
+            budget = BudgetUi(
+                id = "1",
+                category = "food",
+                amount = 500.0,
+                spent = 550.0,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis(),
+                period = "monthly",
+                notes = "",
+                currency = "USD",
+                userId = ""
+            ),
+            onClick = {}
+        )
+    }
+
 }

@@ -10,7 +10,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,12 +31,17 @@ fun CustomProgressBar(
     progressColor: Color = ProgressPrimary,
     height: Dp = 8.dp
 ) {
-    val animatedProgress = remember { Animatable(0f) }
+    val hasAnimated = rememberSaveable { mutableStateOf(false) }
+    val animatedProgress = remember { Animatable(if (!hasAnimated.value) 0f else progress.coerceIn(0f, 1f)) }
 
     LaunchedEffect(Unit) {
-        animatedProgress.animateTo(
-            targetValue = progress.coerceIn(0f, 1f),
-            animationSpec = tween(durationMillis = 800, easing = FastOutLinearInEasing))
+        if (!hasAnimated.value){
+            animatedProgress.animateTo(
+                targetValue = progress.coerceIn(0f, 1f),
+                animationSpec = tween(durationMillis = 800, easing = FastOutLinearInEasing))
+            hasAnimated.value = true
+        }
+
 
     }
 

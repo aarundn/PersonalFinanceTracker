@@ -22,13 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomProgressBar
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
 import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetContract
 
 @Composable
@@ -36,10 +41,10 @@ fun BudgetOverviewCard(
     state: EditBudgetContract.State,
     modifier: Modifier = Modifier
 ) {
-    val tint = if (state.iconTint != Color.Unspecified) state.iconTint else MaterialTheme.colorScheme.primary
-    val containerColor = state.iconBackground.takeIf { it != Color.Transparent }
-        ?: tint.copy(alpha = 0.12f)
-    val icon = state.icon ?: Icons.Outlined.Home
+    val category = state.selectedCategory
+    val tint = category?.color ?: MaterialTheme.colorScheme.primary
+    val containerColor = tint.copy(alpha = 0.12f)
+    val icon = category?.let { ImageVector.vectorResource(it.icon) } ?: Icons.Outlined.Home
     val percentageUsed = state.percentageUsed.coerceAtLeast(0f)
     val progressColor = when {
         state.isOverBudget -> ProgressError
@@ -82,7 +87,7 @@ fun BudgetOverviewCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = state.category.ifEmpty { "Budget Category" },
+                        text = state.selectedCategory?.let { stringResource(it.nameResId) } ?: "Budget Category",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -215,7 +220,7 @@ private fun Double.formatCurrency(): String = String.format("%,.2f", this)
 private fun Float.formatPercent(): String = String.format("%.1f%%", this)
 
 private fun periodLabel(id: String): String {
-    return EditBudgetContract.PeriodOptions.findById(id).label
+    return BudgetPeriodOptions.findById(id).label
 }
 
 @Preview(showBackground = true)
@@ -224,14 +229,12 @@ private fun BudgetOverviewCardPreview() {
     PersonalFinanceTrackerTheme {
         BudgetOverviewCard(
             state = EditBudgetContract.State(
-                category = "Food & Dining",
+                selectedCategory = DefaultCategories.FOOD,
                 budgetedAmountOriginal = 500.0,
                 budgetedAmountInput = "500.00",
                 spentAmount = 420.0,
-                periodInput = EditBudgetContract.PeriodOptions.Monthly.id,
-                periodOriginal = EditBudgetContract.PeriodOptions.Monthly.id,
-                iconTint = Color(0xFFF97316),
-                iconBackground = Color(0xFFFFEDD5)
+                periodInput = BudgetPeriodOptions.Monthly.id,
+                periodOriginal = BudgetPeriodOptions.Monthly.id
             )
         )
     }

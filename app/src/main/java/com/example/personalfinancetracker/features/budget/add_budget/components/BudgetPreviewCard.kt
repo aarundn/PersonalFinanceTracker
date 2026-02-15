@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -21,15 +19,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.Category
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.personalfinancetracker.features.budget.add_budget.AddBudgetContract
 
 @Composable
 fun BudgetPreviewCard(
-    category: AddBudgetContract.Category,
+    category: Category,
     amount: Double,
     dailyAverage: Double,
     periodLabel: String,
@@ -57,13 +58,13 @@ fun BudgetPreviewCard(
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
-                        .background(category.iconBackground),
+                        .background(category.color.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = category.icon,
+                        imageVector = ImageVector.vectorResource(category.icon),
                         contentDescription = null,
-                        tint = category.iconTint,
+                        tint = category.color,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -72,7 +73,7 @@ fun BudgetPreviewCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = category.name,
+                        text = stringResource(category.nameResId),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -110,17 +111,10 @@ private fun Double.formatCurrency(): String = String.format("%,.2f", this)
 private fun BudgetPreviewCardPreview() {
     PersonalFinanceTrackerTheme {
         BudgetPreviewCard(
-            category = AddBudgetContract.Category(
-                id = "food",
-                name = "Food & Dining",
-                icon = Icons.Outlined.Home,
-                iconTint = Color(0xFFF97316),
-                iconBackground = Color(0xFFFFEDD5)
-            ),
+            category = DefaultCategories.FOOD,
             amount = 250.0,
             dailyAverage = 8.3,
             periodLabel = "Monthly"
         )
     }
 }
-

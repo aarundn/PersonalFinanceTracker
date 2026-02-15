@@ -1,6 +1,7 @@
 [versions]
 agp = "8.13.1"
 firebaseBom = "34.6.0"
+dateTime = "0.6.0"
 googleGmsGoogleServices = "4.4.4"
 firebaseFirestore = "26.0.2"
 firebaseDatabase = "22.0.1"
@@ -83,6 +84,8 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+# DateTime
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "dateTime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

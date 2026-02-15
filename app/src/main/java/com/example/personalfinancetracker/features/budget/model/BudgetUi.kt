@@ -15,10 +15,10 @@ data class BudgetUi(
     val notes: String?,
     val createdAt: Long,
     val updatedAt: Long,
+    val formattedCreatedDate: String = parseDateString(createdAt),
+    val periodLabel: String = period.replaceFirstChar { it.uppercase() },
+    val currencySymbol: String = currency.substringBefore(")").substringAfter("(")
 ) {
-    val formattedCreatedDate: String get() = parseDateString(createdAt)
-    val periodLabel: String
-        get() = period.replaceFirstChar { it.uppercase() }
     val percentage: Float get() = if (amount == 0.0) 0f else (spent / amount).toFloat().coerceIn(0f, 1f)
     val  remaining: Double get() = (amount - spent).coerceAtLeast(0.0)
     val overBudget: Double get() = (spent - amount).coerceAtLeast(0.0)
