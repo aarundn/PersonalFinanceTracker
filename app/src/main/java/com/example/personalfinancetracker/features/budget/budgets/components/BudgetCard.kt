@@ -1,34 +1,23 @@
 package com.example.personalfinancetracker.features.budget.budgets.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.BudgetAmountStateInfo
+import com.example.core.components.BudgetInfo
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
@@ -69,65 +58,24 @@ fun BudgetCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(iconBackground),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(budget.currentCategory.icon),
-                            contentDescription = null,
-                            tint = iconTint,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                    Column {
-                        Text(
-                            text = stringResource(budget.currentCategory.nameResId),
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "${budget.currencySymbol} ${budget.spent} of ${budget.currencySymbol} ${budget.amount}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Column(
-                    horizontalAlignment = Alignment.End
-                ) {
-                    if (budget.isOverBudget) {
-                        StatusBadge(
-                            text = "Over Budget",
-                            color = ProgressError
-                        )
-                    } else if (budget.isWarning) {
-                        StatusBadge(
-                            text = "Almost Full",
-                            color = Warning
-                        )
-                    }
-
-                    Text(
-                        text = if (budget.isOverBudget) {
-                            "${budget.currencySymbol} ${budget.overBudget} over"
-                        } else {
-                            "${budget.currencySymbol} ${budget.remaining} left"
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Medium,
-                        color = progressColor
-                    )
-                }
+                BudgetInfo(
+                    modifier = Modifier.weight(1f),
+                    iconTint = iconTint,
+                    iconBackground = iconBackground,
+                    icon = budget.currentCategory.icon,
+                    categoryName = budget.currentCategory.nameResId,
+                    currencySymbol = budget.currencySymbol,
+                    spent = budget.spent.toString(),
+                    amount = budget.amount.toString()
+                )
+                BudgetAmountStateInfo(
+                    isOverBudget = budget.isOverBudget,
+                    isWarning = budget.isWarning,
+                    progressColor = progressColor,
+                    overBudget = budget.overBudget.toString(),
+                    remaining = budget.remaining.toString(),
+                    currencySymbol = budget.currencySymbol
+                )
             }
 
             Column(
@@ -157,37 +105,6 @@ fun BudgetCard(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun StatusBadge(
-    text: String,
-    color: androidx.compose.ui.graphics.Color,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = color.copy(alpha = 0.1f),
-        modifier = modifier.padding(bottom = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(12.dp),
-                tint = color
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelSmall,
-                color = color
-            )
         }
     }
 }
