@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Suppress("ParamsComparedByRef")
@@ -29,10 +30,14 @@ fun EditTransactionRoute(
                     onNavigateToTransactions()
                 }
                 is EditTransactionSideEffect.ShowError -> {
-                    snackBarHostState.showSnackbar(sideEffect.message)
+                    launch {
+                        snackBarHostState.showSnackbar(sideEffect.message)
+                    }
                 }
                 is EditTransactionSideEffect.ShowSuccess -> {
-                    snackBarHostState.showSnackbar(sideEffect.message)
+                    launch {
+                        snackBarHostState.showSnackbar(sideEffect.message)
+                    }
                 }
             }
         }

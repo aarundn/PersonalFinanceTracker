@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.features.budget.di
 import com.example.core.navigation.features.BudgetFeature
 import com.example.personalfinancetracker.features.budget.add_budget.AddBudgetViewModel
 import com.example.personalfinancetracker.features.budget.budgets.BudgetViewModel
+import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetViewModel
 import com.example.personalfinancetracker.features.budget.navigation.BudgetFeatureImpl
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -15,4 +16,5 @@ val budgetModule = module {
     // view models
     viewModelOf(::BudgetViewModel)
     viewModelOf(::AddBudgetViewModel)
+    viewModelOf(::EditBudgetViewModel)
 }

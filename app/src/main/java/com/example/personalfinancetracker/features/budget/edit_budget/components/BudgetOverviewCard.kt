@@ -10,45 +10,46 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
 import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
-import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetContract
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
 @Composable
 fun BudgetOverviewCard(
-    state: EditBudgetContract.State,
-    modifier: Modifier = Modifier
+    budget: BudgetUi,
+    modifier: Modifier = Modifier,
 ) {
-    val category = state.selectedCategory
-    val tint = category?.color ?: MaterialTheme.colorScheme.primary
+    val category = budget.currentCategory
+    val tint = category.color
     val containerColor = tint.copy(alpha = 0.12f)
-    val icon = category?.let { ImageVector.vectorResource(it.icon) } ?: Icons.Outlined.Home
-    val percentageUsed = state.percentageUsed.coerceAtLeast(0f)
+    val icon = category.let { ImageVector.vectorResource(it.icon) }
+    val percentageUsed = budget.percentage.coerceAtLeast(0f)
+
+    val isOverBudget = budget.isOverBudget
+    val isWarning = budget.isWarning
+
     val progressColor = when {
-        state.isOverBudget -> ProgressError
-        state.isWarning -> Warning
+        isOverBudget -> ProgressError
+        isWarning -> Warning
         else -> MaterialTheme.colorScheme.primary
     }
 
@@ -74,7 +75,7 @@ fun BudgetOverviewCard(
                         .background(color = containerColor, shape = CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    androidx.compose.material3.Icon(
+                    Icon(
                         imageVector = icon,
                         contentDescription = null,
                         tint = tint,
@@ -87,22 +88,28 @@ fun BudgetOverviewCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = state.selectedCategory?.let { stringResource(it.nameResId) } ?: "Budget Category",
+                        text = stringResource(category.nameResId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${periodLabel(state.periodInput)} Budget",
+                        text = "${budget.period} Budget",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                when {
+                    isOverBudget -> BudgetStatusBadge(
+                        text = "Over Budget",
+                        color = ProgressError
+                    )
 
-                StatusBadge(
-                    isOverBudget = state.isOverBudget,
-                    isWarning = state.isWarning
-                )
+                    isWarning -> BudgetStatusBadge(
+                        text = "Almost Full",
+                        color = Warning
+                    )
+                }
             }
 
             Column(
@@ -110,12 +117,14 @@ fun BudgetOverviewCard(
             ) {
                 AmountRow(
                     label = "Spent",
-                    value = state.spentAmount,
-                    emphasize = true
+                    value = budget.spent,
+                    emphasize = true,
+                    currencySymbol = budget.currencySymbol
                 )
                 AmountRow(
                     label = "Budget",
-                    value = state.budgetedAmount
+                    value = budget.amount,
+                    currencySymbol = budget.currencySymbol
                 )
 
                 CustomProgressBar(
@@ -134,15 +143,15 @@ fun BudgetOverviewCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = progressColor
                     )
-                    val remaining = state.remainingAmount
+                    val remaining = budget.remaining
                     Text(
                         text = if (remaining >= 0) {
-                            "$${remaining.formatCurrency()} left"
+                            "${budget.currencySymbol} ${remaining} left"
                         } else {
-                            "$${kotlin.math.abs(remaining).formatCurrency()} over"
+                            "${budget.currencySymbol} ${budget.overBudget} over"
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (remaining >= 0) MaterialTheme.colorScheme.primary else ProgressError,
+                        color = if (remaining >= 0) progressColor else ProgressError,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -152,49 +161,11 @@ fun BudgetOverviewCard(
 }
 
 @Composable
-private fun StatusBadge(
-    isOverBudget: Boolean,
-    isWarning: Boolean,
-    modifier: Modifier = Modifier
-) {
-    when {
-        isOverBudget -> {
-            Surface(
-                modifier = modifier,
-                shape = RoundedCornerShape(12.dp),
-                color = ProgressError.copy(alpha = 0.12f)
-            ) {
-                Text(
-                    text = "Over Budget",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = ProgressError,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
-        }
-
-        isWarning -> {
-            Surface(
-                modifier = modifier,
-                shape = RoundedCornerShape(12.dp),
-                color = Warning.copy(alpha = 0.12f)
-            ) {
-                Text(
-                    text = "Almost Full",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Warning,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun AmountRow(
     label: String,
     value: Double,
-    emphasize: Boolean = false
+    emphasize: Boolean = false,
+    currencySymbol: String
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -207,7 +178,7 @@ private fun AmountRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "$${value.formatCurrency()}",
+            text = "$currencySymbol $value",
             style = if (emphasize) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
             fontWeight = if (emphasize) FontWeight.SemiBold else FontWeight.Normal,
             color = MaterialTheme.colorScheme.onSurface
@@ -215,28 +186,27 @@ private fun AmountRow(
     }
 }
 
-private fun Double.formatCurrency(): String = String.format("%,.2f", this)
-
 private fun Float.formatPercent(): String = String.format("%.1f%%", this)
 
-private fun periodLabel(id: String): String {
-    return BudgetPeriodOptions.findById(id).label
-}
 
 @Preview(showBackground = true)
 @Composable
 private fun BudgetOverviewCardPreview() {
     PersonalFinanceTrackerTheme {
         BudgetOverviewCard(
-            state = EditBudgetContract.State(
-                selectedCategory = DefaultCategories.FOOD,
-                budgetedAmountOriginal = 500.0,
-                budgetedAmountInput = "500.00",
-                spentAmount = 420.0,
-                periodInput = BudgetPeriodOptions.Monthly.id,
-                periodOriginal = BudgetPeriodOptions.Monthly.id
-            )
+
+            budget = BudgetUi(
+                id = "1",
+                userId = "A1",
+                category = DefaultCategories.FOOD.id,
+                amount = 500.0,
+                currency = "USD",
+                period = BudgetPeriodOptions.Monthly.id,
+                notes = null,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis(),
+                spent = 420.0
+            ),
         )
     }
 }
-

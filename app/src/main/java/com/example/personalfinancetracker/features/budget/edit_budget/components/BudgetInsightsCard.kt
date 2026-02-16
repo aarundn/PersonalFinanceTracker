@@ -18,17 +18,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
-import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetContract
+import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetState
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import kotlin.math.max
 
 @Composable
 fun BudgetInsightsCard(
-    state: EditBudgetContract.State,
+    state: EditBudgetState,
     modifier: Modifier = Modifier
 ) {
-    val projectedColor = if (state.projectedTotal > state.budgetedAmount) {
+    val budget = state.budget ?: return
+    
+    val daysInPeriod = BudgetPeriodOptions.findById(budget.period).days
+    val daysElapsed = calculateDaysElapsed(budget.createdAt, daysInPeriod)
+    val averageDailySpend = if (daysElapsed > 0) budget.spent / daysElapsed else 0.0
+    val projectedTotal = if (daysElapsed > 0) averageDailySpend * daysInPeriod else budget.spent
+    
+    val projectedColor = if (projectedTotal > budget.amount) {
         ProgressError
     } else {
         MaterialTheme.colorScheme.primary
@@ -54,18 +64,18 @@ fun BudgetInsightsCard(
 
             InsightRow(
                 label = "Days into period",
-                value = "${state.daysElapsed} of ${state.daysInPeriod}"
+                value = "$daysElapsed of $daysInPeriod"
             )
 
             InsightRow(
                 label = "Average daily spending",
-                value = "$${state.averageDailySpend.formatCurrency()}",
+                value = "$${averageDailySpend.formatCurrency()}",
                 emphasize = true
             )
 
             InsightRow(
                 label = "Projected ${periodLabel(state.periodInput)} total",
-                value = "$${state.projectedTotal.formatCurrency()}",
+                value = "$${projectedTotal.formatCurrency()}",
                 emphasize = true,
                 valueColor = projectedColor
             )
@@ -105,18 +115,32 @@ private fun Double.formatCurrency(): String = String.format("%,.2f", this)
 
 private fun periodLabel(id: String): String =
     BudgetPeriodOptions.findById(id).label
+    
+private fun calculateDaysElapsed(createdAt: Long, daysInPeriod: Int): Int {
+    val diff = System.currentTimeMillis() - createdAt
+    val days = (diff / (1000 * 60 * 60 * 24)).toInt()
+    return max(0, minOf(days, daysInPeriod))
+}
 
 @Preview(showBackground = true)
 @Composable
 private fun BudgetInsightsCardPreview() {
     PersonalFinanceTrackerTheme {
         BudgetInsightsCard(
-            state = EditBudgetContract.State(
-                budgetedAmountOriginal = 500.0,
-                budgetedAmountInput = "500.00",
-                spentAmount = 320.0,
-                daysElapsed = 12,
-                daysInPeriod = 30,
+            state = EditBudgetState(
+                budget = BudgetUi(
+                    id = "1",
+                    userId = "A1",
+                    category = DefaultCategories.FOOD.id,
+                    amount = 500.0,
+                    currency = "USD",
+                    period = BudgetPeriodOptions.Monthly.id,
+                    notes = null,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
+                    spent = 320.0
+                ),
+                amountInput = "500.00",
                 periodInput = BudgetPeriodOptions.Monthly.id
             )
         )

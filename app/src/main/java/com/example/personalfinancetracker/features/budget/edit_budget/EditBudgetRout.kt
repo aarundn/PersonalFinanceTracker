@@ -1,39 +1,44 @@
 package com.example.personalfinancetracker.features.budget.edit_budget
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditBudgetRoute(
-    budgetId: Int,
     onNavigateBack: () -> Unit,
-    viewModel: EditBudgetViewModel = viewModel()
+    viewModel: EditBudgetViewModel = koinViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
+
 
     LaunchedEffect(viewModel) {
-        viewModel.sideEffects.collect { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is EditBudgetContract.SideEffect.NavigateBack -> onNavigateBack()
-                is EditBudgetContract.SideEffect.ShowError -> {
-                    // Hook up to snackbar host when available
+                is EditBudgetSideEffect.NavigateBack -> onNavigateBack()
+                is EditBudgetSideEffect.ShowError -> {
+                    launch {
+                        snackBarHostState.showSnackbar(sideEffect.message)
+                    }
                 }
-                is EditBudgetContract.SideEffect.ShowSuccess -> {
-                    // Hook up to snackbar host when available
+                is EditBudgetSideEffect.ShowSuccess -> {
+                    launch {
+                        snackBarHostState.showSnackbar(sideEffect.message)
+                    }
                 }
             }
         }
     }
 
-    LaunchedEffect(budgetId) {
-        viewModel.setBudgetId(budgetId)
-    }
-
     EditBudgetScreen(
         state = state,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
+        snackBarHostState = snackBarHostState
     )
 }
