@@ -18,8 +18,7 @@ data class AddBudgetState(
     val isSaving: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val categories: List<Category> = emptyList(),
-    val isSaveEnabled: Boolean = false
+    val categories: List<Category> = emptyList()
 ) : MVIState
 
 sealed class AddBudgetEvent : MVIUiEvent {

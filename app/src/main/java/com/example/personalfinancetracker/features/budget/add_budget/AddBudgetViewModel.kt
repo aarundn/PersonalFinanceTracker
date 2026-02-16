@@ -37,7 +37,7 @@ class AddBudgetViewModel(
     }
 
     private fun updateCategory(category: Category) {
-        setState { copy(selectedCategory = category).derived() }
+        setState { copy(selectedCategory = category) }
     }
 
     private fun updateAmount(amount: String) {
@@ -53,18 +53,17 @@ class AddBudgetViewModel(
                 }
             }
         }
-        setState { copy(amountInput = sanitized).derived() }
+        setState { copy(amountInput = sanitized) }
     }
 
     private fun updateCurrency(currency: Currency) {
-        setState { copy(selectedCurrency = currency).derived() }
+        setState { copy(selectedCurrency = currency) }
     }
 
     private fun saveBudget() {
         val currentState = _uiState.value
-        if (!currentState.isSaveEnabled) return
 
-        setState { copy(isSaving = true, error = null).derived() }
+        setState { copy(isSaving = true, error = null) }
 
         viewModelScope.launch {
             try {
@@ -81,15 +80,15 @@ class AddBudgetViewModel(
                 )
 
                 addBudgetUseCase(budget).onSuccess {
-                    setState { copy(isSaving = false).derived() }
+                    setState { copy(isSaving = false) }
                     triggerSideEffect(AddBudgetSideEffect.ShowSuccess("Budget created successfully"))
                     triggerSideEffect(AddBudgetSideEffect.NavigateBack)
                 }.onFailure { e ->
-                    setState { copy(isSaving = false, error = "Failed to save budget").derived() }
+                    setState { copy(isSaving = false, error = "Failed to save budget") }
                     triggerSideEffect(AddBudgetSideEffect.ShowError("Failed to save budget: ${e.message}"))
                 }
             } catch (e: Exception) {
-                setState { copy(isSaving = false, error = "Failed to save budget").derived() }
+                setState { copy(isSaving = false, error = "Failed to save budget") }
                 triggerSideEffect(AddBudgetSideEffect.ShowError("Failed to save budget: ${e.message}"))
             }
         }
@@ -99,14 +98,5 @@ class AddBudgetViewModel(
         viewModelScope.launch {
             triggerSideEffect(AddBudgetSideEffect.NavigateBack)
         }
-    }
-    // todo do it in the ui model not in the viewmodel
-    private fun AddBudgetState.derived(): AddBudgetState {
-        val amount = amountInput.toDoubleOrNull() ?: 0.0
-        val isEnabled = selectedCategory != null &&
-                amount > 0.0 &&
-                selectedCurrency != null &&
-                !isSaving
-        return copy(isSaveEnabled = isEnabled)
     }
 }
