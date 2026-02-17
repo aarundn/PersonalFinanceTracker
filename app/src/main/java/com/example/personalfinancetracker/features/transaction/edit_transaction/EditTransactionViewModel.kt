@@ -8,10 +8,10 @@ import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
-import com.example.domain.repo.TransactionRepository
-import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
-import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
 import com.example.domain.usecase.ValidateInputsUseCase
+import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
+import com.example.domain.usecase.transaction_usecases.GetTransactionByIdUseCase
+import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: TransactionRepository,
+    private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
     private val validateInputsUseCase: ValidateInputsUseCase
@@ -44,39 +44,38 @@ class EditTransactionViewModel(
             updateState { copy(isLoading = false, error = "Invalid transaction ID") }
             return
         }
-
         updateState { copy(isLoading = true) }
 
         viewModelScope.launch {
-            try {
-                val transactionUi = repository.getTransactionById(transactionId)?.toTransactionUi()
-                transactionUi?.let { txn ->
 
-                    val categories = DefaultCategories.getCategories(txn.isIncome)
-                    val selectedCategory = DefaultCategories.fromId(txn.categoryId)
-                    
-                    updateState {
-                        copy(
-                            transactionId = transactionId,
-                            isLoading = false,
-                            isIncome = txn.isIncome,
-                            selectedCategory = selectedCategory,
-                            amount = txn.amount.toString(),
-                            selectedCurrency = DefaultCurrencies.fromId(txn.currency),
-                            date = txn.date,
-                            notes = txn.notes ?: "",
-                            categories = categories
-                        )
-                    }
-                } ?: run {
+            getTransactionByIdUseCase(transactionId).onSuccess { transaction ->
+                if (transaction == null)
                     updateState { copy(isLoading = false, error = "Transaction not found") }
+
+                val txn = transaction?.toTransactionUi() ?: return@onSuccess
+
+                val categories = DefaultCategories.getCategories(txn.isIncome)
+                val selectedCategory = DefaultCategories.fromId(txn.categoryId)
+
+                updateState {
+                    copy(
+                        isLoading = false,
+                        isIncome = txn.isIncome,
+                        selectedCategory = selectedCategory,
+                        amount = txn.amount.toString(),
+                        selectedCurrency = DefaultCurrencies.fromId(txn.currency),
+                        date = txn.date,
+                        notes = txn.notes ?: "",
+                        categories = categories
+                    )
                 }
-            } catch (e: Exception) {
-                updateState { copy(isLoading = false, error = e.message) }
-                showError(e.message ?: "Failed to load transaction")
+            }.onFailure { e ->
+                updateState { copy(isLoading = false, error = "Failed to load transaction: ${e.message}") }
             }
+
         }
     }
+
     override fun handleEvent(event: MVIUiEvent) {
         when (event) {
             is EditTransactionEvent.OnTransactionTypeChanged -> {

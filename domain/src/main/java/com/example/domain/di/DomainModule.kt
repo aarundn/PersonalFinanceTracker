@@ -20,6 +20,7 @@ val domainModule = module {
     factoryOf(::DeleteTransactionUseCase)
     factoryOf(::GetTransactionsUseCase)
     factoryOf(::UpdateTransactionUseCase)
+    factoryOf(::GetBudgetByIdUseCase)
 
     factoryOf(::AddBudgetUseCase)
     factoryOf(::UpdateBudgetUseCase)

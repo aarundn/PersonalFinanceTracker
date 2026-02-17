@@ -191,7 +191,6 @@ private fun TransactionOverviewCardPreview() {
     PersonalFinanceTrackerTheme {
         TransactionOverviewCard(
             state = EditTransactionState(
-                transactionId = "1",
                 isIncome = false,
                 selectedCategory = null,
                 amount = "85.50",

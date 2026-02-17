@@ -9,7 +9,6 @@ import com.example.core.model.Currency
 
 @Immutable
 data class EditTransactionState(
-    val transactionId: String = "",
     val isIncome: Boolean = false,
     val selectedCategory: Category? = null,
     val amount: String = "",

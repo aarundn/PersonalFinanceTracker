@@ -152,7 +152,6 @@ private fun EditTransactionScreenPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
             state = EditTransactionState(
-                transactionId = "",
                 isIncome = false,
                 selectedCategory = DefaultCategories.FOOD,
                 amount = "85.50",
@@ -173,7 +172,6 @@ private fun EditTransactionScreenEditingPreview() {
     PersonalFinanceTrackerTheme {
         EditTransactionScreen(
             state = EditTransactionState(
-                transactionId = "",
                 isIncome = true,
                 selectedCategory = DefaultCategories.SALARY,
                 amount = "800.00",
