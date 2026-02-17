@@ -6,7 +6,9 @@ import com.example.core.common.BaseViewModel
 import com.example.core.common.MVIUiEvent
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
+import com.example.domain.ValidationResult
 import com.example.domain.model.Budget
+import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.budget_usecases.DeleteBudgetUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetByIdUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
@@ -24,6 +26,7 @@ class EditBudgetViewModel(
     private val updateBudgetUseCase: UpdateBudgetUseCase,
     private val deleteBudgetUseCase: DeleteBudgetUseCase,
     private val getBudgetTransactionsUseCase: GetBudgetTransactionsUseCase,
+    private val validatorUseCase: ValidateInputsUseCase
 ) : BaseViewModel<EditBudgetState, MVIUiEvent, EditBudgetSideEffect>() {
 
     companion object {
@@ -106,6 +109,7 @@ class EditBudgetViewModel(
             is EditBudgetEvent.OnAmountChanged -> updateState {
                 copy(amountInput = sanitizeAmount(event.amount))
             }
+
             is EditBudgetEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
             is EditBudgetEvent.OnPeriodChanged -> updateState { copy(periodInput = event.periodId) }
             is EditBudgetEvent.OnNotesChanged -> updateState { copy(notesInput = event.notes) }
@@ -116,13 +120,15 @@ class EditBudgetViewModel(
         val currentState = _uiState.value
         val amount = currentState.amountInput.toDoubleOrNull()
 
-        if (currentState.selectedCategory == null) {
-            showError("Please select a category")
-            return
-        }
+        val validationResult = validatorUseCase(
+            category = currentState.selectedCategory?.id ?: "",
+            amount = currentState.amountInput,
+            currency = currentState.selectedCurrency?.id ?: "",
+            date = currentState.budget?.updatedAt ?: 0L
+        )
 
-        if (amount == null || amount <= 0.0) {
-            showError("Please enter a valid amount")
+        if (validationResult is ValidationResult.Error) {
+            showError(validationResult.message)
             return
         }
 
@@ -133,8 +139,8 @@ class EditBudgetViewModel(
                 id = budgetId,
                 userId = currentState.budget?.userId ?: "",
                 spent = currentState.budget?.spent ?: 0.0,
-                category = currentState.selectedCategory.id,
-                amount = amount,
+                category = currentState.selectedCategory?.id ?: "",
+                amount = amount ?: 0.0,
                 currency = currentState.selectedCurrency?.id ?: "",
                 period = currentState.periodInput,
                 notes = currentState.notesInput.ifBlank { null },

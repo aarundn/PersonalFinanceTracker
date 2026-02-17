@@ -5,13 +5,16 @@ import com.example.core.common.BaseViewModel
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCategories
+import com.example.domain.ValidationResult
 import com.example.domain.model.Budget
+import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.budget_usecases.AddBudgetUseCase
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class AddBudgetViewModel(
-    private val addBudgetUseCase: AddBudgetUseCase
+    private val addBudgetUseCase: AddBudgetUseCase,
+    private val validatorUseCase: ValidateInputsUseCase
 ) : BaseViewModel<AddBudgetState, AddBudgetEvent, AddBudgetSideEffect>() {
 
     init {
@@ -63,6 +66,17 @@ class AddBudgetViewModel(
     private fun saveBudget() {
         val currentState = _uiState.value
 
+        val validationResult = validatorUseCase(
+            category = currentState.selectedCategory?.id ?: "",
+            amount = currentState.amountInput,
+            currency = currentState.selectedCurrency?.id ?: "",
+            date = System.currentTimeMillis()
+        )
+
+        if (validationResult is ValidationResult.Error) {
+            triggerSideEffect(AddBudgetSideEffect.ShowError(validationResult.message))
+            return
+        }
         setState { copy(isSaving = true, error = null) }
 
         viewModelScope.launch {

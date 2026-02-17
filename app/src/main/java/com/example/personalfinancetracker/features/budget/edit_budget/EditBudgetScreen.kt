@@ -100,7 +100,6 @@ fun EditBudgetScreen(
                     onSave = { onEvent(EditBudgetEvent.OnSave) },
                     onCancel = { onEvent(EditBudgetEvent.OnCancel) }, // Note: OnCancelEdit was removed/mapped to OnCancel or we need to check logic
                     isLoading = state.isLoading,
-                    isSaveEnabled = state.isEditing && state.amountInput.isNotBlank(),
                     isReadOnly = !state.isEditing
                 )
 

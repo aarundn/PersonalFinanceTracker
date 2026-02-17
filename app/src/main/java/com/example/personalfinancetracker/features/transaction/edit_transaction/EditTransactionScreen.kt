@@ -104,7 +104,6 @@ fun EditTransactionScreen(
                     amount = state.amount,
                     date = parseDateString(state.date),
                     notes = state.notes,
-                    isSaveEnabled = state.isEditing && state.selectedCategory != null && state.amount.isNotEmpty(),
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
                     categories = state.categories

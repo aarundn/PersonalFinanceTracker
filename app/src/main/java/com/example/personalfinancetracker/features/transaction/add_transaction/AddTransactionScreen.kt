@@ -54,7 +54,6 @@ fun AddTransactionScreen(
             amount = state.amount,
             date = parseDateString(state.date),
             notes = state.notes,
-            isSaveEnabled = state.selectedCategory != null && state.amount.isNotEmpty()
         )
     }
 }

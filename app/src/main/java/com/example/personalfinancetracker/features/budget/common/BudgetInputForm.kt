@@ -46,7 +46,6 @@ fun BudgetInputForm(
     onSave: () -> Unit,
     onCancel: () -> Unit,
     isLoading: Boolean = false,
-    isSaveEnabled: Boolean = true,
     isReadOnly: Boolean = false,
 ) {
     Column(
@@ -119,7 +118,6 @@ fun BudgetInputForm(
                 onCancel = onCancel,
                 onSave = onSave,
                 isLoading = isLoading,
-                isSaveEnabled = isSaveEnabled
             )
         }
     }

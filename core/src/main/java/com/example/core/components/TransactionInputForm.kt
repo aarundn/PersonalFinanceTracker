@@ -43,7 +43,6 @@ fun TransactionInputForm(
     amount: String,
     date: String,
     notes: String,
-    isSaveEnabled: Boolean,
     isReadOnly: Boolean = false,
     showTypeToggle: Boolean = true
 ) {
@@ -121,7 +120,6 @@ fun TransactionInputForm(
             onCancel = onCancel,
             onSave = onSave,
             isLoading = isLoading,
-            isSaveEnabled = isSaveEnabled
         )
     }
 }
@@ -168,7 +166,6 @@ private fun TransactionInputFormPreview() {
             amount = "",
             date = "",
             notes = "",
-            isSaveEnabled = false,
         )
     }
 }

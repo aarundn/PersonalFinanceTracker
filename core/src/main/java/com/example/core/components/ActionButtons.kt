@@ -27,7 +27,6 @@ fun ActionButtons(
     onCancel: () -> Unit,
     onSave: () -> Unit,
     isLoading: Boolean = false,
-    isSaveEnabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
@@ -52,7 +51,6 @@ fun ActionButtons(
         
         Button(
             onClick = onSave,
-            enabled = isSaveEnabled && !isLoading,
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF2563EB), // Blue-600
@@ -85,7 +83,6 @@ private fun ActionButtonsPreview() {
             onCancel = {},
             onSave = {},
             isLoading = false,
-            isSaveEnabled = true
         )
     }
 }

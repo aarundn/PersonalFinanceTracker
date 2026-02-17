@@ -11,7 +11,7 @@ import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
 import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
-import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -23,7 +23,7 @@ class EditTransactionViewModel(
     private val repository: TransactionRepository,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
-    private val validateInputsUseCase: ValidateTransactionInputsUseCase
+    private val validateInputsUseCase: ValidateInputsUseCase
 ) : BaseViewModel<EditTransactionState, MVIUiEvent, EditTransactionSideEffect>() {
 
     companion object {

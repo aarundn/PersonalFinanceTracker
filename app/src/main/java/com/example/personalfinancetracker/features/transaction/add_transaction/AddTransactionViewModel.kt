@@ -7,7 +7,7 @@ import com.example.core.model.DefaultCategories
 import com.example.domain.ValidationResult
 import com.example.domain.model.Type
 import com.example.domain.usecase.transaction_usecases.AddTransactionUseCase
-import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import java.util.UUID
 
 class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
-    private val validateInputsUseCase: ValidateTransactionInputsUseCase
+    private val validateInputsUseCase: ValidateInputsUseCase
 ) : BaseViewModel<AddTransactionState, MVIUiEvent, AddTransactionSideEffect>() {
 
     init {

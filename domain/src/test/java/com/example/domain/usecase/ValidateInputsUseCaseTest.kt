@@ -6,13 +6,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class ValidateTransactionInputsUseCaseTest {
+class ValidateInputsUseCaseTest {
 
-    private lateinit var validateInputs: ValidateTransactionInputsUseCase
+    private lateinit var validateInputs: ValidateInputsUseCase
 
     @Before
     fun setUp() {
-        validateInputs = ValidateTransactionInputsUseCase()
+        validateInputs = ValidateInputsUseCase()
     }
 
     @Test

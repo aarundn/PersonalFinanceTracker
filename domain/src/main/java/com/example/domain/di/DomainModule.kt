@@ -10,7 +10,7 @@ import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.domain.usecase.budget_usecases.UpdateBudgetUseCase
 import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
-import com.example.domain.usecase.ValidateTransactionInputsUseCase
+import com.example.domain.usecase.ValidateInputsUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -28,5 +28,5 @@ val domainModule = module {
     factoryOf(::GetBudgetByIdUseCase)
     factoryOf(::GetBudgetTransactionsUseCase)
 
-    singleOf(::ValidateTransactionInputsUseCase)
+    singleOf(::ValidateInputsUseCase)
 }

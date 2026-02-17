@@ -2,7 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.ValidationResult
 
-class ValidateTransactionInputsUseCase {
+class ValidateInputsUseCase {
 
     /**
      * Validates all transaction fields and returns a ValidationResult.
@@ -17,22 +17,23 @@ class ValidateTransactionInputsUseCase {
             return ValidationResult.Error("Category is required")
         }
 
+        if (currency.isBlank()) {
+            return ValidationResult.Error("Currency is required")
+        }
+
         if (amount.isBlank()) {
             return ValidationResult.Error("Amount is required")
         }
+
         val amountValue = amount.toDoubleOrNull()
         if (amountValue == null || amountValue <= 0) {
             return ValidationResult.Error("Please enter a valid amount")
         }
 
-        if (currency.isBlank()) {
-            return ValidationResult.Error("Currency is required")
-        }
-
         if (date <= 0) {
             return ValidationResult.Error("Date is required")
         }
-        
+
         return ValidationResult.Success
     }
 

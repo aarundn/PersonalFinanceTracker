@@ -63,10 +63,6 @@ fun AddBudgetScreen(
                 onSave = { onEvent(AddBudgetEvent.OnSave) },
                 onCancel = { onEvent(AddBudgetEvent.OnCancel) },
                 isLoading = state.isSaving,
-                isSaveEnabled = state.selectedCategory != null &&
-                    state.amountInput.isNotBlank() &&
-                    state.selectedCurrency != null &&
-                    !state.isSaving
             )
 
             state.error?.let { errorMessage ->
