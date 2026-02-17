@@ -4,6 +4,7 @@ import com.example.data.local.TrackerDatabase
 import com.example.data.mapping.toDomain
 import com.example.data.mapping.toEntity
 import com.example.domain.model.Transaction
+import com.example.domain.model.Type
 import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,7 +15,7 @@ class TransactionRepositoryImp(
 
 
     override suspend fun addTransaction(transaction: Transaction) {
-            transactionDB.transactionDao().insertTransaction(transaction.toEntity())
+        transactionDB.transactionDao().insertTransaction(transaction.toEntity())
     }
 
     override fun getAllTransactions(): Flow<List<Transaction>> =
@@ -32,6 +33,19 @@ class TransactionRepositoryImp(
         return transactionDB.transactionDao().getTransactionById(id)?.toDomain()
     }
 
-
-
+    override fun getTransactionsByCategoryAndDateRange(
+        category: String,
+        currency: String,
+        type: Type,
+        startDate: Long,
+        endDate: Long
+    ): Flow<List<Transaction>> =
+        transactionDB.transactionDao().getTransactionsByCategoryAndDateRange(
+            category = category,
+            currency = currency,
+            type = type,
+            startDate = startDate,
+            endDate = endDate
+        ).map { it.toDomain() }
 }
+

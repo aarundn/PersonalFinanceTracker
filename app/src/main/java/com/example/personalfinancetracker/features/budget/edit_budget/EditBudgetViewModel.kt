@@ -9,8 +9,8 @@ import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.Budget
 import com.example.domain.usecase.budget_usecases.DeleteBudgetUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetByIdUseCase
+import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
 import com.example.domain.usecase.budget_usecases.UpdateBudgetUseCase
-import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudget
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
@@ -23,7 +23,7 @@ class EditBudgetViewModel(
     private val getBudgetByIdUseCase: GetBudgetByIdUseCase,
     private val updateBudgetUseCase: UpdateBudgetUseCase,
     private val deleteBudgetUseCase: DeleteBudgetUseCase,
-    private val getTransactionsUseCase: GetTransactionsUseCase,
+    private val getBudgetTransactionsUseCase: GetBudgetTransactionsUseCase,
 ) : BaseViewModel<EditBudgetState, MVIUiEvent, EditBudgetSideEffect>() {
 
     companion object {
@@ -57,33 +57,27 @@ class EditBudgetViewModel(
         updateState { copy(isLoading = true) }
 
         viewModelScope.launch {
-            try {
-                getBudgetByIdUseCase(budgetId).onSuccess { budget ->
-                    budget?.let {
-
-                        collectTransactions(budget)
-
-                    } ?: run {
+            getBudgetByIdUseCase(budgetId)
+                .onSuccess { budget ->
+                    if (budget == null) {
                         updateState { copy(isLoading = false, error = "Budget not found") }
+                        return@launch
                     }
-                }.onFailure {
+                    collectTransactions(budget)
+                }
+                .onFailure {
                     updateState { copy(isLoading = false, error = "Failed to load budget") }
                     showError("Failed to load budget")
                 }
-            } catch (e: Exception) {
-                updateState { copy(isLoading = false, error = e.message) }
-                showError(e.message ?: "Failed to load budget")
-            }
         }
     }
 
-    private suspend fun collectTransactions(
-        budget: Budget
-    ) {
-        getTransactionsUseCase()
+    private suspend fun collectTransactions(budget: Budget) {
+        getBudgetTransactionsUseCase(budgetId)
             .catch { showError("Failed to load transactions") }
             .collect { transactions ->
-                val budgetUi = budget.toBudgetUi(transactions)
+                val spent = transactions.sumOf { it.amount }
+                val budgetUi = budget.toBudgetUi(spent)
                 updateState {
                     copy(
                         budget = budgetUi,
@@ -110,13 +104,8 @@ class EditBudgetViewModel(
             EditBudgetEvent.OnDismissDelete -> updateState { copy(showDeleteConfirmation = false) }
             is EditBudgetEvent.OnCategoryChanged -> updateState { copy(selectedCategory = event.category) }
             is EditBudgetEvent.OnAmountChanged -> updateState {
-                copy(
-                    amountInput = sanitizeAmount(
-                        event.amount
-                    )
-                )
+                copy(amountInput = sanitizeAmount(event.amount))
             }
-
             is EditBudgetEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
             is EditBudgetEvent.OnPeriodChanged -> updateState { copy(periodInput = event.periodId) }
             is EditBudgetEvent.OnNotesChanged -> updateState { copy(notesInput = event.notes) }
@@ -140,31 +129,28 @@ class EditBudgetViewModel(
         updateState { copy(isLoading = true) }
 
         viewModelScope.launch {
-            try {
-                val budget = BudgetUi(
-                    id = budgetId,
-                    userId = currentState.budget?.userId ?: "",
-                    spent = currentState.budget?.spent ?: 0.0,
-                    category = currentState.selectedCategory.id,
-                    amount = amount,
-                    currency = currentState.selectedCurrency?.id ?: "",
-                    period = currentState.periodInput,
-                    notes = currentState.notesInput.ifBlank { null },
-                    createdAt = currentState.budget?.createdAt ?: 0L,
-                    updatedAt = System.currentTimeMillis()
-                )
+            val budget = BudgetUi(
+                id = budgetId,
+                userId = currentState.budget?.userId ?: "",
+                spent = currentState.budget?.spent ?: 0.0,
+                category = currentState.selectedCategory.id,
+                amount = amount,
+                currency = currentState.selectedCurrency?.id ?: "",
+                period = currentState.periodInput,
+                notes = currentState.notesInput.ifBlank { null },
+                createdAt = currentState.budget?.createdAt ?: 0L,
+                updatedAt = System.currentTimeMillis()
+            )
 
-                updateBudgetUseCase(budget.toBudget()).onSuccess {
+            updateBudgetUseCase(budget.toBudget())
+                .onSuccess {
                     updateState { copy(isLoading = false, isEditing = false) }
                     triggerSideEffect(EditBudgetSideEffect.ShowSuccess("Budget updated"))
-                }.onFailure {
+                }
+                .onFailure {
                     updateState { copy(isLoading = false) }
                     showError("Failed to update: ${it.message}")
                 }
-            } catch (e: Exception) {
-                updateState { copy(isLoading = false) }
-                showError("Error: ${e.message}")
-            }
         }
     }
 
@@ -172,14 +158,16 @@ class EditBudgetViewModel(
         updateState { copy(showDeleteConfirmation = false, isLoading = true) }
 
         viewModelScope.launch {
-            deleteBudgetUseCase(budgetId).onSuccess {
-                updateState { copy(isLoading = false) }
-                triggerSideEffect(EditBudgetSideEffect.ShowSuccess("Budget deleted"))
-                triggerSideEffect(EditBudgetSideEffect.NavigateBack)
-            }.onFailure {
-                updateState { copy(isLoading = false) }
-                showError("Failed to delete: ${it.message}")
-            }
+            deleteBudgetUseCase(budgetId)
+                .onSuccess {
+                    updateState { copy(isLoading = false) }
+                    triggerSideEffect(EditBudgetSideEffect.ShowSuccess("Budget deleted"))
+                    triggerSideEffect(EditBudgetSideEffect.NavigateBack)
+                }
+                .onFailure {
+                    updateState { copy(isLoading = false) }
+                    showError("Failed to delete: ${it.message}")
+                }
         }
     }
 

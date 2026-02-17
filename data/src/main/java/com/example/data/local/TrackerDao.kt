@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.data.local.model.TransactionEntity
+import com.example.domain.model.Type
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,4 +29,22 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransactionById(id: String): TransactionEntity?
+
+    @Query(
+        """
+    SELECT * FROM transactions 
+    WHERE category = :category 
+      AND currency = :currency 
+      AND type = :type 
+      AND date BETWEEN :startDate AND :endDate 
+    ORDER BY date DESC
+"""
+    )
+    fun getTransactionsByCategoryAndDateRange(
+        category: String,
+        currency: String,
+        type: Type,
+        startDate: Long,
+        endDate: Long
+    ): Flow<List<TransactionEntity>>
 }
