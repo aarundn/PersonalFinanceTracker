@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.CustomSnackBar
 import com.example.core.components.TransactionInputForm
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
@@ -25,7 +26,9 @@ fun AddTransactionScreen(
     onEvent: (AddTransactionEvent) -> Unit,
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = { SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
+            CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+        } },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = { HeaderSection(onBackClick = { onEvent(AddTransactionEvent.OnCancel) }) }

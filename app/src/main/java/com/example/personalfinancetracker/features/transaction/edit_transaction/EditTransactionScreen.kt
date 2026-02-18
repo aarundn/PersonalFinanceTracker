@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.components.ConfirmationDialog
+import com.example.core.components.CustomSnackBar
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
@@ -48,10 +49,13 @@ fun EditTransactionScreen(
 ) {
 
 
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+            }
+        },
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             HeaderSection(
@@ -90,13 +94,49 @@ fun EditTransactionScreen(
                 TransactionInputForm(
                     modifier = Modifier,
                     isIncome = state.isIncome,
-                    onTypeChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnTransactionTypeChanged(it)) },
+                    onTypeChanged = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnTransactionTypeChanged(
+                                it
+                            )
+                        )
+                    },
                     selectedCategory = state.selectedCategory,
-                    onCategorySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCategoryChanged(it)) },
-                    onDateChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnDateChanged(it.toLong())) },
-                    onAmountChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnAmountChanged(it)) },
-                    onNotesChanged = { if (state.isEditing) onEvent(EditTransactionEvent.OnNotesChanged(it)) },
-                    onCurrencySelected = { if (state.isEditing) onEvent(EditTransactionEvent.OnCurrencyChanged(it)) },
+                    onCategorySelected = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnCategoryChanged(
+                                it
+                            )
+                        )
+                    },
+                    onDateChanged = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnDateChanged(
+                                it.toLong()
+                            )
+                        )
+                    },
+                    onAmountChanged = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnAmountChanged(
+                                it
+                            )
+                        )
+                    },
+                    onNotesChanged = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnNotesChanged(
+                                it
+                            )
+                        )
+                    },
+                    onCurrencySelected = {
+                        if (state.isEditing) onEvent(
+                            EditTransactionEvent.OnCurrencyChanged(
+                                it
+                            )
+                        )
+                    },
                     onSave = { onEvent(EditTransactionEvent.OnSave) },
                     onCancel = { onEvent(EditTransactionEvent.OnCancel) },
                     selectedCurrency = state.selectedCurrency,

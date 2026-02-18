@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.CustomSnackBar
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
@@ -29,7 +30,11 @@ fun AddBudgetScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+            }
+        },
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
