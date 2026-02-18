@@ -25,6 +25,8 @@ fun AddTransactionScreen(
     state: AddTransactionState,
     onEvent: (AddTransactionEvent) -> Unit,
 ) {
+
+    // review this screen
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
             CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
