@@ -32,7 +32,7 @@ class AddBudgetViewModel(
             is AddBudgetEvent.OnCategorySelected -> updateCategory(event.category)
             is AddBudgetEvent.OnAmountChanged -> updateAmount(event.amount)
             is AddBudgetEvent.OnCurrencyChanged -> updateCurrency(event.currency)
-            is AddBudgetEvent.OnPeriodChanged -> setState { copy(periodId = event.periodId) }
+            is AddBudgetEvent.OnPeriodChanged -> setState { copy(period = event.period) }
             is AddBudgetEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
             AddBudgetEvent.OnSave -> saveBudget()
             AddBudgetEvent.OnCancel -> navigateBack()
@@ -87,7 +87,7 @@ class AddBudgetViewModel(
                     category = currentState.selectedCategory?.id ?: "",
                     amount = currentState.amountInput.toDoubleOrNull() ?: 0.0,
                     currency = currentState.selectedCurrency?.id ?: "",
-                    period = currentState.periodId,
+                    period = currentState.period.id,
                     notes = currentState.notes.ifBlank { null },
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()

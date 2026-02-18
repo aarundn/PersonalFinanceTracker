@@ -23,6 +23,7 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
 @Composable
 fun BudgetCard(
@@ -65,15 +66,15 @@ fun BudgetCard(
                     icon = budget.currentCategory.icon,
                     categoryName = budget.currentCategory.nameResId,
                     currencySymbol = budget.currencySymbol,
-                    spent = budget.spent.toString(),
-                    amount = budget.amount.toString()
+                    spent = budget.spent.formatCurrency(),
+                    amount = budget.amount.formatCurrency()
                 )
                 BudgetAmountStateInfo(
                     isOverBudget = budget.isOverBudget,
                     isWarning = budget.isWarning,
                     progressColor = progressColor,
-                    overBudget = budget.overBudget.toString(),
-                    remaining = budget.remaining.toString(),
+                    overBudget = budget.overBudget.formatCurrency(),
+                    remaining = budget.remaining.formatCurrency(),
                     currencySymbol = budget.currencySymbol
                 )
             }
@@ -94,12 +95,12 @@ fun BudgetCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${String.format("%.1f", budget.percentage * 100)}%",
+                        text = "${(budget.percentage * 100).toDouble().formatCurrency()}%",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${budget.currencySymbol}${budget.amount}",
+                        text = "${budget.currencySymbol}${budget.amount.formatCurrency()}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -1,6 +1,7 @@
 package com.example.domain.usecase.budget_usecases
 
 import com.example.domain.model.Budget
+import com.example.domain.model.BudgetPeriod
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 import com.example.domain.repo.BudgetRepository
@@ -38,10 +39,10 @@ class GetBudgetTransactionsUseCase(
         val timeZone = TimeZone.currentSystemDefault()
         val startDate = Instant.fromEpochMilliseconds(createdAt)
         val endDate = when (period.lowercase()) {
-            "weekly" -> startDate.plus(1, DateTimeUnit.WEEK, timeZone)
-            "monthly" -> startDate.plus(1, DateTimeUnit.MONTH, timeZone)
-            "quarterly" -> startDate.plus(3, DateTimeUnit.MONTH, timeZone)
-            "yearly" -> startDate.plus(1, DateTimeUnit.YEAR, timeZone)
+            BudgetPeriod.Weekly.id -> startDate.plus(1, DateTimeUnit.WEEK, timeZone)
+            BudgetPeriod.Monthly.id -> startDate.plus(1, DateTimeUnit.MONTH, timeZone)
+            BudgetPeriod.Quarterly.id -> startDate.plus(3, DateTimeUnit.MONTH, timeZone)
+            BudgetPeriod.Yearly.id -> startDate.plus(1, DateTimeUnit.YEAR, timeZone)
             else -> startDate.plus(1, DateTimeUnit.MONTH, timeZone)
         }
         return endDate.toEpochMilliseconds()

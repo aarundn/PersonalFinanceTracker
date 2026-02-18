@@ -28,18 +28,19 @@ import com.example.core.model.Currency
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.domain.model.BudgetPeriod
 
 @Composable
 fun BudgetInputForm(
     categories: List<Category>,
     selectedCategory: Category?,
-    selectedPeriodId: String,
+    selectedPeriod: BudgetPeriod,
     amount: String,
     notes: String,
     selectedCurrency: Currency?,
     modifier: Modifier = Modifier,
     onCategorySelected: (Category) -> Unit,
-    onPeriodSelected: (String) -> Unit,
+    onPeriodSelected: (BudgetPeriod) -> Unit,
     onAmountChanged: (String) -> Unit,
     onCurrencySelected: (Currency) -> Unit,
     onNotesChanged: (String) -> Unit,
@@ -94,9 +95,9 @@ fun BudgetInputForm(
 
                 TransactionDropdown(
                     label = "Budget Period",
-                    items = BudgetPeriodOptions.all,
-                    selectedItem = BudgetPeriodOptions.findById(selectedPeriodId),
-                    onItemSelected = { onPeriodSelected(it.id) },
+                    items = BudgetPeriod.entries,
+                    selectedItem = selectedPeriod,
+                    onItemSelected = onPeriodSelected ,
                     itemLabel = { "${it.label} (${it.days} days)" },
                     enabled = !isReadOnly
                 )
@@ -150,7 +151,7 @@ private fun BudgetInputFormPreview() {
         BudgetInputForm(
             categories = DefaultCategories.getCategories(isIncome = false),
             selectedCategory = DefaultCategories.FOOD,
-            selectedPeriodId = BudgetPeriodOptions.Monthly.id,
+            selectedPeriod = BudgetPeriod.Monthly,
             amount = "500.00",
             notes = "",
             selectedCurrency = DefaultCurrencies.USD,

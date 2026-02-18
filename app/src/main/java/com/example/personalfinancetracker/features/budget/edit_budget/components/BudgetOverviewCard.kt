@@ -30,8 +30,9 @@ import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
-import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
+import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
 @Composable
 fun BudgetOverviewCard(
@@ -139,16 +140,17 @@ fun BudgetOverviewCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "${(percentageUsed * 100).coerceAtMost(999f).formatPercent()} used",
+                        text = "${(percentageUsed * 100).coerceAtMost(999f)
+                            .toDouble().formatCurrency()} used",
                         style = MaterialTheme.typography.bodySmall,
                         color = progressColor
                     )
                     val remaining = budget.remaining
                     Text(
                         text = if (remaining >= 0) {
-                            "${budget.currencySymbol} ${remaining} left"
+                            "${budget.currencySymbol} ${remaining.formatCurrency()} left"
                         } else {
-                            "${budget.currencySymbol} ${budget.overBudget} over"
+                            "${budget.currencySymbol} ${budget.overBudget.formatCurrency()} over"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = if (remaining >= 0) progressColor else ProgressError,
@@ -178,7 +180,7 @@ private fun AmountRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "$currencySymbol $value",
+            text = "$currencySymbol ${value.formatCurrency()}",
             style = if (emphasize) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
             fontWeight = if (emphasize) FontWeight.SemiBold else FontWeight.Normal,
             color = MaterialTheme.colorScheme.onSurface
@@ -186,7 +188,7 @@ private fun AmountRow(
     }
 }
 
-private fun Float.formatPercent(): String = String.format("%.1f%%", this)
+
 
 
 @Preview(showBackground = true)
@@ -201,7 +203,7 @@ private fun BudgetOverviewCardPreview() {
                 category = DefaultCategories.FOOD.id,
                 amount = 500.0,
                 currency = "USD",
-                period = BudgetPeriodOptions.Monthly.id,
+                period = BudgetPeriod.Monthly.id,
                 notes = null,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = System.currentTimeMillis(),

@@ -51,7 +51,7 @@ fun AddBudgetScreen(
                 modifier = Modifier.padding(top = 16.dp),
                 categories = state.categories,
                 selectedCategory = state.selectedCategory,
-                selectedPeriodId = state.periodId,
+                selectedPeriod = state.period,
                 amount = state.amountInput,
                 notes = state.notes,
                 selectedCurrency = state.selectedCurrency,

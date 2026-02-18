@@ -18,27 +18,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
-import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
-import com.example.personalfinancetracker.features.budget.edit_budget.EditBudgetState
-import com.example.personalfinancetracker.features.budget.model.BudgetUi
-import kotlin.math.max
+import com.example.domain.model.BudgetPeriod
+import com.example.personalfinancetracker.features.budget.model.BudgetInsightsUi
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
 @Composable
 fun BudgetInsightsCard(
-    state: EditBudgetState,
+    insights: BudgetInsightsUi?,
+    periodInput: BudgetPeriod,
     modifier: Modifier = Modifier
 ) {
-    val budget = state.budget ?: return
+
     
-    val daysInPeriod = BudgetPeriodOptions.findById(budget.period).days
-    val daysElapsed = calculateDaysElapsed(budget.createdAt, daysInPeriod)
-    val averageDailySpend = if (daysElapsed > 0) budget.spent / daysElapsed else 0.0
-    val projectedTotal = if (daysElapsed > 0) averageDailySpend * daysInPeriod else budget.spent
-    
-    val projectedColor = if (projectedTotal > budget.amount) {
+    val projectedColor = if (insights?.isProjectedOverBudget == true) {
         ProgressError
     } else {
         MaterialTheme.colorScheme.primary
@@ -64,24 +58,25 @@ fun BudgetInsightsCard(
 
             InsightRow(
                 label = "Days into period",
-                value = "$daysElapsed of $daysInPeriod"
+                value = "${insights?.daysElapsed} of ${insights?.daysTotal}"
             )
 
             InsightRow(
                 label = "Average daily spending",
-                value = "$${averageDailySpend.formatCurrency()}",
+                value = "$${insights?.averageDailySpend?.formatCurrency()}",
                 emphasize = true
             )
 
             InsightRow(
-                label = "Projected ${periodLabel(state.periodInput)} total",
-                value = "$${projectedTotal.formatCurrency()}",
+                label = "Projected ${periodInput.label} total",
+                value = "$${insights?.projectedTotal?.formatCurrency()}",
                 emphasize = true,
                 valueColor = projectedColor
             )
         }
     }
 }
+
 
 @Composable
 private fun InsightRow(
@@ -111,38 +106,19 @@ private fun InsightRow(
     }
 }
 
-private fun Double.formatCurrency(): String = String.format("%,.2f", this)
-
-private fun periodLabel(id: String): String =
-    BudgetPeriodOptions.findById(id).label
-    
-private fun calculateDaysElapsed(createdAt: Long, daysInPeriod: Int): Int {
-    val diff = System.currentTimeMillis() - createdAt
-    val days = (diff / (1000 * 60 * 60 * 24)).toInt()
-    return max(0, minOf(days, daysInPeriod))
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun BudgetInsightsCardPreview() {
     PersonalFinanceTrackerTheme {
         BudgetInsightsCard(
-            state = EditBudgetState(
-                budget = BudgetUi(
-                    id = "1",
-                    userId = "A1",
-                    category = DefaultCategories.FOOD.id,
-                    amount = 500.0,
-                    currency = "USD",
-                    period = BudgetPeriodOptions.Monthly.id,
-                    notes = null,
-                    createdAt = System.currentTimeMillis(),
-                    updatedAt = System.currentTimeMillis(),
-                    spent = 320.0
-                ),
-                amountInput = "500.00",
-                periodInput = BudgetPeriodOptions.Monthly.id
-            )
+            insights = BudgetInsightsUi(
+                daysElapsed = 10,
+                daysTotal = 30,
+                averageDailySpend = 50.0,
+                projectedTotal = 1000.0,
+                isProjectedOverBudget = false
+            ),
+            periodInput = BudgetPeriod.Monthly
         )
     }
 }

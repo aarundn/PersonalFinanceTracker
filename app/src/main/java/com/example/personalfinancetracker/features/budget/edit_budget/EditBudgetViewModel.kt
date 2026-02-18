@@ -8,6 +8,7 @@ import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.domain.ValidationResult
 import com.example.domain.model.Budget
+import com.example.domain.model.BudgetPeriod
 import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.budget_usecases.DeleteBudgetUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetByIdUseCase
@@ -15,7 +16,9 @@ import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
 import com.example.domain.usecase.budget_usecases.UpdateBudgetUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudget
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
+import com.example.personalfinancetracker.features.budget.model.BudgetInsightsUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.budget.utils.calculateDaysElapsed
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -81,20 +84,38 @@ class EditBudgetViewModel(
             .collect { transactions ->
                 val spent = transactions.sumOf { it.amount }
                 val budgetUi = budget.toBudgetUi(spent)
+                val insights = calculateInsights(budgetUi)
+
                 updateState {
                     copy(
                         budget = budgetUi,
+                        insights = insights,
                         selectedCategory = budgetUi.currentCategory,
                         selectedCurrency = DefaultCurrencies.fromId(budgetUi.currency)
                             ?: DefaultCurrencies.USD,
                         categories = DefaultCategories.getCategories(isIncome = false),
                         amountInput = budgetUi.amount.toString(),
-                        periodInput = budgetUi.period,
+                        periodInput = BudgetPeriod.fromId(budgetUi.period),
                         notesInput = budgetUi.notes ?: "",
                         isLoading = false
                     )
                 }
             }
+    }
+
+    private fun calculateInsights(budget: BudgetUi, days: Int? = null): BudgetInsightsUi {
+        val daysInPeriod = days ?: BudgetPeriod.fromId( budget.period).days
+        val daysElapsed = calculateDaysElapsed(budget.createdAt, daysInPeriod)
+        val averageDailySpend = if (daysElapsed > 0) budget.spent / daysElapsed else 0.0
+        val projectedTotal = if (daysElapsed > 0) averageDailySpend * daysInPeriod else budget.spent
+
+        return BudgetInsightsUi(
+            daysElapsed = daysElapsed,
+            daysTotal = daysInPeriod,
+            averageDailySpend = averageDailySpend,
+            projectedTotal = projectedTotal,
+            isProjectedOverBudget = budget.amount < projectedTotal
+        )
     }
 
     override fun handleEvent(event: MVIUiEvent) {
@@ -111,7 +132,15 @@ class EditBudgetViewModel(
             }
 
             is EditBudgetEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
-            is EditBudgetEvent.OnPeriodChanged -> updateState { copy(periodInput = event.periodId) }
+            is EditBudgetEvent.OnPeriodChanged -> updateState {
+
+               val insights = calculateInsights(budget!!, event.period.days)
+                copy(
+                    periodInput = event.period,
+                    insights = insights
+                )
+            }
+
             is EditBudgetEvent.OnNotesChanged -> updateState { copy(notesInput = event.notes) }
         }
     }
@@ -142,7 +171,7 @@ class EditBudgetViewModel(
                 category = currentState.selectedCategory?.id ?: "",
                 amount = amount ?: 0.0,
                 currency = currentState.selectedCurrency?.id ?: "",
-                period = currentState.periodInput,
+                period = currentState.periodInput.id,
                 notes = currentState.notesInput.ifBlank { null },
                 createdAt = currentState.budget?.createdAt ?: 0L,
                 updatedAt = System.currentTimeMillis()

@@ -33,8 +33,8 @@ import com.example.core.components.LoadingIndicator
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.common.BudgetInputForm
-import com.example.personalfinancetracker.features.budget.common.BudgetPeriodOptions
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetInsightsCard
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetOverviewCard
 
@@ -88,7 +88,7 @@ fun EditBudgetScreen(
                 BudgetInputForm(
                     categories = state.categories,
                     selectedCategory = state.selectedCategory,
-                    selectedPeriodId = state.periodInput,
+                    selectedPeriod = state.periodInput,
                     amount = state.amountInput,
                     notes = state.notesInput,
                     selectedCurrency = state.selectedCurrency,
@@ -98,12 +98,11 @@ fun EditBudgetScreen(
                     onCurrencySelected = { onEvent(EditBudgetEvent.OnCurrencyChanged(it)) },
                     onNotesChanged = { onEvent(EditBudgetEvent.OnNotesChanged(it)) },
                     onSave = { onEvent(EditBudgetEvent.OnSave) },
-                    onCancel = { onEvent(EditBudgetEvent.OnCancel) }, // Note: OnCancelEdit was removed/mapped to OnCancel or we need to check logic
+                    onCancel = { onEvent(EditBudgetEvent.OnCancel) },
                     isLoading = state.isLoading,
                     isReadOnly = !state.isEditing
                 )
-
-                BudgetInsightsCard(state = state)
+                BudgetInsightsCard(insights = state.insights, periodInput = state.periodInput)
 
                 if (!state.isEditing) {
                     DangerZoneCard(
@@ -186,13 +185,13 @@ private fun EditBudgetScreenPreview() {
                     amount = 500.0,
                     spent = 420.0,
                     currency = "USD",
-                    period = BudgetPeriodOptions.Monthly.id,
+                    period = BudgetPeriod.Monthly.id,
                     notes = "Groceries",
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 ),
                 amountInput = "500.00",
-                periodInput = BudgetPeriodOptions.Monthly.id,
+                periodInput = BudgetPeriod.Monthly,
                 notesInput = "Groceries and dining out",
                 categories = DefaultCategories.getCategories(isIncome = false)
             ),
