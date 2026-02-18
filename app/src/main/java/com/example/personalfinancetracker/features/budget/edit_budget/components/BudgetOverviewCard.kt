@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
+import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
@@ -65,99 +67,135 @@ fun BudgetOverviewCard(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(58.dp)
-                        .background(color = containerColor, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = tint,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
+            CategoryOverViewInfo(
+                containerColor = containerColor,
+                icon = icon,
+                tint = tint,
+                category = category,
+                period = budget.period,
+                isOverBudget = isOverBudget,
+                isWarning = isWarning
+            )
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = stringResource(category.nameResId),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "${budget.period} Budget",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                when {
-                    isOverBudget -> BudgetStatusBadge(
-                        text = "Over Budget",
-                        color = ProgressError
-                    )
+            ProgressOverViewInfo(
+                budget = budget,
+                percentageUsed = percentageUsed,
+                progressColor = progressColor
+            )
+        }
+    }
+}
 
-                    isWarning -> BudgetStatusBadge(
-                        text = "Almost Full",
-                        color = Warning
-                    )
-                }
-            }
+@Composable
+private fun CategoryOverViewInfo(
+    containerColor: Color,
+    icon: ImageVector,
+    tint: Color,
+    category: Category,
+    period: String,
+    isOverBudget: Boolean,
+    isWarning: Boolean
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(58.dp)
+                .background(color = containerColor, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = tint,
+                modifier = Modifier.size(32.dp)
+            )
+        }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                AmountRow(
-                    label = "Spent",
-                    value = budget.spent,
-                    emphasize = true,
-                    currencySymbol = budget.currencySymbol
-                )
-                AmountRow(
-                    label = "Budget",
-                    value = budget.amount,
-                    currencySymbol = budget.currencySymbol
-                )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = stringResource(category.nameResId),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "$period Budget",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        when {
+            isOverBudget -> BudgetStatusBadge(
+                text = "Over Budget",
+                color = ProgressError
+            )
 
-                CustomProgressBar(
-                    progress = percentageUsed.coerceIn(0f, 1f),
-                    modifier = Modifier.fillMaxWidth(),
-                    progressColor = progressColor,
-                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant
-                )
+            isWarning -> BudgetStatusBadge(
+                text = "Almost Full",
+                color = Warning
+            )
+        }
+    }
+}
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "${(percentageUsed * 100).coerceAtMost(999f)
-                            .toDouble().formatCurrency()} used",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = progressColor
-                    )
-                    val remaining = budget.remaining
-                    Text(
-                        text = if (remaining >= 0) {
-                            "${budget.currencySymbol} ${remaining.formatCurrency()} left"
-                        } else {
-                            "${budget.currencySymbol} ${budget.overBudget.formatCurrency()} over"
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (remaining >= 0) progressColor else ProgressError,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
+@Composable
+private fun ProgressOverViewInfo(
+    budget: BudgetUi,
+    percentageUsed: Float,
+    progressColor: Color
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        AmountRow(
+            label = "Spent",
+            value = budget.spent,
+            emphasize = true,
+            currencySymbol = budget.currencySymbol
+        )
+        AmountRow(
+            label = "Budget",
+            value = budget.amount,
+            currencySymbol = budget.currencySymbol
+        )
+
+        CustomProgressBar(
+            progress = percentageUsed.coerceIn(0f, 1f),
+            modifier = Modifier.fillMaxWidth(),
+            progressColor = progressColor,
+            backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "${
+                    (percentageUsed * 100).coerceAtMost(999f)
+                        .toDouble().formatCurrency()
+                } used",
+                style = MaterialTheme.typography.bodySmall,
+                color = progressColor
+            )
+            val remaining = budget.remaining
+            Text(
+                text = if (remaining >= 0) {
+                    "${budget.currencySymbol} ${remaining.formatCurrency()} left"
+                } else {
+                    "${budget.currencySymbol} ${budget.overBudget.formatCurrency()} over"
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = if (remaining >= 0) progressColor else ProgressError,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
@@ -187,8 +225,6 @@ private fun AmountRow(
         )
     }
 }
-
-
 
 
 @Preview(showBackground = true)

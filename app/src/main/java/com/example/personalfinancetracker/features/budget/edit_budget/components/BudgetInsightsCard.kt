@@ -28,6 +28,7 @@ import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 fun BudgetInsightsCard(
     insights: BudgetInsightsUi?,
     periodInput: BudgetPeriod,
+    currencySymbol: String = "$",
     modifier: Modifier = Modifier
 ) {
 
@@ -63,13 +64,13 @@ fun BudgetInsightsCard(
 
             InsightRow(
                 label = "Average daily spending",
-                value = "$${insights?.averageDailySpend?.formatCurrency()}",
+                value = "$currencySymbol ${insights?.averageDailySpend?.formatCurrency()}",
                 emphasize = true
             )
 
             InsightRow(
                 label = "Projected ${periodInput.label} total",
-                value = "$${insights?.projectedTotal?.formatCurrency()}",
+                value = "${insights?.projectedTotal?.formatCurrency()}",
                 emphasize = true,
                 valueColor = projectedColor
             )
