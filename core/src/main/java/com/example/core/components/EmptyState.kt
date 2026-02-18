@@ -1,4 +1,5 @@
-package com.example.personalfinancetracker.features.budget.budgets.components
+package com.example.core.components
+
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun EmptyState(
+    title: String,
+    description: String,
+    buttonText: String,
     onAddClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -40,13 +44,13 @@ fun EmptyState(
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "No budgets yet",
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
         Text(
-            text = "Create your first budget to start tracking your spending",
+            text = description,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 8.dp),
@@ -65,7 +69,7 @@ fun EmptyState(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Add Budget",
+                text = buttonText,
                 style = MaterialTheme.typography.labelLarge
             )
         }
