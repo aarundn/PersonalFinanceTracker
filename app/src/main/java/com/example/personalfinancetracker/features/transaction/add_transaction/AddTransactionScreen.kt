@@ -29,7 +29,7 @@ fun AddTransactionScreen(
     // review this screen
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-            CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+            CustomSnackBar(snackBarData, modifier = odifier.padding(16.dp))
         } },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
