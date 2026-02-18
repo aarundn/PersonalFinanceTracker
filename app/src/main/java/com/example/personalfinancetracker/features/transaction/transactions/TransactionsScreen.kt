@@ -22,9 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.core.components.EmptyState
+import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
-import com.example.personalfinancetracker.features.transaction.transactions.components.EmptyState
-import com.example.personalfinancetracker.features.transaction.transactions.components.HeaderSection
 import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
 
 @Composable
@@ -38,10 +38,7 @@ fun TransactionsScreen(
         topBar = {
             val state = transactionsUiState as? TransactionsUiState.Success
             if (state?.transactions?.isEmpty() == false)
-                HeaderSection(
-                    title = "Recent Transactions",
-                    onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
-                )
+                HeaderSection(title = "Recent Transactions")
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         modifier = modifier
@@ -64,6 +61,9 @@ fun TransactionsScreen(
                 is TransactionsUiState.Success -> {
                     if (transactionsUiState.transactions.isEmpty()) {
                         EmptyState(
+                            title = "No transactions yet",
+                            description = "Add your first transaction to start tracking",
+                            buttonText = "Add Transaction",
                             onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
                         )
                     } else {

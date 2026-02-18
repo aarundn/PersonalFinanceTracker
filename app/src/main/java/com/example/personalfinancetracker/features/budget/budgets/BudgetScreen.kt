@@ -30,10 +30,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.example.core.components.EmptyState
+import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.personalfinancetracker.features.budget.budgets.components.BudgetCard
-import com.example.personalfinancetracker.features.budget.budgets.components.EmptyState
-import com.example.personalfinancetracker.features.budget.budgets.components.HeaderSection
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_INITIAL_VALUE
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_TARGET_VALUE
@@ -60,7 +60,6 @@ fun BudgetScreen(
                 HeaderSection(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     title = "Budget Overview",
-                    onAddClick = { onEvent(BudgetsEvent.OnAddBudgetClick) }
                 )
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
@@ -84,6 +83,9 @@ fun BudgetScreen(
                 is BudgetsUiState.Success -> {
                     if (budgetsUiState.budgets.isEmpty()) {
                         EmptyState(
+                            title = "No budgets yet",
+                            description = "Create your first budget to start tracking your spending",
+                            buttonText = "Add Budget",
                             onAddClick = { onEvent(BudgetsEvent.OnAddBudgetClick) }
                         )
                     } else {
