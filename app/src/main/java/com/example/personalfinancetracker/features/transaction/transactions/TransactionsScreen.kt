@@ -38,10 +38,9 @@ fun TransactionsScreen(
         topBar = {
             val state = transactionsUiState as? TransactionsUiState.Success
             if (state?.transactions?.isEmpty() == false)
-                HeaderSection(title = "Recent Transactions")
+                HeaderSection(title = "Recent Transactions", showBackIcon = false)
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        modifier = modifier
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -72,7 +71,7 @@ fun TransactionsScreen(
 
                         FloatingActionButton(
                             onClick = { onEvent(TransactionsEvent.OnAddTransactionClick) },
-                            modifier = Modifier
+                            modifier = modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(24.dp),
                             containerColor = MaterialTheme.colorScheme.primary,
@@ -106,7 +105,7 @@ private fun Content(
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 88.dp)
+            contentPadding = PaddingValues(bottom = 88.dp, top = 16.dp)
         ) {
             items(
                 transactionsUiState.transactions,

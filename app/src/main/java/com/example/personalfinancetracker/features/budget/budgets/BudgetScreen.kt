@@ -57,13 +57,10 @@ fun BudgetScreen(
         topBar = {
             val state = budgetsUiState as? BudgetsUiState.Success
             if (state?.budgets?.isEmpty() == false)
-                HeaderSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = "Budget Overview",
-                )
+                HeaderSection(title = "Budget Overview", showBackIcon = false)
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -93,7 +90,7 @@ fun BudgetScreen(
 
                         FloatingActionButton(
                             onClick = { onEvent(BudgetsEvent.OnAddBudgetClick) },
-                            modifier = Modifier
+                            modifier = modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(24.dp),
                             containerColor = MaterialTheme.colorScheme.primary,
@@ -124,10 +121,11 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 88.dp)
+            contentPadding = PaddingValues(bottom = 88.dp, top = 16.dp)
         ) {
             itemsIndexed(
                 budgetsUiState.budgets,

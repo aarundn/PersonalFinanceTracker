@@ -25,6 +25,7 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 fun HeaderSection(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
+    showBackIcon: Boolean = true,
     title: String = "Add Transaction",
     actions: @Composable (() -> Unit)? = null,
 ) {
@@ -37,25 +38,26 @@ fun HeaderSection(
             )
         },
         navigationIcon = {
-            Row(
-                modifier = Modifier
-                    .padding(start = 4.dp)
-                    .clickable(onClick = onBackClick),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(20.dp)
-                )
-                Text(
-                    text = "Back",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            if (showBackIcon)
+                Row(
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .clickable(onClick = onBackClick),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "Back",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
         },
         actions = {
             actions?.invoke()
