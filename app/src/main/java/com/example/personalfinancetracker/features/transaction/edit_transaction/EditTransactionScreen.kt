@@ -85,58 +85,29 @@ fun EditTransactionScreen(
             if (state.isLoading) {
                 LoadingIndicator(modifier = Modifier.padding(vertical = 32.dp))
             } else {
-                TransactionOverviewCard(
-                    state = state,
-                    modifier = Modifier.padding(top = 16.dp),
-                    category = state.selectedCategory ?: DefaultCategories.OTHER
-                )
+                state.transaction?.let {
+                    TransactionOverviewCard(
+                        transactionUi = it,
+                        modifier = Modifier.padding(top = 16.dp),
+                    )
+                }
 
                 TransactionInputForm(
                     modifier = Modifier,
                     isIncome = state.isIncome,
-                    onTypeChanged = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnTransactionTypeChanged(
-                                it
-                            )
-                        )
-                    },
+                    onTypeChanged = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnTransactionTypeChanged(it)) },
                     selectedCategory = state.selectedCategory,
-                    onCategorySelected = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnCategoryChanged(
-                                it
-                            )
-                        )
-                    },
-                    onDateChanged = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnDateChanged(
-                                it.toLong()
-                            )
-                        )
-                    },
-                    onAmountChanged = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnAmountChanged(
-                                it
-                            )
-                        )
-                    },
-                    onNotesChanged = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnNotesChanged(
-                                it
-                            )
-                        )
-                    },
-                    onCurrencySelected = {
-                        if (state.isEditing) onEvent(
-                            EditTransactionEvent.OnCurrencyChanged(
-                                it
-                            )
-                        )
-                    },
+                    onCategorySelected = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnCategoryChanged(it)) },
+                    onDateChanged = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnDateChanged(it.toLong())) },
+                    onAmountChanged = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnAmountChanged(it)) },
+                    onNotesChanged = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnNotesChanged(it)) },
+                    onCurrencySelected = { if (state.isEditing)
+                        onEvent(EditTransactionEvent.OnCurrencyChanged(it)) },
                     onSave = { onEvent(EditTransactionEvent.OnSave) },
                     onCancel = { onEvent(EditTransactionEvent.OnCancel) },
                     selectedCurrency = state.selectedCurrency,

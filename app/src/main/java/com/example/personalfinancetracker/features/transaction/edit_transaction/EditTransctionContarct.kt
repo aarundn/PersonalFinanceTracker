@@ -6,9 +6,11 @@ import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
 import com.example.core.model.Currency
+import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 
 @Immutable
 data class EditTransactionState(
+    val transaction: TransactionUi? = null,
     val isIncome: Boolean = false,
     val selectedCategory: Category? = null,
     val amount: String = "",

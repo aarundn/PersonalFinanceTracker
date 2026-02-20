@@ -23,5 +23,6 @@ data class TransactionUi(
     val type: Type,
 ) {
     val formattedDate: String get() = parseDateString(date)
+    val formattedTime: String get() = parseDateString(date, isDate = false)
     val isIncome: Boolean get() = type == Type.INCOME
 }

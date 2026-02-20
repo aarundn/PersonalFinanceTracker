@@ -59,6 +59,7 @@ class EditTransactionViewModel(
 
                 updateState {
                     copy(
+                        transaction = txn,
                         isLoading = false,
                         isIncome = txn.isIncome,
                         selectedCategory = selectedCategory,
