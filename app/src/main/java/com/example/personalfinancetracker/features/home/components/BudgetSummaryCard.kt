@@ -3,157 +3,143 @@ package com.example.personalfinancetracker.features.home.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.CategoryBills
-import com.example.core.ui.theme.CategoryFood
-import com.example.core.ui.theme.CategoryShopping
-import com.example.core.ui.theme.CategoryTransport
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
-import com.example.personalfinancetracker.features.home.HomeContract
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.home.HomeContract.Event
+import com.example.personalfinancetracker.features.home.HomeContract.HomeData
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
 fun BudgetSummaryCard(
-    state: HomeContract.State,
-    onEvent: (HomeContract.Event) -> Unit,
+    data: HomeData,
+    onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (data.budgets.isEmpty()) return
+
+    val averageUsed = data.budgets.map { it.percentage }.average().toFloat()
+
     Card(
         modifier = modifier,
-        colors = androidx.compose.material3.CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)) {
+        Column(
+            Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(Icons.Outlined.CheckCircle, contentDescription = null)
                     Text("Budget Summary", style = MaterialTheme.typography.titleMedium)
                 }
                 AssistChip(
                     onClick = {},
-                    label = { Text("78.5% used") },
-                    colors = AssistChipDefaults.assistChipColors()
+                    label = {
+                        Text("${TextFormattingUtils.formatPercentage(averageUsed.toDouble())} used")
+                    }
                 )
             }
-            state.budgets.forEach { BudgetItem(it) { onEvent(HomeContract.Event.OnClickBudgetItem(it.name)) } }
+            data.budgets.forEach { budget ->
+                BudgetItem(
+                    budget = budget,
+                    onClick = { onEvent(Event.OnClickBudgetItem(budget.id)) }
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun BudgetItem(item: HomeContract.BudgetProgress, onClick: () -> Unit) {
-    val isOverBudget = item.progress > 1.0f
-    val categoryColors = mapOf(
-        "Food" to CategoryFood,
-        "Transport" to CategoryTransport,
-        "Shopping" to CategoryShopping,
-        "Bills" to CategoryBills
-    )
-    val categoryIcons = mapOf(
-        "Food" to Icons.Outlined.ShoppingCart,
-        "Transport" to Icons.Outlined.Warning,
-        "Shopping" to Icons.Outlined.ShoppingCart,
-        "Bills" to Icons.Outlined.Home
-    )
-    
-    Column(Modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)) {
+private fun BudgetItem(
+    budget: BudgetUi,
+    onClick: () -> Unit
+) {
+    val category = budget.currentCategory
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                val categoryColor = categoryColors[item.name] ?: Color.Gray
-                val categoryIcon = categoryIcons[item.name] ?: Icons.Outlined.ShoppingCart
-                
-                androidx.compose.foundation.layout.Box(
+                Box(
                     modifier = Modifier
                         .padding(8.dp)
-                        .background(
-                            categoryColor.copy(alpha = 0.1f),
-                            androidx.compose.foundation.shape.CircleShape
-                        ),
+                        .background(category.color.copy(alpha = 0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        categoryIcon, 
-                        contentDescription = null, 
-                        tint = categoryColor,
+                        imageVector = ImageVector.vectorResource(category.icon),
+                        contentDescription = null,
+                        tint = category.color,
                         modifier = Modifier.padding(8.dp)
                     )
                 }
                 Column {
-                    Text(item.name, style = MaterialTheme.typography.bodyMedium)
                     Text(
-                        TextFormattingUtils.formatBudgetProgress(item.spent, item.limit),
+                        text = budget.category,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = TextFormattingUtils.formatBudgetProgress(budget.spent, budget.amount),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-            if (isOverBudget) {
+            if (budget.isOverBudget) {
                 Icon(Icons.Outlined.Warning, contentDescription = null, tint = ProgressError)
             }
         }
         Spacer(Modifier.height(8.dp))
         CustomProgressBar(
-            progress = item.progress.coerceAtMost(1.0f),
+            progress = budget.percentage.coerceAtMost(1.0f),
             modifier = Modifier.fillMaxWidth(),
-            progressColor = if (isOverBudget) ProgressError else ProgressPrimary
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun BudgetSummaryCardPreview() {
-    PersonalFinanceTrackerTheme {
-        BudgetSummaryCard(
-            state = HomeContract.State(
-                budgets = listOf(
-                    HomeContract.BudgetProgress("Food", 385.0, 500.0),
-                    HomeContract.BudgetProgress("Transport", 265.0, 300.0)
-                )
-            ),
-            onEvent = {}
+            progressColor = if (budget.isOverBudget) ProgressError else ProgressPrimary
         )
     }
 }

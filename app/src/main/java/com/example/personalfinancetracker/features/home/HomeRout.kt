@@ -1,7 +1,10 @@
 package com.example.personalfinancetracker.features.home
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -13,26 +16,30 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeRoute(
-
     navController: NavController,
     onNavigateToCurrency: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val state = viewModel.state.collectAsStateWithLifecycle().value
+    val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(Unit) {
-        viewModel.effects.collectLatest { effect ->
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 HomeContract.SideEffect.NavigateBudgets -> navController.navigateToBudgetScreen()
                 HomeContract.SideEffect.NavigateTransactions -> navController.navigateToTransactionsScreen()
                 HomeContract.SideEffect.NavigateAddExpense -> navController.navigateToAddTransactionScreen()
                 HomeContract.SideEffect.NavigateAddIncome -> navController.navigateToAddTransactionScreen()
                 HomeContract.SideEffect.NavigateCurrency -> onNavigateToCurrency()
-                is HomeContract.SideEffect.ShowMessage -> { /* Snackbar later */ }
+                is HomeContract.SideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message)
             }
         }
     }
 
-    HomeScreen(state = state, onEvent = viewModel::onEvent, modifier)
+    HomeScreen(
+        homeUiState = homeUiState,
+        onEvent = viewModel::onEvent,
+        modifier = modifier
+    )
 }

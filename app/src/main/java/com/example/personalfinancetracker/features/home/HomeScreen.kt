@@ -7,57 +7,81 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.home.HomeContract.BudgetProgress
+import com.example.core.components.EmptyState
+import com.example.core.components.LoadingIndicator
 import com.example.personalfinancetracker.features.home.HomeContract.Event
-import com.example.personalfinancetracker.features.home.HomeContract.State
+import com.example.personalfinancetracker.features.home.HomeContract.HomeData
+import com.example.personalfinancetracker.features.home.HomeContract.HomeUiState
 import com.example.personalfinancetracker.features.home.components.BudgetSummaryCard
-import com.example.personalfinancetracker.features.home.components.HeaderSection
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.home.components.OverviewRow
 import com.example.personalfinancetracker.features.home.components.QuickActions
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
 fun HomeScreen(
-    state: State,
+    homeUiState: HomeUiState,
+    onEvent: (Event) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (homeUiState) {
+        HomeUiState.Loading -> {
+            LoadingIndicator(modifier = modifier.fillMaxSize())
+        }
+
+        is HomeUiState.Error -> {
+            EmptyState(
+                title = "Something went wrong",
+                description = homeUiState.message,
+                buttonText = "Retry",
+                onAddClick = { onEvent(Event.OnRetry) },
+                modifier = modifier
+            )
+        }
+
+        is HomeUiState.Success -> {
+            HomeContent(
+                data = homeUiState.data,
+                onEvent = onEvent,
+                modifier = modifier
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeContent(
+    data: HomeData,
     onEvent: (Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(PaddingValues(horizontal = 16.dp))
+        modifier = modifier
+            .padding(PaddingValues(horizontal = 16.dp))
             .fillMaxSize()
-            .verticalScroll(
-                rememberScrollState()
-            ),
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        HeaderSection(state)
-        OverviewRow(state)
-        MonthCard(state)
-        BudgetSummaryCard(state, onEvent)
-        QuickActions(onEvent)
-    }
-}
+        // Greeting header (inline — home tab has no TopAppBar back button)
+        Column {
+            Text(
+                text = data.greeting,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = data.subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
 
-
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenPreview() {
-    PersonalFinanceTrackerTheme {
-        HomeScreen(
-            state = State(
-                budgets = listOf(
-                    BudgetProgress("Food", 385.0, 500.0),
-                    BudgetProgress("Transport", 265.0, 300.0),
-                    BudgetProgress("Shopping", 520.0, 400.0),
-                    BudgetProgress("Bills", 420.0, 600.0)
-                )
-            ),
-            onEvent = {}
-        )
+        OverviewRow(data = data)
+        MonthCard(data = data)
+        BudgetSummaryCard(data = data, onEvent = onEvent)
+        QuickActions(onEvent = onEvent)
     }
 }

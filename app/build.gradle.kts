@@ -77,4 +77,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database)
 
+    // date time
+    implementation(libs.kotlinx.datetime)
+
 }
