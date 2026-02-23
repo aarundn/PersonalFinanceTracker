@@ -21,14 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.conversion_rate.navigation.currencyConverterScreen
 import com.example.core.navigation.Feature
-import com.example.core.navigation.features.BudgetFeature
-import com.example.core.navigation.features.HomeFeature
-import com.example.core.navigation.features.TransactionFeature
 import com.example.core.navigation.register
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
-import com.example.personalfinancetracker.features.settings.navigation.settingsRoute
-import org.koin.compose.koinInject
+import org.koin.compose.getKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +37,7 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry = navController.currentBackStackEntryAsState()
                 val destination = navBackStackEntry.value?.destination
 
-                val homeFeature: HomeFeature = koinInject()
-                val budgetFeature: BudgetFeature = koinInject()
-                val transactionFeature: TransactionFeature = koinInject()
+                val allFeatures: List<Feature> = getKoin().getAll<Feature>()
 
                 Scaffold(bottomBar = {
                     AnimatedVisibility(
@@ -58,11 +52,7 @@ class MainActivity : ComponentActivity() {
                     AppNavGraph(
                         navController = navController,
                         modifier = Modifier.padding(paddingValues),
-                        features = listOf(
-                            homeFeature,
-                            transactionFeature,
-                            budgetFeature
-                        )
+                        features = allFeatures
                     )
                 }
             }
@@ -110,6 +100,5 @@ fun AppNavGraph(
             register(it, navController, modifier)
         }
         currencyConverterScreen(onNavigateBack = { navController.popBackStack() })
-        settingsRoute(navController = navController)
     }
 }

@@ -4,11 +4,11 @@ import android.app.Application
 import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
 import com.example.personalfinancetracker.features.budget.di.budgetModule
-import com.example.personalfinancetracker.features.home.di.homeModule
-import com.example.personalfinancetracker.features.settings.di.settingsModule
 import com.example.personalfinancetracker.features.transaction.di.transactionsModule
+import homeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import settingsModule
 
 class App: Application()  {
     override fun onCreate() {
@@ -19,6 +19,9 @@ class App: Application()  {
         }
     }
 }
+
+
+
 
 val appModule = listOf(
     dataModule,
