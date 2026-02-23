@@ -9,21 +9,27 @@ import com.example.personalfinancetracker.features.transaction.add_transaction.n
 import com.example.personalfinancetracker.features.transaction.edit_transaction.navigation.editTransactionRoute
 import com.example.personalfinancetracker.features.transaction.transactions.navigation.transactionRoute
 
-class TransactionFeatureImpl: TransactionFeature {
+class TransactionFeatureImpl : TransactionFeature {
     override fun transactionsRoute(): AppRoutes = TransactionRoutes.TransactionsRoute
 
     override fun addTransactionRoute(): AppRoutes = TransactionRoutes.AddTransactionRoute
 
-    override fun editTransactionRoute(transactionId: String) = TransactionRoutes.EditTransactionRoute(transactionId)
+    override fun editTransactionRoute(transactionId: String): AppRoutes =
+        TransactionRoutes.EditTransactionRoute(transactionId)
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
         navController: NavController,
         modifier: Modifier
     ) {
-        navGraphBuilder.transactionRoute(navController = navController, modifier = modifier)
-        navGraphBuilder.addTransactionRoute(navController = navController)
-        navGraphBuilder.editTransactionRoute(navController = navController)
+        navGraphBuilder.transactionRoute(
+            onNavigateToAddTransaction = { navController.navigate(addTransactionRoute()) },
+            onNavigateToEditTransaction = { transactionId ->
+                navController.navigate(editTransactionRoute(transactionId))
+            },
+            modifier = modifier
+        )
+        navGraphBuilder.addTransactionRoute(onNavigateBack = { navController.popBackStack() })
+        navGraphBuilder.editTransactionRoute(onNavigateBack = { navController.popBackStack() })
     }
-
 }

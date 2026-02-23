@@ -1,9 +1,10 @@
 package com.example.core.navigation.features
 
+import com.example.core.navigation.AppRoutes
 import com.example.core.navigation.Feature
 
 interface BudgetFeature : Feature {
-    fun addBudgetRoute(): Any
-    fun budgetsRoute(): Any
-    fun editBudgetRoute(budgetId: String): Any
+    fun addBudgetRoute(): AppRoutes
+    fun budgetsRoute(): AppRoutes
+    fun editBudgetRoute(budgetId: String): AppRoutes
 }

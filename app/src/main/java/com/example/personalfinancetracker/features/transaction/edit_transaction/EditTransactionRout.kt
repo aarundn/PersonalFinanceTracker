@@ -14,7 +14,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EditTransactionRoute(
     onNavigateBack: () -> Unit,
-    onNavigateToTransactions: () -> Unit,
     viewModel: EditTransactionViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -27,7 +26,7 @@ fun EditTransactionRoute(
                     onNavigateBack()
                 }
                 is EditTransactionSideEffect.NavigateToTransactions -> {
-                    onNavigateToTransactions()
+                    onNavigateBack()
                 }
                 is EditTransactionSideEffect.ShowError -> {
                     launch {

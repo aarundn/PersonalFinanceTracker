@@ -14,6 +14,6 @@ class SettingsFeatureImpl : SettingsFeature {
         navController: NavController,
         modifier: Modifier
     ) {
-        navGraphBuilder.settingsRoute(navController = navController)
+        navGraphBuilder.settingsRoute(onNavigateBack = { navController.popBackStack() })
     }
 }
