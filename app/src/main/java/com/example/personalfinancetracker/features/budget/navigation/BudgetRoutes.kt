@@ -1,8 +1,9 @@
 package com.example.personalfinancetracker.features.budget.navigation
 
+import com.example.core.navigation.AppRoutes
 import kotlinx.serialization.Serializable
 
-sealed interface BudgetRoutes{
+sealed interface BudgetRoutes: AppRoutes{
     @Serializable
     data object BudgetsRoute : BudgetRoutes
 

@@ -19,3 +19,5 @@ fun NavGraphBuilder.register(
 ) {
     feature.registerGraph(this, navController, modifier)
 }
+
+interface AppRoutes

@@ -1,24 +1,28 @@
 package com.example.personalfinancetracker.features.home.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.conversion_rate.navigation.CurrencyConversionNavigator
 import com.example.personalfinancetracker.features.home.HomeRoute
 
-fun NavController.navigateToHomeScreen() {
-    navigate(HomeRoutes.HomeRoute)
-}
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeRoute(
-    navController: NavController,
-    currencyConversionNavigator: CurrencyConversionNavigator,
-    modifier: Modifier = Modifier
-) {
+    onNavigateToAddTransaction: () -> Unit,
+    onNavigateToSettings:  () -> Unit,
+    onNavigateToCurrency: () -> Unit,
+    modifier: Modifier,
+
+    ) {
     composable<HomeRoutes.HomeRoute> {
-        HomeRoute(navController = navController, onNavigateToCurrency = {
-            currencyConversionNavigator.navigateToCurrencyConverter(navController = navController)
-        }, modifier = modifier)
+        HomeRoute(
+            onNavigateToCurrency = onNavigateToCurrency,
+            onNavigateToAddTransaction = onNavigateToAddTransaction,
+            onNavigateToSettings = onNavigateToSettings,
+            modifier = modifier
+        )
     }
 }

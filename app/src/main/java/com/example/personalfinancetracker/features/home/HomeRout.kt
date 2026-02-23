@@ -9,20 +9,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.example.personalfinancetracker.features.budget.budgets.navigation.navigateToBudgetScreen
-import com.example.personalfinancetracker.features.settings.navigation.navigateToSettingsScreen
-import com.example.personalfinancetracker.features.transaction.add_transaction.navigation.navigateToAddTransactionScreen
-import com.example.personalfinancetracker.features.transaction.transactions.navigation.navigateToTransactionsScreen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeRoute(
-    modifier: Modifier = Modifier,
-    navController: NavController,
     onNavigateToCurrency: () -> Unit,
+    onNavigateToAddTransaction: () -> Unit,
+    onNavigateToSettings:  () -> Unit,
+    modifier: Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
@@ -31,20 +27,18 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                HomeContract.SideEffect.NavigateBudgets -> navController.navigateToBudgetScreen()
-                HomeContract.SideEffect.NavigateTransactions -> navController.navigateToTransactionsScreen()
-                HomeContract.SideEffect.NavigateAddExpense -> navController.navigateToAddTransactionScreen()
-                HomeContract.SideEffect.NavigateAddIncome -> navController.navigateToAddTransactionScreen()
+                HomeContract.SideEffect.NavigateAddExpense -> onNavigateToAddTransaction()
+                HomeContract.SideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
                 HomeContract.SideEffect.NavigateCurrency -> onNavigateToCurrency()
-                HomeContract.SideEffect.NavigateSettings -> navController.navigateToSettingsScreen()
+                HomeContract.SideEffect.NavigateSettings -> onNavigateToSettings()
                 is HomeContract.SideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message)
             }
         }
     }
 
     HomeScreen(
+        modifier = modifier,
         homeUiState = homeUiState,
         onEvent = viewModel::onEvent,
-        modifier = modifier
     )
 }

@@ -31,8 +31,6 @@ object HomeContract {
     }
 
     sealed interface Event {
-        data object OnClickBudgets : Event
-        data object OnClickTransactions : Event
         data object OnClickAddExpense : Event
         data object OnClickAddIncome : Event
         data object OnClickCurrency : Event
@@ -43,8 +41,6 @@ object HomeContract {
     }
 
     sealed interface SideEffect {
-        data object NavigateBudgets : SideEffect
-        data object NavigateTransactions : SideEffect
         data object NavigateAddExpense : SideEffect
         data object NavigateAddIncome : SideEffect
         data object NavigateCurrency : SideEffect

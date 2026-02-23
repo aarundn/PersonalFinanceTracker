@@ -97,8 +97,6 @@ class HomeViewModel(
             when (event) {
                 Event.OnClickAddExpense -> _sideEffect.emit(SideEffect.NavigateAddExpense)
                 Event.OnClickAddIncome -> _sideEffect.emit(SideEffect.NavigateAddIncome)
-                Event.OnClickBudgets -> _sideEffect.emit(SideEffect.NavigateBudgets)
-                Event.OnClickTransactions -> _sideEffect.emit(SideEffect.NavigateTransactions)
                 Event.OnClickCurrency -> _sideEffect.emit(SideEffect.NavigateCurrency)
                 Event.OnClickSettings -> _sideEffect.emit(SideEffect.NavigateSettings)
                 is Event.OnClickBudgetItem -> _sideEffect.emit(SideEffect.ShowMessage("${event.budgetId} tapped"))

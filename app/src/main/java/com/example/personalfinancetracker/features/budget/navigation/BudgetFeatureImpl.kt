@@ -8,12 +8,14 @@ import com.example.personalfinancetracker.features.budget.add_budget.navigation.
 import com.example.personalfinancetracker.features.budget.budgets.navigation.budgetRoute
 import com.example.personalfinancetracker.features.budget.edit_budget.navigation.editBudgetRoute
 
+import com.example.core.navigation.AppRoutes
+
 class BudgetFeatureImpl : BudgetFeature {
-    override fun addBudgetRoute(): Any = BudgetRoutes.AddBudgetRoute
+    override fun addBudgetRoute(): AppRoutes = BudgetRoutes.AddBudgetRoute
 
-    override fun budgetsRoute(): Any = BudgetRoutes.BudgetsRoute
+    override fun budgetsRoute(): AppRoutes = BudgetRoutes.BudgetsRoute
 
-    override fun editBudgetRoute(budgetId: String) = BudgetRoutes.EditBudgetRoute(budgetId)
+    override fun editBudgetRoute(budgetId: String): AppRoutes = BudgetRoutes.EditBudgetRoute(budgetId)
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
