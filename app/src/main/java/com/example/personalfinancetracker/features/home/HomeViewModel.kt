@@ -1,8 +1,12 @@
 package com.example.personalfinancetracker.features.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.Type
+import com.example.domain.repo.UserPreferencesRepository
 import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
@@ -28,20 +32,24 @@ import kotlin.time.ExperimentalTime
 class HomeViewModel(
     getTransactionsUseCase: GetTransactionsUseCase,
     getBudgetsUseCase: GetBudgetsUseCase,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<SideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalTime::class)
     val homeUiState: StateFlow<HomeUiState> =
         combine(
             getTransactionsUseCase(),
-            getBudgetsUseCase()
-        ) { transactions, budgets ->
-            val income = transactions
-                .filter { it.type == Type.INCOME }
-                .sumOf { it.amount }
+            getBudgetsUseCase(),
+            userPreferencesRepository.baseCurrency,
+        ) { transactions, budgets, baseCurrencyId ->
+
+                val income =  transactions
+                    .filter { it.type == Type.INCOME }
+                    .sumOf { it.amount }
 
             val expense = transactions
                 .filter { it.type == Type.EXPENSE }
@@ -58,6 +66,8 @@ class HomeViewModel(
             val daysPassed = now.dayOfMonth
             val daysInMonth = now.month.length(isLeapYear(now.year))
 
+            val currencySymbol = DefaultCurrencies.fromId(baseCurrencyId)?.symbol ?: "$"
+
             HomeUiState.Success(
                 HomeData(
                     greeting = computeGreeting(now.hour),
@@ -70,6 +80,7 @@ class HomeViewModel(
                     daysPassed = daysPassed,
                     daysInMonth = daysInMonth,
                     budgets = budgetUis,
+                    currencySymbol = currencySymbol,
                 )
             ) as HomeUiState
         }
@@ -89,6 +100,7 @@ class HomeViewModel(
                 Event.OnClickBudgets -> _sideEffect.emit(SideEffect.NavigateBudgets)
                 Event.OnClickTransactions -> _sideEffect.emit(SideEffect.NavigateTransactions)
                 Event.OnClickCurrency -> _sideEffect.emit(SideEffect.NavigateCurrency)
+                Event.OnClickSettings -> _sideEffect.emit(SideEffect.NavigateSettings)
                 is Event.OnClickBudgetItem -> _sideEffect.emit(SideEffect.ShowMessage("${event.budgetId} tapped"))
                 Event.OnClickSavings -> _sideEffect.emit(SideEffect.ShowMessage("Savings tapped"))
                 Event.OnRetry -> { /* State is reactive — no manual retry needed */ }

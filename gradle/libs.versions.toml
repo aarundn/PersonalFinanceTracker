@@ -13,6 +13,7 @@ activityCompose = "1.11.0"
 composeBom = "2025.09.00"
 appcompat = "1.7.1"
 room = "2.8.4"
+datastorePreferences = "1.1.4"
 material = "1.13.0"
 navigationCompose = "2.9.6"
 ksp = "2.0.21-1.0.27"
@@ -83,6 +84,9 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+# DataStore
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 
 # DateTime
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "dateTime" }

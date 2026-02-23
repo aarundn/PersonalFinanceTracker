@@ -27,6 +27,7 @@ import com.example.core.navigation.features.TransactionFeature
 import com.example.core.navigation.register
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
+import com.example.personalfinancetracker.features.settings.navigation.settingsRoute
 import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
@@ -109,7 +110,6 @@ fun AppNavGraph(
             register(it, navController, modifier)
         }
         currencyConverterScreen(onNavigateBack = { navController.popBackStack() })
+        settingsRoute(navController = navController)
     }
 }
-
-

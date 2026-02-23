@@ -69,7 +69,7 @@ fun MonthCard(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        TextFormattingUtils.formatCurrency(data.dailyAverage),
+                        TextFormattingUtils.formatCurrency(data.dailyAverage, data.currencySymbol),
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }

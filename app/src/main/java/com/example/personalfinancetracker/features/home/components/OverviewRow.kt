@@ -26,6 +26,7 @@ fun OverviewRow(
         MoneyCard(
             title = "Income",
             value = data.totalIncome,
+            currencySymbol = data.currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_up),
             modifier = Modifier.weight(1f),
             backgroundColor = Income.copy(alpha = 0.1f),
@@ -35,6 +36,7 @@ fun OverviewRow(
         MoneyCard(
             title = "Expense",
             value = data.totalExpense,
+            currencySymbol = data.currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_down),
             modifier = Modifier.weight(1f),
             backgroundColor = Expense.copy(alpha = 0.1f),
@@ -44,6 +46,7 @@ fun OverviewRow(
         MoneyCard(
             title = "Balance",
             value = data.balance,
+            currencySymbol = data.currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.bank),
             modifier = Modifier.weight(1f),
             backgroundColor = PrimaryLight.copy(alpha = 0.1f),

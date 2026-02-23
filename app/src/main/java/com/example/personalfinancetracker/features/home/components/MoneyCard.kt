@@ -30,6 +30,7 @@ fun MoneyCard(
     title: String,
     value: Double,
     modifier: Modifier = Modifier,
+    currencySymbol: String = "$",
     icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     borderColor: Color = MaterialTheme.colorScheme.outline,
@@ -63,7 +64,7 @@ fun MoneyCard(
             }
             Spacer(Modifier.height(4.dp))
             Text(
-                TextFormattingUtils.formatCurrencyNoDecimals(value),
+                TextFormattingUtils.formatCurrencyNoDecimals(value, currencySymbol),
                 style = MaterialTheme.typography.headlineSmall,
                 color = textColor
             )

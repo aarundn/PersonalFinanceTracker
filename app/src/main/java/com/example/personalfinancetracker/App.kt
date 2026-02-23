@@ -5,6 +5,7 @@ import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
 import com.example.personalfinancetracker.features.budget.di.budgetModule
 import com.example.personalfinancetracker.features.home.di.homeModule
+import com.example.personalfinancetracker.features.settings.di.settingsModule
 import com.example.personalfinancetracker.features.transaction.di.transactionsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
@@ -25,4 +26,5 @@ val appModule = listOf(
     homeModule,
     budgetModule,
     transactionsModule,
+    settingsModule,
 )

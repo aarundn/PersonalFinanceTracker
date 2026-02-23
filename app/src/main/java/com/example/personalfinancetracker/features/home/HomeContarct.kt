@@ -19,7 +19,8 @@ object HomeContract {
         val dailyAverage: Double,
         val daysPassed: Int,
         val daysInMonth: Int,
-        val budgets: List<BudgetUi>
+        val budgets: List<BudgetUi>,
+        val currencySymbol: String
     )
 
     @Immutable
@@ -37,6 +38,7 @@ object HomeContract {
         data object OnClickCurrency : Event
         data class OnClickBudgetItem(val budgetId: String) : Event
         data object OnClickSavings : Event
+        data object OnClickSettings : Event
         data object OnRetry : Event
     }
 
@@ -46,6 +48,7 @@ object HomeContract {
         data object NavigateAddExpense : SideEffect
         data object NavigateAddIncome : SideEffect
         data object NavigateCurrency : SideEffect
+        data object NavigateSettings : SideEffect
         data class ShowMessage(val message: String) : SideEffect
     }
 }

@@ -78,6 +78,7 @@ fun BudgetSummaryCard(
             data.budgets.forEach { budget ->
                 BudgetItem(
                     budget = budget,
+                    currencySymbol = data.currencySymbol,
                     onClick = { onEvent(Event.OnClickBudgetItem(budget.id)) }
                 )
             }
@@ -88,6 +89,7 @@ fun BudgetSummaryCard(
 @Composable
 private fun BudgetItem(
     budget: BudgetUi,
+    currencySymbol: String,
     onClick: () -> Unit
 ) {
     val category = budget.currentCategory
@@ -125,7 +127,11 @@ private fun BudgetItem(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = TextFormattingUtils.formatBudgetProgress(budget.spent, budget.amount),
+                        text = TextFormattingUtils.formatBudgetProgress(
+                            budget.spent,
+                            budget.amount,
+                            currencySymbol
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
