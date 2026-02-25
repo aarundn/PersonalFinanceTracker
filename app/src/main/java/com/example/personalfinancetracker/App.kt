@@ -1,6 +1,7 @@
 package com.example.personalfinancetracker
 
 import android.app.Application
+import com.example.conversion_rate.di.conversionRateModule
 import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
 import com.example.personalfinancetracker.features.budget.di.budgetModule
@@ -20,12 +21,10 @@ class App: Application()  {
     }
 }
 
-
-
-
 val appModule = listOf(
     dataModule,
     domainModule,
+    conversionRateModule,
     homeModule,
     budgetModule,
     transactionsModule,
