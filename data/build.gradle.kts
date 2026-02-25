@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -37,6 +38,7 @@ dependencies {
 
 
     implementation(project(path = ":domain"))
+    implementation(project(path = ":conversion-rate"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -60,4 +62,14 @@ dependencies {
 
     // DataStore
     implementation(libs.datastore.preferences)
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
