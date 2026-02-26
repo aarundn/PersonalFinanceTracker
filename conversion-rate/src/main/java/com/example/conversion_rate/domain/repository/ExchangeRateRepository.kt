@@ -27,4 +27,16 @@ interface ExchangeRateRepository {
      * Returns the list of available exchange-rate providers as (id, displayName) pairs.
      */
     suspend fun getProviders(): Result<List<Pair<String, String>>>
+
+    /**
+     * Force-fetches [fromCurrencyCode]→[toCurrencyCode] from the provider and
+     * updates the local cache, ignoring the TTL.
+     *
+     * Designed for background sync (WorkManager).
+     */
+    suspend fun syncRate(
+        providerId: String,
+        fromCurrencyCode: String,
+        toCurrencyCode: String,
+    ): Result<Unit>
 }

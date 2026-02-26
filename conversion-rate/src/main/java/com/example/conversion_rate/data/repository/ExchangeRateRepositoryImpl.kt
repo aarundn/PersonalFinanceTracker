@@ -1,9 +1,12 @@
 package com.example.conversion_rate.data.repository
 
+import android.util.Log
 import com.example.conversion_rate.data.local.ConversionRateDao
 import com.example.conversion_rate.data.local.ConversionRateEntity
+import com.example.conversion_rate.data.repository.ExchangeRateRepositoryImpl.Companion.CACHE_TTL_MILLIS
 import com.example.conversion_rate.domain.port.ExchangeRateProviderPort
 import com.example.conversion_rate.domain.repository.ExchangeRateRepository
+import com.example.conversion_rate.sync.RateSyncManager
 import java.math.BigDecimal
 
 /**
@@ -22,6 +25,7 @@ import java.math.BigDecimal
 class ExchangeRateRepositoryImpl(
     private val providers: List<ExchangeRateProviderPort>,
     private val dao: ConversionRateDao,
+    private val syncManager: RateSyncManager
 ) : ExchangeRateRepository {
 
     override suspend fun convert(
@@ -29,55 +33,82 @@ class ExchangeRateRepositoryImpl(
         fromCurrencyCode: String,
         toCurrencyCode: String,
         amount: BigDecimal,
-    ): Result<BigDecimal> {
+    ): Result<BigDecimal> = runCatching {
+        val rate = getOrFetchRate(providerId, fromCurrencyCode, toCurrencyCode)
+        amount.multiply(rate)
+    }
 
-        val provider = providers.find { it.id == providerId }
-            ?: return Result.failure(
-                IllegalArgumentException("Unknown provider: $providerId")
-            )
+    override suspend fun getProviders(): Result<List<Pair<String, String>>> =
+        Result.success(providers.map { it.id to it.displayName })
 
-        val cached = dao.getRate(
-            providerId = providerId,
-            from = fromCurrencyCode,
-            to = toCurrencyCode,
-        )
+    override suspend fun syncRate(
+        providerId: String,
+        fromCurrencyCode: String,
+        toCurrencyCode: String,
+    ): Result<Unit> = runCatching {
+        val provider = findProvider(providerId)
+        val freshRate = provider.getRate(fromCurrencyCode, toCurrencyCode).getOrThrow()
+        cacheRate(providerId, fromCurrencyCode, toCurrencyCode, freshRate)
+    }
 
-        val now = System.currentTimeMillis()
 
-        if (cached != null && (now - cached.lastUpdatedMillis) < CACHE_TTL_MILLIS) {
-            val rate = BigDecimal.valueOf(cached.rate)
-            return Result.success(amount.multiply(rate))
-        }
+    private suspend fun getOrFetchRate(
+        providerId: String,
+        from: String,
+        to: String,
+    ): BigDecimal {
+        val cached = dao.getRate(providerId, from, to)
 
-        val fetchResult = provider.getRate(fromCurrencyCode, toCurrencyCode)
+        if (cached != null) return cached.rateBigDecimal
 
-        return fetchResult.fold(
-            onSuccess = { freshRate ->
-                dao.insertRate(
-                    ConversionRateEntity(
-                        providerId = providerId,
-                        fromCurrency = fromCurrencyCode,
-                        toCurrency = toCurrencyCode,
-                        rate = freshRate.toDouble(),
-                        lastUpdatedMillis = now,
-                    )
-                )
-                Result.success(amount.multiply(freshRate))
-            },
-            onFailure = { error ->
-                if (cached != null) {
-                    val staleRate = BigDecimal.valueOf(cached.rate)
-                    Result.success(amount.multiply(staleRate))
-                } else {
-                    Result.failure(error)
-                }
+        return fetchAndCache(providerId, from, to)
+            .onSuccess {
+                syncManager.triggerImmediateSync(from, providerId)
             }
+            .getOrElse { error ->
+                Log.e("ExchangeRateRepository", "Failed to fetch rate", error)
+                throw Exception(
+                    "Fetch failed. The provider might not support converting $from to $to." +
+                            " Please change the provider in Settings and try again.",
+                )
+            }
+    }
+
+    private suspend fun fetchAndCache(
+        providerId: String,
+        from: String,
+        to: String,
+    ): Result<BigDecimal> = runCatching {
+        val provider = findProvider(providerId)
+        val rate = provider.getRate(from, to).getOrThrow()
+        cacheRate(providerId, from, to, rate)
+        rate
+    }
+
+    private fun findProvider(id: String): ExchangeRateProviderPort =
+        providers.find { it.id == id }
+            ?: throw IllegalArgumentException("Unknown provider: $id")
+
+
+    private suspend fun cacheRate(
+        providerId: String,
+        from: String,
+        to: String,
+        rate: BigDecimal,
+    ) {
+        dao.insertRate(
+            ConversionRateEntity(
+                providerId = providerId,
+                fromCurrency = from,
+                toCurrency = to,
+                rate = rate.toDouble(),
+                lastUpdatedMillis = System.currentTimeMillis(),
+            )
         )
     }
 
-    override suspend fun getProviders(): Result<List<Pair<String, String>>> {
-        return Result.success(providers.map { it.id to it.displayName })
-    }
+    private val ConversionRateEntity.rateBigDecimal: BigDecimal
+        get() = BigDecimal.valueOf(rate)
 
     companion object {
         /** Cache time-to-live: 1 hour. */
