@@ -28,19 +28,16 @@ class RateSyncWorker(
             ?: return@withContext failure("Missing provider ID")
 
         Log.d(TAG, "Starting rate sync for base=$baseCurrency, provider=$providerId")
-        try {
-            syncExchangeRates(baseCurrency, providerId).onSuccess {
-                Log.d(TAG, "Rate sync completed")
-                Result.success()
-            }.onFailure {
-                Log.e(TAG, "Rate sync failed", it)
-                if (runAttemptCount < MAX_RETRIES) Result.retry()
-                else failure(it.message)
-            }
+        return@withContext try {
+            Log.d(TAG, "Syncing rates...")
+            syncExchangeRates(baseCurrency, providerId).getOrThrow()
+            
+            Log.d(TAG, "Rate sync completed")
             Result.success()
         } catch (e: Exception) {
-            Log.e(TAG, "Error syncing rates", e)
-            failure(e.message)
+            Log.e(TAG, "Rate sync failed", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry()
+            else failure(e.message)
         }
     }
 
