@@ -13,13 +13,18 @@ class SyncExchangeRatesUseCase(
     /**
      * Syncs rates from [providerId] for [baseCurrency] against [DEFAULT_TARGETS].
      */
-    suspend operator fun invoke(baseCurrency: String, providerId: String): Result<Unit> = runCatching {
-        DEFAULT_TARGETS
-            .filter { it != baseCurrency }
-            .forEach { target ->
-                repository.syncRate(providerId, baseCurrency, target)
-            }
-    }
+    suspend operator fun invoke(baseCurrency: String, providerId: String): Result<Unit> =
+        runCatching {
+            DEFAULT_TARGETS
+                .filter { it != baseCurrency }
+                .forEach { target ->
+                    repository.syncRate(
+                        providerId,
+                        baseCurrency,
+                        target
+                    ).getOrThrow()
+                }
+        }
 
     companion object {
         val DEFAULT_TARGETS = listOf(
