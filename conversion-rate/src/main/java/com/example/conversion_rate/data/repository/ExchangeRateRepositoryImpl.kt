@@ -7,6 +7,7 @@ import com.example.conversion_rate.data.repository.ExchangeRateRepositoryImpl.Co
 import com.example.conversion_rate.domain.port.ExchangeRateProviderPort
 import com.example.conversion_rate.domain.repository.ExchangeRateRepository
 import com.example.conversion_rate.sync.RateSyncManager
+import java.io.IOException
 import java.math.BigDecimal
 
 /**
@@ -67,6 +68,9 @@ class ExchangeRateRepositoryImpl(
             }
             .getOrElse { error ->
                 Log.e("ExchangeRateRepository", "Failed to fetch rate", error)
+                if (error is IOException) {
+                    throw Exception("Network error: Please connect to the internet to initialize exchange rates for the first time.")
+                }
                 throw Exception(
                     "Fetch failed. The provider might not support converting $from to $to." +
                             " Please change the provider in Settings and try again.",
