@@ -16,6 +16,5 @@ class InitializeRateSyncUseCase(
     operator fun invoke(baseCurrency: String, providerId: String) {
         syncManager.triggerImmediateSync(baseCurrency, providerId)
         syncManager.schedulePeriodicSync(baseCurrency, providerId)
-
     }
 }

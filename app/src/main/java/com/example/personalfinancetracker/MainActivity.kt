@@ -24,6 +24,7 @@ import com.example.core.navigation.Feature
 import com.example.core.navigation.register
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
 
 class MainActivity : ComponentActivity() {
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            koinViewModel<MainViewModel>()
             PersonalFinanceTrackerTheme {
 
                 val navController = rememberNavController()
