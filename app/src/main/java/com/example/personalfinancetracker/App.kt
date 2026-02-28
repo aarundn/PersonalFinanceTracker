@@ -15,6 +15,7 @@ import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import settingsModule
+import com.example.core.di.coreModule
 
 class App : Application(), Configuration.Provider {
 
@@ -42,6 +43,7 @@ val mainModule = module {
 val appModule = listOf(
     dataModule,
     domainModule,
+    coreModule,
     conversionRateModule,
     homeModule,
     budgetModule,
