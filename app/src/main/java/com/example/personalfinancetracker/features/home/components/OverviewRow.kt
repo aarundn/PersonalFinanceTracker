@@ -12,11 +12,12 @@ import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PrimaryLight
-import com.example.personalfinancetracker.features.home.HomeContract.HomeData
-
 @Composable
 fun OverviewRow(
-    data: HomeData,
+    totalIncome: Double,
+    totalExpense: Double,
+    balance: Double,
+    currencySymbol: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -25,8 +26,8 @@ fun OverviewRow(
     ) {
         MoneyCard(
             title = "Income",
-            value = data.totalIncome,
-            currencySymbol = data.currencySymbol,
+            value = totalIncome,
+            currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_up),
             modifier = Modifier.weight(1f),
             backgroundColor = Income.copy(alpha = 0.1f),
@@ -35,8 +36,8 @@ fun OverviewRow(
         )
         MoneyCard(
             title = "Expense",
-            value = data.totalExpense,
-            currencySymbol = data.currencySymbol,
+            value = totalExpense,
+            currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_down),
             modifier = Modifier.weight(1f),
             backgroundColor = Expense.copy(alpha = 0.1f),
@@ -45,8 +46,8 @@ fun OverviewRow(
         )
         MoneyCard(
             title = "Balance",
-            value = data.balance,
-            currencySymbol = data.currencySymbol,
+            value = balance,
+            currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.bank),
             modifier = Modifier.weight(1f),
             backgroundColor = PrimaryLight.copy(alpha = 0.1f),

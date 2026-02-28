@@ -101,9 +101,28 @@ private fun HomeContent(
             }
         }
 
-        OverviewRow(data = data)
-        MonthCard(data = data)
-        BudgetSummaryCard(data = data, onEvent = onEvent)
-        QuickActions(onEvent = onEvent)
+        OverviewRow(
+            totalIncome = data.totalIncome,
+            totalExpense = data.totalExpense,
+            balance = data.balance,
+            currencySymbol = data.currencySymbol
+        )
+        MonthCard(
+            totalTransactions = data.totalTransactions,
+            dailyAverage = data.dailyAverage,
+            daysPassed = data.daysPassed,
+            daysInMonth = data.daysInMonth,
+            currencySymbol = data.currencySymbol
+        )
+        BudgetSummaryCard(
+            budgets = data.budgets,
+            currencySymbol = data.currencySymbol,
+            onBudgetClick = { budgetId -> onEvent(Event.OnClickBudgetItem(budgetId)) }
+        )
+        QuickActions(
+            onAddExpenseClick = { onEvent(Event.OnClickAddExpense) },
+            onAddIncomeClick = { onEvent(Event.OnClickAddIncome) },
+            onCurrencyClick = { onEvent(Event.OnClickCurrency) }
+        )
     }
 }

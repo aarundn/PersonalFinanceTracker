@@ -62,11 +62,12 @@ class HomeViewModel(
                     baseCurrencyId = baseCurrencyId,
                     providerId = providerId
                 )
-                
+
                 val convertedTransactions = convertTransactions(transactions, baseCurrencyId, rates)
                 val income = calculateTotal(convertedTransactions, Type.INCOME)
                 val expense = calculateTotal(convertedTransactions, Type.EXPENSE)
-                val budgetUis = mapBudgetsToUi(budgets, convertedTransactions, baseCurrencyId, rates)
+                val budgetUis =
+                    mapBudgetsToUi(budgets, convertedTransactions, baseCurrencyId, rates)
 
                 val now = clock.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 val daysPassed = now.dayOfMonth
@@ -86,7 +87,7 @@ class HomeViewModel(
                         daysPassed = daysPassed,
                         daysInMonth = daysInMonth,
                         budgets = budgetUis,
-                        currencySymbol = currencySymbol,
+                        currencySymbol = currencySymbol
                     )
                 ) as HomeUiState
             } catch (e: Exception) {
@@ -94,7 +95,7 @@ class HomeViewModel(
             }
         }
             .flowOn(Dispatchers.IO)
-            .onStart { emit(HomeUiState.Loading ) }
+            .onStart { emit(HomeUiState.Loading) }
             .catch { e -> emit(HomeUiState.Error(e.message ?: "Failed to load data")) }
             .stateIn(
                 scope = viewModelScope,
@@ -111,7 +112,8 @@ class HomeViewModel(
                 Event.OnClickSettings -> _sideEffect.emit(SideEffect.NavigateSettings)
                 is Event.OnClickBudgetItem -> _sideEffect.emit(SideEffect.ShowMessage("${event.budgetId} tapped"))
                 Event.OnClickSavings -> _sideEffect.emit(SideEffect.ShowMessage("Savings tapped"))
-                Event.OnRetry -> { /* State is reactive — no manual retry needed */ }
+                Event.OnRetry -> { /* State is reactive — no manual retry needed */
+                }
             }
         }
     }
@@ -138,7 +140,8 @@ class HomeViewModel(
         baseCurrencyId: String,
         providerId: String
     ): Map<String, Double> {
-        val uniqueCurrencies = (transactions.map { it.currency } + budgets.map { it.currency }).toSet() - baseCurrencyId
+        val uniqueCurrencies =
+            (transactions.map { it.currency } + budgets.map { it.currency }).toSet() - baseCurrencyId
 
         return uniqueCurrencies.associateWith { currency ->
             val convertedAmountResult = convertCurrencyUseCase(

@@ -23,9 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.example.personalfinancetracker.features.home.HomeContract
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
+import androidx.compose.ui.graphics.vector.ImageVector
+
 @Composable
 fun QuickActions(
-    onEvent: (HomeContract.Event) -> Unit,
+    onAddExpenseClick: () -> Unit,
+    onAddIncomeClick: () -> Unit,
+    onCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -37,80 +41,60 @@ fun QuickActions(
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Quick Actions", style = MaterialTheme.typography.titleMedium)
+            
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(
-                    onClick = { onEvent(HomeContract.Event.OnClickAddExpense) },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Outlined.Add, 
-                            contentDescription = null,
-                            modifier = Modifier.height(16.dp)
-                        )
-                        Text(
-                            "Add Expense",
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    }
-                }
-                Button(
-                    onClick = { onEvent(HomeContract.Event.OnClickAddIncome) },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Outlined.Add, 
-                            contentDescription = null,
-                            modifier = Modifier.height(16.dp)
-                        )
-                        Text(
-                            "Add Income",
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    }
-                }
+                ActionButton(
+                    text = "Add Expense",
+                    icon = Icons.Outlined.Add,
+                    onClick = onAddExpenseClick,
+                    modifier = Modifier.weight(1f)
+                )
+                ActionButton(
+                    text = "Add Income",
+                    icon = Icons.Outlined.Add,
+                    onClick = onAddIncomeClick,
+                    modifier = Modifier.weight(1f)
+                )
             }
-            Button(
-                onClick = { onEvent(HomeContract.Event.OnClickCurrency) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Outlined.Add, 
-                        contentDescription = null,
-                        modifier = Modifier.height(16.dp)
-                    )
-                    Text(
-                        "Currency & Exchange Rates",
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-            }
+            ActionButton(
+                text = "Currency & Exchange Rates",
+                icon = Icons.Outlined.Add,
+                onClick = onCurrencyClick,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActionButton(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.height(16.dp)
+            )
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelSmall
+            )
         }
     }
 }
@@ -120,6 +104,10 @@ fun QuickActions(
 @Composable
 private fun QuickActionsPreview() {
     PersonalFinanceTrackerTheme {
-        QuickActions(onEvent = {})
+        QuickActions(
+            onAddExpenseClick = {},
+            onAddIncomeClick = {},
+            onCurrencyClick = {}
+        )
     }
 }

@@ -21,12 +21,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.components.CustomProgressBar
-import com.example.personalfinancetracker.features.home.HomeContract.HomeData
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
 fun MonthCard(
-    data: HomeData,
+    totalTransactions: Int,
+    dailyAverage: Double,
+    daysPassed: Int,
+    daysInMonth: Int,
+    currencySymbol: String,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -57,7 +60,7 @@ fun MonthCard(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        data.totalTransactions.toString(),
+                        totalTransactions.toString(),
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
@@ -69,7 +72,7 @@ fun MonthCard(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        TextFormattingUtils.formatCurrency(data.dailyAverage, data.currencySymbol),
+                        TextFormattingUtils.formatCurrency(dailyAverage, currencySymbol),
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
@@ -86,14 +89,14 @@ fun MonthCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        "${data.daysPassed} of ${data.daysInMonth}",
+                        "${daysPassed} of ${daysInMonth}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Spacer(Modifier.height(8.dp))
                 CustomProgressBar(
-                    progress = data.daysPassed / data.daysInMonth.toFloat(),
+                    progress = daysPassed / daysInMonth.toFloat(),
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -31,19 +31,18 @@ import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
-import com.example.personalfinancetracker.features.home.HomeContract.Event
-import com.example.personalfinancetracker.features.home.HomeContract.HomeData
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
 fun BudgetSummaryCard(
-    data: HomeData,
-    onEvent: (Event) -> Unit,
+    budgets: List<BudgetUi>,
+    currencySymbol: String,
+    onBudgetClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (data.budgets.isEmpty()) return
+    if (budgets.isEmpty()) return
 
-    val averageUsed = data.budgets.map { it.percentage }.average().toFloat()
+    val averageUsed = budgets.map { it.percentage }.average().toFloat()
 
     Card(
         modifier = modifier,
@@ -75,11 +74,11 @@ fun BudgetSummaryCard(
                     }
                 )
             }
-            data.budgets.forEach { budget ->
+            budgets.forEach { budget ->
                 BudgetItem(
                     budget = budget,
-                    currencySymbol = data.currencySymbol,
-                    onClick = { onEvent(Event.OnClickBudgetItem(budget.id)) }
+                    currencySymbol = currencySymbol,
+                    onClick = { onBudgetClick(budget.id) }
                 )
             }
         }
