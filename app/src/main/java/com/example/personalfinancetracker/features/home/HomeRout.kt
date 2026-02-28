@@ -27,11 +27,11 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                HomeContract.SideEffect.NavigateAddExpense -> onNavigateToAddTransaction()
-                HomeContract.SideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
-                HomeContract.SideEffect.NavigateCurrency -> onNavigateToCurrency()
-                HomeContract.SideEffect.NavigateSettings -> onNavigateToSettings()
-                is HomeContract.SideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message)
+                HomeSideEffect.NavigateAddExpense -> onNavigateToAddTransaction()
+                HomeSideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
+                HomeSideEffect.NavigateCurrency -> onNavigateToCurrency()
+                HomeSideEffect.NavigateSettings -> onNavigateToSettings()
+                is HomeSideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message)
             }
         }
     }

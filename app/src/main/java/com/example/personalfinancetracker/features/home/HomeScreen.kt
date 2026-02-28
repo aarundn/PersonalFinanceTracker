@@ -21,9 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
-import com.example.personalfinancetracker.features.home.HomeContract.Event
-import com.example.personalfinancetracker.features.home.HomeContract.HomeData
-import com.example.personalfinancetracker.features.home.HomeContract.HomeUiState
 import com.example.personalfinancetracker.features.home.components.BudgetSummaryCard
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.home.components.OverviewRow
@@ -32,7 +29,7 @@ import com.example.personalfinancetracker.features.home.components.QuickActions
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
-    onEvent: (Event) -> Unit,
+    onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (homeUiState) {
@@ -45,10 +42,10 @@ fun HomeScreen(
                 title = "Something went wrong",
                 description = homeUiState.message,
                 buttonText = "Retry",
-                onAddClick = { onEvent(Event.OnRetry) },
+                onAddClick = { onEvent(HomeEvent.OnRetry) },
                 modifier = modifier,
                 secondaryButtonText = "Go to Settings",
-                onSecondaryClick = { onEvent(Event.OnClickSettings) }
+                onSecondaryClick = { onEvent(HomeEvent.OnClickSettings) }
             )
         }
 
@@ -65,7 +62,7 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     data: HomeData,
-    onEvent: (Event) -> Unit,
+    onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -92,7 +89,7 @@ private fun HomeContent(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            IconButton(onClick = { onEvent(Event.OnClickSettings) }) {
+            IconButton(onClick = { onEvent(HomeEvent.OnClickSettings) }) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "Settings",
@@ -117,12 +114,12 @@ private fun HomeContent(
         BudgetSummaryCard(
             budgets = data.budgets,
             currencySymbol = data.currencySymbol,
-            onBudgetClick = { budgetId -> onEvent(Event.OnClickBudgetItem(budgetId)) }
+            onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) }
         )
         QuickActions(
-            onAddExpenseClick = { onEvent(Event.OnClickAddExpense) },
-            onAddIncomeClick = { onEvent(Event.OnClickAddIncome) },
-            onCurrencyClick = { onEvent(Event.OnClickCurrency) }
+            onAddExpenseClick = { onEvent(HomeEvent.OnClickAddExpense) },
+            onAddIncomeClick = { onEvent(HomeEvent.OnClickAddIncome) },
+            onCurrencyClick = { onEvent(HomeEvent.OnClickCurrency) }
         )
     }
 }

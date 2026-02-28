@@ -14,10 +14,6 @@ import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
-import com.example.personalfinancetracker.features.home.HomeContract.Event
-import com.example.personalfinancetracker.features.home.HomeContract.HomeData
-import com.example.personalfinancetracker.features.home.HomeContract.HomeUiState
-import com.example.personalfinancetracker.features.home.HomeContract.SideEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -43,7 +39,7 @@ class HomeViewModel(
     private val clock: Clock,
 ) : ViewModel() {
 
-    private val _sideEffect = MutableSharedFlow<SideEffect>()
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -103,16 +99,16 @@ class HomeViewModel(
                 initialValue = HomeUiState.Loading,
             )
 
-    fun onEvent(event: Event) {
+    fun onEvent(event: HomeEvent) {
         viewModelScope.launch {
             when (event) {
-                Event.OnClickAddExpense -> _sideEffect.emit(SideEffect.NavigateAddExpense)
-                Event.OnClickAddIncome -> _sideEffect.emit(SideEffect.NavigateAddIncome)
-                Event.OnClickCurrency -> _sideEffect.emit(SideEffect.NavigateCurrency)
-                Event.OnClickSettings -> _sideEffect.emit(SideEffect.NavigateSettings)
-                is Event.OnClickBudgetItem -> _sideEffect.emit(SideEffect.ShowMessage("${event.budgetId} tapped"))
-                Event.OnClickSavings -> _sideEffect.emit(SideEffect.ShowMessage("Savings tapped"))
-                Event.OnRetry -> { /* State is reactive — no manual retry needed */
+                HomeEvent.OnClickAddExpense -> _sideEffect.emit(HomeSideEffect.NavigateAddExpense)
+                HomeEvent.OnClickAddIncome -> _sideEffect.emit(HomeSideEffect.NavigateAddIncome)
+                HomeEvent.OnClickCurrency -> _sideEffect.emit(HomeSideEffect.NavigateCurrency)
+                HomeEvent.OnClickSettings -> _sideEffect.emit(HomeSideEffect.NavigateSettings)
+                is HomeEvent.OnClickBudgetItem -> _sideEffect.emit(HomeSideEffect.ShowMessage("${event.budgetId} tapped"))
+                HomeEvent.OnClickSavings -> _sideEffect.emit(HomeSideEffect.ShowMessage("Savings tapped"))
+                HomeEvent.OnRetry -> { /* State is reactive — no manual retry needed */
                 }
             }
         }
