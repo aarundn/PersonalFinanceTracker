@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +27,9 @@ fun EmptyState(
     description: String,
     buttonText: String,
     onAddClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    secondaryButtonText: String? = null,
+    onSecondaryClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -73,12 +76,17 @@ fun EmptyState(
                 style = MaterialTheme.typography.labelLarge
             )
         }
+        
+        if (secondaryButtonText != null && onSecondaryClick != null) {
+            OutlinedButton(
+                onClick = onSecondaryClick,
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(
+                    text = secondaryButtonText,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        }
     }
 }
-
-
-
-
-
-
-

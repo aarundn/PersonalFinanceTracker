@@ -46,7 +46,9 @@ fun HomeScreen(
                 description = homeUiState.message,
                 buttonText = "Retry",
                 onAddClick = { onEvent(Event.OnRetry) },
-                modifier = modifier
+                modifier = modifier,
+                secondaryButtonText = "Go to Settings",
+                onSecondaryClick = { onEvent(Event.OnClickSettings) }
             )
         }
 
