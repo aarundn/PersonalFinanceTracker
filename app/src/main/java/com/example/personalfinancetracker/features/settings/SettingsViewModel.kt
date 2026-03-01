@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.conversion_rate.domain.usecase.ConvertCurrencyUseCase
 import com.example.conversion_rate.domain.usecase.GetProvidersUseCase
+import com.example.conversion_rate.domain.usecase.InitializeRateSyncUseCase
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
 import com.example.domain.repo.UserPreferencesRepository
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ import java.math.RoundingMode
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val convertCurrency: ConvertCurrencyUseCase,
+    private val initializeRateSync: InitializeRateSyncUseCase,
     private val getProviders: GetProvidersUseCase,
 ) : ViewModel() {
 
@@ -33,12 +36,14 @@ class SettingsViewModel(
     private val _pickerVisible = MutableStateFlow(false)
     private val _conversionState = MutableStateFlow(ConversionTestState())
 
+
     val state: StateFlow<SettingsState> =
         combine(
             userPreferencesRepository.baseCurrency,
             _pickerVisible,
             _conversionState,
         ) { currencyId, pickerVisible, conversion ->
+
             SettingsState(
                 selectedCurrency = DefaultCurrencies.fromId(currencyId) ?: DefaultCurrencies.USD,
                 availableCurrencies = DefaultCurrencies.all,
@@ -65,12 +70,14 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
+            val savedProviderId = userPreferencesRepository.selectedProviderId.first()
             getProviders().onSuccess { providers ->
-                val first = providers.firstOrNull()
                 _conversionState.update {
                     it.copy(
                         providers = providers,
-                        selectedProviderId = first?.first,
+                        selectedProviderId = providers
+                            .firstOrNull { (id, _) -> id == savedProviderId }?.first
+                            ?: providers.firstOrNull()?.first,
                     )
                 }
             }
@@ -85,15 +92,28 @@ class SettingsViewModel(
             Event.OnNavigateBack -> viewModelScope.launch {
                 _sideEffect.emit(SideEffect.NavigateBack)
             }
+
             is Event.OnAmountChanged -> _conversionState.update {
                 it.copy(amount = event.amount, result = null, error = null)
             }
+
             is Event.OnTargetCurrencySelected -> _conversionState.update {
                 it.copy(targetCurrency = event.currency, result = null, error = null)
             }
-            is Event.OnProviderSelected -> _conversionState.update {
-                it.copy(selectedProviderId = event.providerId, result = null, error = null)
+
+            is Event.OnProviderSelected -> {
+                _conversionState.update {
+                    it.copy(selectedProviderId = event.providerId, result = null, error = null)
+                }
+                viewModelScope.launch {
+                    userPreferencesRepository.setSelectedProviderId(event.providerId)
+                    initializeRateSync(
+                        userPreferencesRepository.baseCurrency.first(),
+                        event.providerId
+                    )
+                }
             }
+
             Event.OnConvertClicked -> performConversion()
         }
     }
@@ -102,6 +122,8 @@ class SettingsViewModel(
         viewModelScope.launch {
             userPreferencesRepository.setBaseCurrency(currency.id)
             _pickerVisible.value = false
+            val providerId = userPreferencesRepository.selectedProviderId.first()
+            initializeRateSync(currency.id, providerId)
         }
     }
 
