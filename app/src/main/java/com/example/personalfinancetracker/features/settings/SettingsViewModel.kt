@@ -30,23 +30,28 @@ class SettingsViewModel(
 
     private fun getInitialPreferences() {
         viewModelScope.launch {
-            userPreferencesRepository.baseCurrency.collect { currencyId ->
-                setState {
-                    copy(
-                        selectedCurrency = DefaultCurrencies.fromId(currencyId)
-                            ?: DefaultCurrencies.USD
-                    )
+            launch {
+                userPreferencesRepository.baseCurrency.collect { currencyId ->
+                    setState {
+                        copy(
+                            selectedCurrency = DefaultCurrencies.fromId(currencyId)
+                                ?: DefaultCurrencies.USD
+                        )
+                    }
                 }
             }
-            val savedProviderId = userPreferencesRepository.selectedProviderId.first()
-            getProviders().onSuccess { providers ->
-                setState {
-                    copy(
-                        availableProviders = providers,
-                        selectedProviderId = providers
-                            .firstOrNull { (id, _) -> id == savedProviderId }?.first
-                            ?: providers.firstOrNull()?.first,
-                    )
+            
+            launch {
+                val savedProviderId = userPreferencesRepository.selectedProviderId.first()
+                getProviders().onSuccess { providers ->
+                    setState {
+                        copy(
+                            availableProviders = providers,
+                            selectedProviderId = providers
+                                .firstOrNull { (id, _) -> id == savedProviderId }?.first
+                                ?: providers.firstOrNull()?.first,
+                        )
+                    }
                 }
             }
         }
