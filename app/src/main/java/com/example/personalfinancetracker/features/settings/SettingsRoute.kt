@@ -12,12 +12,12 @@ fun SettingsRoute(
     onNavigateBack: () -> Unit,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                SettingsContract.SideEffect.NavigateBack -> onNavigateBack()
+                SettingsSideEffect.NavigateBack -> onNavigateBack()
             }
         }
     }

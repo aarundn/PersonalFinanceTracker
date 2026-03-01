@@ -11,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.core.components.HeaderSection
-import com.example.personalfinancetracker.features.settings.SettingsContract.Event
-import com.example.personalfinancetracker.features.settings.SettingsContract.SettingsState
 import com.example.personalfinancetracker.features.settings.components.BaseCurrencyCard
 import com.example.personalfinancetracker.features.settings.components.ConversionTestCard
 import com.example.personalfinancetracker.features.settings.components.CurrencyPickerBottomSheet
@@ -20,13 +18,13 @@ import com.example.personalfinancetracker.features.settings.components.CurrencyP
 @Composable
 fun SettingsScreen(
     state: SettingsState,
-    onEvent: (Event) -> Unit,
+    onEvent: (SettingsEvent) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier,
         topBar = {
             HeaderSection(
-                onBackClick = { onEvent(Event.OnNavigateBack) },
+                onBackClick = { onEvent(SettingsEvent.OnNavigateBack) },
                 title = "Settings"
             )
         }
@@ -47,21 +45,21 @@ fun SettingsScreen(
             
             BaseCurrencyCard(
                 selectedCurrency = state.selectedCurrency,
-                onClick = { onEvent(Event.OnClickCurrencyPicker) }
+                onClick = { onEvent(SettingsEvent.OnClickCurrencyPicker) }
             )
             
             ConversionTestCard(
                 baseCurrency = state.selectedCurrency,
                 conversionAmount = state.conversionAmount,
-                onAmountChanged = { onEvent(Event.OnAmountChanged(it)) },
+                onAmountChanged = { onEvent(SettingsEvent.OnAmountChanged(it)) },
                 availableCurrencies = state.availableCurrencies,
                 targetCurrency = state.targetCurrency,
-                onTargetCurrencySelected = { onEvent(Event.OnTargetCurrencySelected(it)) },
+                onTargetCurrencySelected = { onEvent(SettingsEvent.OnTargetCurrencySelected(it)) },
                 availableProviders = state.availableProviders,
                 selectedProviderId = state.selectedProviderId,
-                onProviderSelected = { onEvent(Event.OnProviderSelected(it)) },
+                onProviderSelected = { onEvent(SettingsEvent.OnProviderSelected(it)) },
                 isConverting = state.isConverting,
-                onConvertClicked = { onEvent(Event.OnConvertClicked) },
+                onConvertClicked = { onEvent(SettingsEvent.OnConvertClicked) },
                 conversionResult = state.conversionResult,
                 conversionError = state.conversionError
             )
@@ -72,8 +70,8 @@ fun SettingsScreen(
         CurrencyPickerBottomSheet(
             currencies = state.availableCurrencies,
             selectedCurrency = state.selectedCurrency,
-            onCurrencySelected = { onEvent(Event.OnCurrencySelected(it)) },
-            onDismiss = { onEvent(Event.OnDismissCurrencyPicker) }
+            onCurrencySelected = { onEvent(SettingsEvent.OnCurrencySelected(it)) },
+            onDismiss = { onEvent(SettingsEvent.OnDismissCurrencyPicker) }
         )
     }
 }
