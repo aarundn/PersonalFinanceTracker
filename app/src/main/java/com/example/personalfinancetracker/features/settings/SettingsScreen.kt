@@ -11,9 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.core.components.HeaderSection
-import com.example.personalfinancetracker.features.settings.components.BaseCurrencyCard
+import com.example.core.components.TransactionDropdown
 import com.example.personalfinancetracker.features.settings.components.ConversionTestCard
-import com.example.personalfinancetracker.features.settings.components.CurrencyPickerBottomSheet
 
 @Composable
 fun SettingsScreen(
@@ -43,9 +42,12 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.primary
             )
             
-            BaseCurrencyCard(
-                selectedCurrency = state.selectedCurrency,
-                onClick = { onEvent(SettingsEvent.OnClickCurrencyPicker) }
+            TransactionDropdown(
+                label = "Base Currency",
+                items = state.availableCurrencies,
+                selectedItem = state.selectedCurrency,
+                onItemSelected = { onEvent(SettingsEvent.OnCurrencySelected(it)) },
+                itemLabel = { "${it.symbol} (${it.id}) - ${it.name}" }
             )
             
             ConversionTestCard(
@@ -66,12 +68,4 @@ fun SettingsScreen(
         }
     }
 
-    if (state.isCurrencyPickerVisible) {
-        CurrencyPickerBottomSheet(
-            currencies = state.availableCurrencies,
-            selectedCurrency = state.selectedCurrency,
-            onCurrencySelected = { onEvent(SettingsEvent.OnCurrencySelected(it)) },
-            onDismiss = { onEvent(SettingsEvent.OnDismissCurrencyPicker) }
-        )
-    }
 }

@@ -10,7 +10,6 @@ import com.example.core.model.Currency
 data class SettingsState(
     val selectedCurrency: Currency,
     val availableCurrencies: List<Currency>,
-    val isCurrencyPickerVisible: Boolean = false,
     // Conversion test
     val conversionAmount: String = "100",
     val targetCurrency: Currency? = null,
@@ -23,8 +22,6 @@ data class SettingsState(
 ) : MVIState
 
 sealed interface SettingsEvent : MVIUiEvent {
-    data object OnClickCurrencyPicker : SettingsEvent
-    data object OnDismissCurrencyPicker : SettingsEvent
     data class OnCurrencySelected(val currency: Currency) : SettingsEvent
     data object OnNavigateBack : SettingsEvent
     // Conversion test events

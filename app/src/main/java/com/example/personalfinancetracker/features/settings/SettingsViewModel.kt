@@ -59,8 +59,6 @@ class SettingsViewModel(
 
     override fun handleEvent(event: SettingsEvent) {
         when (event) {
-            SettingsEvent.OnClickCurrencyPicker -> setState { copy(isCurrencyPickerVisible = true) }
-            SettingsEvent.OnDismissCurrencyPicker -> setState { copy(isCurrencyPickerVisible = false) }
             is SettingsEvent.OnCurrencySelected -> selectCurrency(event.currency)
             SettingsEvent.OnNavigateBack -> triggerSideEffect(SettingsSideEffect.NavigateBack)
 
@@ -104,7 +102,6 @@ class SettingsViewModel(
     private fun selectCurrency(currency: Currency) {
         viewModelScope.launch {
             userPreferencesRepository.setBaseCurrency(currency.id)
-            setState { copy(isCurrencyPickerVisible = false) }
             val providerId = userPreferencesRepository.selectedProviderId.first()
             initializeRateSync(currency.id, providerId)
         }
