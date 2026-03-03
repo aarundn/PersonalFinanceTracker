@@ -19,7 +19,7 @@ object TextFormattingUtils {
      * Format a double value as currency without decimals (e.g., $1,235) using the provided symbol.
      */
     fun formatCurrencyNoDecimals(amount: Double, symbol: String = "$"): String {
-        return "$symbol${String.format("%.0f", amount)}"
+        return "$symbol ${String.format("%.0f", amount)}"
     }
 
     /**

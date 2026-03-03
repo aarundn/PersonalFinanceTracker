@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -64,7 +63,7 @@ fun MoneyCard(
             }
             Spacer(Modifier.height(4.dp))
             Text(
-                TextFormattingUtils.formatCurrencyNoDecimals(value, currencySymbol),
+                text = "${value} $currencySymbol",
                 style = MaterialTheme.typography.headlineSmall,
                 color = textColor
             )

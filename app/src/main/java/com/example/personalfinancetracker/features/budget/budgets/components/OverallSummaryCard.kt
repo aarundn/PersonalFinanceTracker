@@ -16,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomProgressBar
+import com.example.core.utils.formatAmountRemaining
+import com.example.core.utils.formatCurrencyAmount
+import com.example.core.utils.formatPercentageUsed
 
 @Composable
 fun OverallSummaryCard(
@@ -46,7 +49,7 @@ fun OverallSummaryCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "$${String.format("%.0f", totalBudgeted)}",
+                    text = formatCurrencyAmount("$", totalBudgeted),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -64,7 +67,7 @@ fun OverallSummaryCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "$${String.format("%.0f", totalSpent)}",
+                    text = formatCurrencyAmount("$", totalSpent),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = if (totalSpent > totalBudgeted) 
@@ -90,12 +93,12 @@ fun OverallSummaryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${String.format("%.1f", overallProgress * 100)}% used",
+                    text = formatPercentageUsed(overallProgress),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "$${String.format("%.0f", totalBudgeted - totalSpent)} remaining",
+                    text = formatAmountRemaining("$", totalBudgeted - totalSpent),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

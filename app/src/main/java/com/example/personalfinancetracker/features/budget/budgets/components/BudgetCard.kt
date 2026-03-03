@@ -21,7 +21,10 @@ import com.example.core.components.BudgetInfo
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.core.utils.formatAmountNoSpace
+import com.example.core.utils.formatPercentage
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
@@ -95,12 +98,12 @@ fun BudgetCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${(budget.percentage * 100).toDouble().formatCurrency()}%",
+                        text = formatPercentage(budget.percentage),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${budget.currencySymbol}${budget.amount.formatCurrency()}",
+                        text = formatAmountNoSpace(budget.currencySymbol, budget.amount.formatCurrency()),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

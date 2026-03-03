@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.core.utils.formatAmountLeft
+import com.example.core.utils.formatAmountOver
 
 @Composable
 fun BudgetAmountStateInfo(
@@ -37,9 +39,9 @@ fun BudgetAmountStateInfo(
 
         Text(
             text = if (isOverBudget) {
-                "$currencySymbol $overBudget over"
+                formatAmountOver(currencySymbol, overBudget)
             } else {
-                "$currencySymbol $remaining left"
+                formatAmountLeft(currencySymbol, remaining)
             },
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Medium

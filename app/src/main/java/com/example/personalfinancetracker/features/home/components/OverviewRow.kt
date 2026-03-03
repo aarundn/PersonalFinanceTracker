@@ -1,6 +1,7 @@
 package com.example.personalfinancetracker.features.home.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -20,16 +21,15 @@ fun OverviewRow(
     currencySymbol: String,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         MoneyCard(
             title = "Income",
             value = totalIncome,
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_up),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             backgroundColor = Income.copy(alpha = 0.1f),
             borderColor = Income.copy(alpha = 0.2f),
             textColor = Income
@@ -39,7 +39,7 @@ fun OverviewRow(
             value = totalExpense,
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_down),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             backgroundColor = Expense.copy(alpha = 0.1f),
             borderColor = Expense.copy(alpha = 0.2f),
             textColor = Expense
@@ -49,7 +49,7 @@ fun OverviewRow(
             value = balance,
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.bank),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             backgroundColor = PrimaryLight.copy(alpha = 0.1f),
             borderColor = PrimaryLight.copy(alpha = 0.2f),
             textColor = PrimaryLight

@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.components.CustomProgressBar
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
@@ -72,7 +73,7 @@ fun MonthCard(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        TextFormattingUtils.formatCurrency(dailyAverage, currencySymbol),
+                        "${dailyAverage.formatCurrency()} $currencySymbol",
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }

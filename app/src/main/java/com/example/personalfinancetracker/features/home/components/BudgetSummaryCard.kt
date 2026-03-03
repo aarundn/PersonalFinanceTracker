@@ -31,6 +31,7 @@ import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
@@ -42,7 +43,7 @@ fun BudgetSummaryCard(
 ) {
     if (budgets.isEmpty()) return
 
-    val averageUsed = budgets.map { it.percentage }.average().toFloat()
+    val averageUsed = budgets.map { it.percentage }.average()
 
     Card(
         modifier = modifier,
@@ -70,7 +71,7 @@ fun BudgetSummaryCard(
                 AssistChip(
                     onClick = {},
                     label = {
-                        Text("${TextFormattingUtils.formatPercentage(averageUsed.toDouble())} used")
+                        Text("${averageUsed.formatCurrency()} used")
                     }
                 )
             }
@@ -126,11 +127,7 @@ private fun BudgetItem(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = TextFormattingUtils.formatBudgetProgress(
-                            budget.spent,
-                            budget.amount,
-                            currencySymbol
-                        ),
+                        text = "$currencySymbol ${budget.amount.formatCurrency()}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

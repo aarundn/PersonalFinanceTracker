@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.core.utils.formatBudgetSpentOfAmount
 
 @Composable
 fun BudgetInfo(
@@ -63,7 +64,7 @@ fun BudgetInfo(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "$currencySymbol $spent of $currencySymbol $amount",
+                text = formatBudgetSpentOfAmount(currencySymbol, spent, amount),
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

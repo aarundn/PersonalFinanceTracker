@@ -32,6 +32,13 @@ import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.core.utils.formatAmount
+import com.example.core.utils.formatAmountLeft
+import com.example.core.utils.formatAmountOver
+import com.example.core.utils.formatPercentageUsed
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.Warning
 import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
@@ -178,19 +185,16 @@ private fun ProgressOverViewInfo(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${
-                    (percentageUsed * 100).coerceAtMost(999f)
-                        .toDouble().formatCurrency()
-                } used",
+                text = formatPercentageUsed(percentageUsed.coerceAtMost(9.99f)),
                 style = MaterialTheme.typography.bodySmall,
                 color = progressColor
             )
             val remaining = budget.remaining
             Text(
                 text = if (remaining >= 0) {
-                    "${budget.currencySymbol} ${remaining.formatCurrency()} left"
+                    formatAmountLeft(budget.currencySymbol, remaining.formatCurrency())
                 } else {
-                    "${budget.currencySymbol} ${budget.overBudget.formatCurrency()} over"
+                    formatAmountOver(budget.currencySymbol, budget.overBudget.formatCurrency())
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = if (remaining >= 0) progressColor else ProgressError,
@@ -218,7 +222,7 @@ private fun AmountRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "$currencySymbol ${value.formatCurrency()}",
+            text = formatAmount(currencySymbol, value.formatCurrency()),
             style = if (emphasize) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
             fontWeight = if (emphasize) FontWeight.SemiBold else FontWeight.Normal,
             color = MaterialTheme.colorScheme.onSurface
