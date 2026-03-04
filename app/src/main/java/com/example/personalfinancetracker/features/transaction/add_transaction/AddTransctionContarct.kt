@@ -6,6 +6,7 @@ import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
 import com.example.core.model.Currency
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
 @Immutable
 data class AddTransactionState(
@@ -19,7 +20,10 @@ data class AddTransactionState(
     val categories: List<Category> = emptyList(),
     val isConverting: Boolean = false,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val availableBudgets: List<BudgetUi> = emptyList(),
+    val selectedBudgetId: String? = null,
+    val showBudgetSelector: Boolean = false
 ) : MVIState
 
 sealed class AddTransactionEvent : MVIUiEvent {
@@ -29,6 +33,10 @@ sealed class AddTransactionEvent : MVIUiEvent {
     data class OnCurrencyChanged(val currency: Currency) : AddTransactionEvent()
     data class OnDateChanged(val date: Long) : AddTransactionEvent()
     data class OnNotesChanged(val notes: String) : AddTransactionEvent()
+    data class OnBudgetSelected(val budgetId: String) : AddTransactionEvent()
+    object OnAddBudgetClicked : AddTransactionEvent()
+    object OnShowBudgetSelector : AddTransactionEvent()
+    object OnHideBudgetSelector : AddTransactionEvent()
     object OnSave : AddTransactionEvent()
     object OnCancel : AddTransactionEvent()
 }
@@ -36,6 +44,7 @@ sealed class AddTransactionEvent : MVIUiEvent {
 sealed class AddTransactionSideEffect : MVIUiSideEffect {
     object NavigateBack : AddTransactionSideEffect()
     object NavigateToTransactions : AddTransactionSideEffect()
+    object NavigateToAddBudget : AddTransactionSideEffect()
     data class ShowError(val message: String) : AddTransactionSideEffect()
     data class ShowSuccess(val message: String) : AddTransactionSideEffect()
 }

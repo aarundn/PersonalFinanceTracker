@@ -12,4 +12,5 @@ data class Transaction(
     val createdAt: Long,
     val updatedAt: Long,
     val type: Type,
+    val budgetId: String? = null,
     )

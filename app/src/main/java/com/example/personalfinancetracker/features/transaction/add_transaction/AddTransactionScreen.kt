@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomSnackBar
@@ -18,13 +21,17 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
 import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
+import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTransactionScreen(
     snackBarHostState: SnackbarHostState,
     state: AddTransactionState,
     onEvent: (AddTransactionEvent) -> Unit,
 ) {
+    val budgetSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
             CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
@@ -33,6 +40,12 @@ fun AddTransactionScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = { HeaderSection(onBackClick = { onEvent(AddTransactionEvent.OnCancel) }) }
     ) { innerPadding ->
+
+        val selectedBudgetName = state.availableBudgets
+            .find { it.id == state.selectedBudgetId }
+            ?.let { budget ->
+                stringResource(budget.currentCategory.nameResId)
+            }
 
         TransactionInputForm(
             modifier = Modifier
@@ -46,6 +59,8 @@ fun AddTransactionScreen(
             onTypeChanged = { onEvent(AddTransactionEvent.OnTransactionTypeChanged(it)) },
             selectedCategory = state.selectedCategory,
             onCategorySelected = { onEvent(AddTransactionEvent.OnCategoryChanged(it)) },
+            selectedBudgetName = selectedBudgetName,
+            onLinkBudgetClicked = { onEvent(AddTransactionEvent.OnShowBudgetSelector) },
             onDateChanged = { onEvent(AddTransactionEvent.OnDateChanged(it.toLongOrNull() ?: 0L)) },
             onAmountChanged = { onEvent(AddTransactionEvent.OnAmountChanged(it)) },
             onNotesChanged = { onEvent(AddTransactionEvent.OnNotesChanged(it)) },
@@ -57,6 +72,17 @@ fun AddTransactionScreen(
             amount = state.amount,
             date = parseDateString(state.date),
             notes = state.notes,
+        )
+    }
+
+    if (state.showBudgetSelector) {
+        BudgetSelectorBottomSheet(
+            budgets = state.availableBudgets,
+            selectedBudgetId = state.selectedBudgetId,
+            onBudgetSelected = { onEvent(AddTransactionEvent.OnBudgetSelected(it)) },
+            onAddBudgetClicked = { onEvent(AddTransactionEvent.OnAddBudgetClicked) },
+            onDismiss = { onEvent(AddTransactionEvent.OnHideBudgetSelector) },
+            sheetState = budgetSheetState
         )
     }
 }
@@ -76,7 +102,7 @@ private fun AddTransactionScreenPreview() {
                 selectedCategory = null
             ),
             onEvent = {},
-            snackBarHostState = SnackbarHostState()
+            snackBarHostState = SnackbarHostState(),
         )
     }
 }

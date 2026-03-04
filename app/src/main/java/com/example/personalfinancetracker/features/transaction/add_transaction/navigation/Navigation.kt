@@ -6,11 +6,13 @@ import com.example.personalfinancetracker.features.transaction.add_transaction.A
 import com.example.personalfinancetracker.features.transaction.navigation.TransactionRoutes
 
 fun NavGraphBuilder.addTransactionRoute(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToAddBudget: () -> Unit
 ) {
     composable<TransactionRoutes.AddTransactionRoute> {
         AddTransactionRoute(
-            onNavigateBack = onNavigateBack
+            onNavigateBack = onNavigateBack,
+            onNavigateToAddBudget = onNavigateToAddBudget
         )
     }
 }

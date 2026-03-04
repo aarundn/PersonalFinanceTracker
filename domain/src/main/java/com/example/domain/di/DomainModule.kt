@@ -6,6 +6,7 @@ import com.example.domain.usecase.budget_usecases.DeleteBudgetUseCase
 import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetByIdUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
+import com.example.domain.usecase.budget_usecases.GetBudgetsByCategoryUseCase
 import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.domain.usecase.budget_usecases.UpdateBudgetUseCase
@@ -29,6 +30,7 @@ val domainModule = module {
     factoryOf(::GetBudgetsUseCase)
     factoryOf(::GetBudgetByIdUseCase)
     factoryOf(::GetBudgetTransactionsUseCase)
+    factoryOf(::GetBudgetsByCategoryUseCase)
 
     singleOf(::ValidateInputsUseCase)
 }

@@ -9,4 +9,5 @@ interface BudgetRepository {
     suspend fun updateBudget(budget: Budget)
     suspend fun deleteBudgetById(id: String)
     suspend fun getBudgetById(id: String): Budget?
+    fun getBudgetsByCategory(category: String): Flow<List<Budget>>
 }

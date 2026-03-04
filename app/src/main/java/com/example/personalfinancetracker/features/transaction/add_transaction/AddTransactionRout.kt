@@ -12,6 +12,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AddTransactionRoute(
     onNavigateBack: () -> Unit,
+    onNavigateToAddBudget: () -> Unit,
     viewModel: AddTransactionViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -21,6 +22,8 @@ fun AddTransactionRoute(
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
+
+                is AddTransactionSideEffect.NavigateToAddBudget -> onNavigateToAddBudget()
                 is AddTransactionSideEffect.NavigateBack -> onNavigateBack()
 
                 is AddTransactionSideEffect.NavigateToTransactions -> onNavigateBack()
@@ -35,6 +38,6 @@ fun AddTransactionRoute(
     AddTransactionScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        snackBarHostState = snackBarHostState
+        snackBarHostState = snackBarHostState,
     )
 }

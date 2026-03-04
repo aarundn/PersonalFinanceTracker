@@ -15,6 +15,7 @@ fun Transaction.toTransactionUi(): TransactionUi {
         createdAt = createdAt,
         updatedAt = updatedAt,
         type = type,
+        budgetId = budgetId,
     )
 }
 
@@ -30,6 +31,7 @@ fun TransactionUi.toTransaction(): Transaction {
         createdAt = createdAt,
         updatedAt = updatedAt,
         type = type,
+        budgetId = budgetId,
     )
 }
 

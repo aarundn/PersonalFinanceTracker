@@ -4,12 +4,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.example.core.navigation.AppRoutes
+import com.example.core.navigation.features.BudgetFeature
 import com.example.core.navigation.features.TransactionFeature
 import com.example.personalfinancetracker.features.transaction.add_transaction.navigation.addTransactionRoute
 import com.example.personalfinancetracker.features.transaction.edit_transaction.navigation.editTransactionRoute
 import com.example.personalfinancetracker.features.transaction.transactions.navigation.transactionRoute
 
-class TransactionFeatureImpl : TransactionFeature {
+class TransactionFeatureImpl(
+    private val budgetFeature: BudgetFeature
+) : TransactionFeature {
     override fun transactionsRoute(): AppRoutes = TransactionRoutes.TransactionsRoute
 
     override fun addTransactionRoute(): AppRoutes = TransactionRoutes.AddTransactionRoute
@@ -29,7 +32,10 @@ class TransactionFeatureImpl : TransactionFeature {
             },
             modifier = modifier
         )
-        navGraphBuilder.addTransactionRoute(onNavigateBack = { navController.popBackStack() })
+        navGraphBuilder.addTransactionRoute(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddBudget = { navController.navigate(budgetFeature.addBudgetRoute()) }
+        )
         navGraphBuilder.editTransactionRoute(onNavigateBack = { navController.popBackStack() })
     }
 }

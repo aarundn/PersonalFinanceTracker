@@ -47,7 +47,8 @@ fun TransactionEntity.toDomain(): Transaction {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        type = type
+        type = type,
+        budgetId = budgetId
     )
 }
 fun Transaction.toEntity(): TransactionEntity{
@@ -61,7 +62,8 @@ fun Transaction.toEntity(): TransactionEntity{
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        type = type
+        type = type,
+        budgetId = budgetId
     )
 }
 fun List<TransactionEntity>.toDomain(): List<Transaction> = map { it.toDomain() }

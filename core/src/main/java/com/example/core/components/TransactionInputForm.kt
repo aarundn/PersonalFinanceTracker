@@ -13,6 +13,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,9 @@ fun TransactionInputForm(
     date: String,
     notes: String,
     isReadOnly: Boolean = false,
-    showTypeToggle: Boolean = true
+    showTypeToggle: Boolean = true,
+    selectedBudgetName: String? = null,
+    onLinkBudgetClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier,
@@ -79,6 +82,27 @@ fun TransactionInputForm(
                     itemLabel = { stringResource(it.nameResId) },
                     enabled = !isReadOnly
                 )
+
+                // Budget link button — only for expenses with a category selected
+                if (!isIncome && selectedCategory != null) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (selectedBudgetName != null) "Budget: $selectedBudgetName" else "No budget linked",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (selectedBudgetName != null)
+                                MaterialTheme.colorScheme.primary
+                            else
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        TextButton(onClick = onLinkBudgetClicked) {
+                            Text(if (selectedBudgetName != null) "Change" else "Link Budget")
+                        }
+                    }
+                }
 
                 TransactionDropdown(
                     label = "Currency",

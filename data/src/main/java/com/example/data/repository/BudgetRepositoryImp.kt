@@ -30,4 +30,7 @@ class BudgetRepositoryImp(
     override suspend fun getBudgetById(id: String): Budget? {
         return trackerDB.budgetDao().getBudgetById(id)?.toDomain()
     }
+
+    override fun getBudgetsByCategory(category: String): Flow<List<Budget>> =
+        trackerDB.budgetDao().getBudgetsByCategory(category).map { it.toDomain() }
 }

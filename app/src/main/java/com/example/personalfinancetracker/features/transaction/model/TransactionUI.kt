@@ -21,6 +21,7 @@ data class TransactionUi(
     val updatedAt: Long,
     val currentCategory: Category = DefaultCategories.fromId(categoryId) ?: DefaultCategories.OTHER,
     val type: Type,
+    val budgetId: String? = null,
 ) {
     val formattedDate: String get() = parseDateString(date)
     val formattedTime: String get() = parseDateString(date, isDate = false)

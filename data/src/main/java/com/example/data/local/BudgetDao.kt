@@ -25,4 +25,7 @@ interface BudgetDao {
 
     @Query("SELECT * FROM budgets WHERE id = :id")
     suspend fun getBudgetById(id: String): BudgetEntity?
+
+    @Query("SELECT * FROM budgets WHERE category = :category ORDER BY createdAt DESC")
+    fun getBudgetsByCategory(category: String): Flow<List<BudgetEntity>>
 }
