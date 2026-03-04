@@ -33,19 +33,7 @@ class TransactionRepositoryImp(
         return transactionDB.transactionDao().getTransactionById(id)?.toDomain()
     }
 
-    override fun getTransactionsByCategoryAndDateRange(
-        category: String,
-        currency: String,
-        type: Type,
-        startDate: Long,
-        endDate: Long
-    ): Flow<List<Transaction>> =
-        transactionDB.transactionDao().getTransactionsByCategoryAndDateRange(
-            category = category,
-            currency = currency,
-            type = type,
-            startDate = startDate,
-            endDate = endDate
-        ).map { it.toDomain() }
+    override fun getTransactionsByBudgetId(budgetId: String): Flow<List<Transaction>> =
+        transactionDB.transactionDao().getTransactionsByBudgetId(budgetId).map { it.toDomain() }
 }
 

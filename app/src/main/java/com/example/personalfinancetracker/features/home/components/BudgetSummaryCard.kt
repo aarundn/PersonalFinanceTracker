@@ -32,7 +32,6 @@ import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
-import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
 fun BudgetSummaryCard(
@@ -139,7 +138,7 @@ private fun BudgetItem(
         }
         Spacer(Modifier.height(8.dp))
         CustomProgressBar(
-            progress = budget.percentage.coerceAtMost(1.0f),
+            progress = budget.percentage,
             modifier = Modifier.fillMaxWidth(),
             progressColor = if (budget.isOverBudget) ProgressError else ProgressPrimary
         )

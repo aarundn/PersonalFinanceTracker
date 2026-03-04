@@ -183,7 +183,7 @@ class HomeViewModel(
     ): List<BudgetUi> {
         return budgets.map { budget ->
             val spent = convertedTransactions
-                .filter { it.type == Type.EXPENSE && it.category == budget.category }
+                .filter { it.budgetId == budget.id}
                 .sumOf { it.amount }
 
             val budgetLimitConverted = if (budget.currency == baseCurrencyId) {

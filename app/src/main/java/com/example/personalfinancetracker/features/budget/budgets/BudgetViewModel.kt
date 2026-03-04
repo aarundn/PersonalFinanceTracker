@@ -35,7 +35,7 @@ class BudgetViewModel(
                     flowOf(BudgetsUiState.Success(emptyList()))
                 } else {
                     val budgetFlows = budgets.map { budget ->
-                        getBudgetTransactionsUseCase(budget).map { transactions ->
+                        getBudgetTransactionsUseCase(budget.id).map { transactions ->
                             val spent = transactions.sumOf { it.amount }
                             budget.toBudgetUi(spent)
                         }
