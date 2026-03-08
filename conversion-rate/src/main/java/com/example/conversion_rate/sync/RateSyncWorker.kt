@@ -6,6 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.example.conversion_rate.domain.usecase.SyncExchangeRatesUseCase
+import com.example.conversion_rate.util.ConversionConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -22,10 +23,10 @@ class RateSyncWorker(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val baseCurrency = inputData.getString(KEY_BASE_CURRENCY)
-            ?: return@withContext failure("Missing base currency")
+            ?: return@withContext failure(ConversionConstants.ERROR_MISSING_BASE_CURRENCY)
 
         val providerId = inputData.getString(KEY_PROVIDER_ID)
-            ?: return@withContext failure("Missing provider ID")
+            ?: return@withContext failure(ConversionConstants.ERROR_MISSING_PROVIDER_ID)
 
         Log.d(TAG, "Starting rate sync for base=$baseCurrency, provider=$providerId")
         return@withContext try {

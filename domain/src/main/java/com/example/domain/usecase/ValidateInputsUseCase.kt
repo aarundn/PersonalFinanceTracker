@@ -1,6 +1,7 @@
 package com.example.domain.usecase
 
 import com.example.domain.ValidationResult
+import com.example.domain.util.DomainConstants
 
 class ValidateInputsUseCase {
 
@@ -14,24 +15,24 @@ class ValidateInputsUseCase {
         date: Long
     ): ValidationResult {
         if (category.isBlank()) {
-            return ValidationResult.Error("Category is required")
+            return ValidationResult.Error(DomainConstants.ERROR_CATEGORY_REQUIRED)
         }
 
         if (currency.isBlank()) {
-            return ValidationResult.Error("Currency is required")
+            return ValidationResult.Error(DomainConstants.ERROR_CURRENCY_REQUIRED)
         }
 
         if (amount.isBlank()) {
-            return ValidationResult.Error("Amount is required")
+            return ValidationResult.Error(DomainConstants.ERROR_AMOUNT_REQUIRED)
         }
 
         val amountValue = amount.toDoubleOrNull()
         if (amountValue == null || amountValue <= 0) {
-            return ValidationResult.Error("Please enter a valid amount")
+            return ValidationResult.Error(DomainConstants.ERROR_INVALID_AMOUNT)
         }
 
         if (date <= 0) {
-            return ValidationResult.Error("Date is required")
+            return ValidationResult.Error(DomainConstants.ERROR_DATE_REQUIRED)
         }
 
         return ValidationResult.Success
