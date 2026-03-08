@@ -3,9 +3,10 @@ package com.example.personalfinancetracker.features.budget.budgets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
-import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.example.core.common.UiText
+import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,10 +48,10 @@ class BudgetViewModel(
             }
             .onStart { emit(BudgetsUiState.Loading) }
             .catch { e ->
-                emit(BudgetsUiState.Error(e.message ?: "Failed to load budgets"))
+                emit(BudgetsUiState.Error(UiText.DynamicString(e.message ?: "Failed to load budgets")))
                 _sideEffect.emit(
                     BudgetsSideEffect.ShowError(
-                        e.message ?: "Failed to load budgets"
+                        UiText.DynamicString(e.message ?: "Failed to load budgets")
                     )
                 )
             }

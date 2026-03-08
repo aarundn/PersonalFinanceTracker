@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
 import com.example.personalfinancetracker.features.home.components.BudgetSummaryCard
@@ -39,12 +41,12 @@ fun HomeScreen(
 
         is HomeUiState.Error -> {
             EmptyState(
-                title = "Something went wrong",
-                description = homeUiState.message,
-                buttonText = "Retry",
+                title = stringResource(R.string.home_something_went_wrong),
+                description = homeUiState.message.asString(),
+                buttonText = stringResource(R.string.action_retry),
                 onAddClick = { onEvent(HomeEvent.OnRetry) },
                 modifier = modifier,
-                secondaryButtonText = "Go to Settings",
+                secondaryButtonText = stringResource(R.string.home_go_to_settings),
                 onSecondaryClick = { onEvent(HomeEvent.OnClickSettings) }
             )
         }
@@ -92,7 +94,7 @@ private fun HomeContent(
             IconButton(onClick = { onEvent(HomeEvent.OnClickSettings) }) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings",
+                    contentDescription = stringResource(R.string.cd_settings),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }

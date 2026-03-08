@@ -33,8 +33,10 @@ import androidx.compose.ui.unit.dp
 import com.example.core.components.EmptyState
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
-import com.example.personalfinancetracker.features.budget.budgets.components.BudgetCard
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.R
+import androidx.compose.ui.res.stringResource
+import com.example.personalfinancetracker.features.budget.budgets.components.BudgetCard
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_INITIAL_VALUE
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_TARGET_VALUE
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ANIMATION_DELAY
@@ -57,7 +59,7 @@ fun BudgetScreen(
         topBar = {
             val state = budgetsUiState as? BudgetsUiState.Success
             if (state?.budgets?.isEmpty() == false)
-                HeaderSection(title = "Budget Overview", showBackIcon = false)
+                HeaderSection(title = stringResource(R.string.budget_overview_title), showBackIcon = false)
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         modifier = Modifier.fillMaxSize()
@@ -72,7 +74,7 @@ fun BudgetScreen(
 
                 is BudgetsUiState.Error -> {
                     Text(
-                        text = budgetsUiState.message,
+                        text = budgetsUiState.message.asString(),
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
@@ -80,9 +82,9 @@ fun BudgetScreen(
                 is BudgetsUiState.Success -> {
                     if (budgetsUiState.budgets.isEmpty()) {
                         EmptyState(
-                            title = "No budgets yet",
-                            description = "Create your first budget to start tracking your spending",
-                            buttonText = "Add Budget",
+                            title = stringResource(R.string.budget_empty_title),
+                            description = stringResource(R.string.budget_empty_description),
+                            buttonText = stringResource(R.string.action_add_budget),
                             onAddClick = { onEvent(BudgetsEvent.OnAddBudgetClick) }
                         )
                     } else {
@@ -102,7 +104,7 @@ fun BudgetScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Add Budget"
+                                contentDescription = stringResource(R.string.action_add_budget)
                             )
                         }
                     }

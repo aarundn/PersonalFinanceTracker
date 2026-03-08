@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.core.common.UiText
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,10 +29,10 @@ class TransactionsViewModel(
             }
             .onStart { emit(TransactionsUiState.Loading) }
             .catch { e ->
-                emit(TransactionsUiState.Error(e.message ?: "Failed to load transactions"))
+                emit(TransactionsUiState.Error(UiText.DynamicString(e.message ?: "Failed to load transactions")))
                 _sideEffect.emit(
                     TransactionsSideEffect.ShowError(
-                        e.message ?: "Failed to load transactions"
+                        UiText.DynamicString(e.message ?: "Failed to load transactions")
                     )
                 )
             }

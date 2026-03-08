@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.core.R
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
@@ -65,7 +67,7 @@ fun BudgetSummaryCard(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(Icons.Outlined.CheckCircle, contentDescription = null)
-                    Text("Budget Summary", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.home_budget_summary), style = MaterialTheme.typography.titleMedium)
                 }
                 AssistChip(
                     onClick = {},

@@ -16,8 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.domain.model.BudgetPeriod
@@ -58,12 +60,12 @@ fun BudgetInsightsCard(
             )
 
             InsightRow(
-                label = "Days into period",
+                label = stringResource(R.string.budget_insights_days_into_period),
                 value = "${insights?.daysElapsed} of ${insights?.daysTotal}"
             )
 
             InsightRow(
-                label = "Average daily spending",
+                label = stringResource(R.string.budget_insights_avg_daily),
                 value = "$currencySymbol ${insights?.averageDailySpend?.formatCurrency()}",
                 emphasize = true
             )

@@ -11,6 +11,8 @@ import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.budget_usecases.AddBudgetUseCase
 import kotlinx.coroutines.launch
 import java.util.UUID
+import com.example.core.R
+import com.example.core.common.UiText
 
 class AddBudgetViewModel(
     private val addBudgetUseCase: AddBudgetUseCase,
@@ -74,7 +76,7 @@ class AddBudgetViewModel(
         )
 
         if (validationResult is ValidationResult.Error) {
-            triggerSideEffect(AddBudgetSideEffect.ShowError(validationResult.message))
+            triggerSideEffect(AddBudgetSideEffect.ShowError(UiText.DynamicString(validationResult.message)))
             return
         }
         setState { copy(isSaving = true, error = null) }
@@ -95,15 +97,25 @@ class AddBudgetViewModel(
 
                 addBudgetUseCase(budget).onSuccess {
                     setState { copy(isSaving = false) }
-                    triggerSideEffect(AddBudgetSideEffect.ShowSuccess("Budget created successfully"))
+                    triggerSideEffect(AddBudgetSideEffect.ShowSuccess(UiText.StringResource(R.string.success_budget_created)))
                     triggerSideEffect(AddBudgetSideEffect.NavigateBack)
                 }.onFailure { e ->
-                    setState { copy(isSaving = false, error = "Failed to save budget") }
-                    triggerSideEffect(AddBudgetSideEffect.ShowError("Failed to save budget: ${e.message}"))
+                    setState {
+                        copy(
+                            isSaving = false,
+                            error = UiText.StringResource(R.string.error_failed_save_budget)
+                        )
+                    }
+                    triggerSideEffect(AddBudgetSideEffect.ShowError(UiText.DynamicString("Failed to save budget: ${e.message}")))
                 }
             } catch (e: Exception) {
-                setState { copy(isSaving = false, error = "Failed to save budget") }
-                triggerSideEffect(AddBudgetSideEffect.ShowError("Failed to save budget: ${e.message}"))
+                setState {
+                    copy(
+                        isSaving = false,
+                        error = UiText.StringResource(R.string.error_failed_save_budget)
+                    )
+                }
+                triggerSideEffect(AddBudgetSideEffect.ShowError(UiText.DynamicString("Failed to save budget: ${e.message}")))
             }
         }
     }

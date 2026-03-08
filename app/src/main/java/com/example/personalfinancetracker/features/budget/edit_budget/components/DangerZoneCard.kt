@@ -16,8 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.ui.theme.ProgressError
 
 @Composable
@@ -37,7 +39,7 @@ fun DangerZoneCard(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Danger Zone",
+                text = stringResource(R.string.budget_danger_zone),
                 style = MaterialTheme.typography.titleMedium,
                 color = ProgressError,
                 fontWeight = FontWeight.SemiBold
@@ -55,7 +57,7 @@ fun DangerZoneCard(
                     contentDescription = null,
                     modifier = Modifier.padding(end = 8.dp)
                 )
-                Text("Delete Budget")
+                Text(stringResource(R.string.budget_delete_button))
             }
             Text(
                 text = "This action cannot be undone. This will permanently delete your budget.",

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -23,6 +24,7 @@ fun HomeRoute(
 ) {
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -31,7 +33,7 @@ fun HomeRoute(
                 HomeSideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
                 HomeSideEffect.NavigateCurrency -> onNavigateToCurrency()
                 HomeSideEffect.NavigateSettings -> onNavigateToSettings()
-                is HomeSideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message)
+                is HomeSideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message.asString(context))
             }
         }
     }

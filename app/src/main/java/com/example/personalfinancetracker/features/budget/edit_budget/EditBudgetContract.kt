@@ -9,6 +9,7 @@ import com.example.core.model.Currency
 import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.model.BudgetInsightsUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.core.common.UiText
 
 @Immutable
 data class EditBudgetState(
@@ -20,7 +21,7 @@ data class EditBudgetState(
     val selectedCurrency: Currency? = null,
     val isEditing: Boolean = false,
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
     val showDeleteConfirmation: Boolean = false,
     val categories: List<Category> = emptyList(),
     val insights: BudgetInsightsUi? = null
@@ -42,6 +43,6 @@ sealed class EditBudgetEvent : MVIUiEvent {
 
 sealed class EditBudgetSideEffect : MVIUiSideEffect {
     data object NavigateBack : EditBudgetSideEffect()
-    data class ShowSuccess(val message: String) : EditBudgetSideEffect()
-    data class ShowError(val message: String) : EditBudgetSideEffect()
+    data class ShowSuccess(val message: UiText) : EditBudgetSideEffect()
+    data class ShowError(val message: UiText) : EditBudgetSideEffect()
 }

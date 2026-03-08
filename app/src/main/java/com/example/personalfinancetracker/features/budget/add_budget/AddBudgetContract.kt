@@ -7,6 +7,7 @@ import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.domain.model.BudgetPeriod
+import com.example.core.common.UiText
 
 @Immutable
 data class AddBudgetState(
@@ -17,7 +18,7 @@ data class AddBudgetState(
     val notes: String = "",
     val isSaving: Boolean = false,
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
     val categories: List<Category> = emptyList()
 ) : MVIState
 
@@ -33,6 +34,6 @@ sealed class AddBudgetEvent : MVIUiEvent {
 
 sealed class AddBudgetSideEffect : MVIUiSideEffect {
     data object NavigateBack : AddBudgetSideEffect()
-    data class ShowError(val message: String) : AddBudgetSideEffect()
-    data class ShowSuccess(val message: String) : AddBudgetSideEffect()
+    data class ShowError(val message: UiText) : AddBudgetSideEffect()
+    data class ShowSuccess(val message: UiText) : AddBudgetSideEffect()
 }

@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.personalfinancetracker.R
 import com.example.core.components.HeaderSection
 import com.example.core.components.TransactionDropdown
 import com.example.personalfinancetracker.features.settings.components.ConversionTestCard
@@ -24,7 +26,7 @@ fun SettingsScreen(
         topBar = {
             HeaderSection(
                 onBackClick = { onEvent(SettingsEvent.OnNavigateBack) },
-                title = "Settings"
+                title = stringResource(R.string.settings_title)
             )
         }
     ) { paddingValues ->
@@ -37,13 +39,13 @@ fun SettingsScreen(
         ) {
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "General",
+                text = stringResource(R.string.settings_general_section),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             
             TransactionDropdown(
-                label = "Base Currency",
+                label = stringResource(R.string.settings_base_currency),
                 items = state.availableCurrencies,
                 selectedItem = state.selectedCurrency,
                 onItemSelected = { onEvent(SettingsEvent.OnCurrencySelected(it)) },
@@ -63,7 +65,7 @@ fun SettingsScreen(
                 isConverting = state.isConverting,
                 onConvertClicked = { onEvent(SettingsEvent.OnConvertClicked) },
                 conversionResult = state.conversionResult,
-                conversionError = state.conversionError
+                conversionError = state.conversionError?.asString()
             )
         }
     }

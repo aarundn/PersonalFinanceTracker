@@ -2,6 +2,7 @@ package com.example.personalfinancetracker.features.home
 
 import androidx.compose.runtime.Immutable
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.core.common.UiText
 
 @Immutable
 data class HomeData(
@@ -22,7 +23,7 @@ data class HomeData(
 sealed interface HomeUiState {
     data object Loading : HomeUiState
     data class Success(val data: HomeData) : HomeUiState
-    data class Error(val message: String) : HomeUiState
+    data class Error(val message: UiText) : HomeUiState
 }
 
 sealed interface HomeEvent {
@@ -40,5 +41,5 @@ sealed interface HomeSideEffect {
     data object NavigateAddIncome : HomeSideEffect
     data object NavigateCurrency : HomeSideEffect
     data object NavigateSettings : HomeSideEffect
-    data class ShowMessage(val message: String) : HomeSideEffect
+    data class ShowMessage(val message: UiText) : HomeSideEffect
 }

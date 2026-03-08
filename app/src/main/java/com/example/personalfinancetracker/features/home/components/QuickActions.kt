@@ -20,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun QuickActions(
@@ -40,17 +40,17 @@ fun QuickActions(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Quick Actions", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.home_quick_actions), style = MaterialTheme.typography.titleMedium)
             
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ActionButton(
-                    text = "Add Expense",
+                    text = stringResource(R.string.home_add_expense),
                     icon = Icons.Outlined.Add,
                     onClick = onAddExpenseClick,
                     modifier = Modifier.weight(1f)
                 )
                 ActionButton(
-                    text = "Add Income",
+                    text = stringResource(R.string.home_add_income),
                     icon = Icons.Outlined.Add,
                     onClick = onAddIncomeClick,
                     modifier = Modifier.weight(1f)

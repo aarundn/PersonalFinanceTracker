@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.UUID
+import com.example.core.common.UiText
 
 class AddTransactionViewModel(
     private val addTransactionUseCase: AddTransactionUseCase,
@@ -132,7 +133,7 @@ class AddTransactionViewModel(
         )
 
         if (validationResult is ValidationResult.Error) {
-            showError(validationResult.message)
+            showError(UiText.DynamicString(validationResult.message))
             return
         }
 
@@ -158,20 +159,20 @@ class AddTransactionViewModel(
                 addTransactionUseCase(transactionData).onSuccess {
                     setState { copy(isLoading = false) }
                     triggerSideEffect(AddTransactionSideEffect.NavigateBack)
-                    triggerSideEffect(AddTransactionSideEffect.ShowSuccess("Transaction saved successfully"))
+                    triggerSideEffect(AddTransactionSideEffect.ShowSuccess(UiText.DynamicString("Transaction saved successfully")))
                 }.onFailure { e ->
-                    setState { copy(isLoading = false, error = "Failed to save transaction") }
-                    triggerSideEffect(AddTransactionSideEffect.ShowError("Failed to save transaction: ${e.message}"))
+                    setState { copy(isLoading = false, error = UiText.DynamicString("Failed to save transaction")) }
+                    triggerSideEffect(AddTransactionSideEffect.ShowError(UiText.DynamicString("Failed to save transaction: ${e.message}")))
                 }
 
             } catch (e: Exception) {
-                setState { copy(isLoading = false, error = "Failed to save transaction") }
-                triggerSideEffect(AddTransactionSideEffect.ShowError("Failed to save transaction: ${e.message}"))
+                setState { copy(isLoading = false, error = UiText.DynamicString("Failed to save transaction")) }
+                triggerSideEffect(AddTransactionSideEffect.ShowError(UiText.DynamicString("Failed to save transaction: ${e.message}")))
             }
         }
     }
 
-    private fun showError(message: String) {
+    private fun showError(message: UiText) {
         viewModelScope.launch {
             triggerSideEffect(AddTransactionSideEffect.ShowError(message))
         }

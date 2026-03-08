@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Suppress("ParamsComparedByRef")
 @Composable
@@ -18,6 +19,7 @@ fun EditTransactionRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collectLatest { sideEffect ->
@@ -30,12 +32,12 @@ fun EditTransactionRoute(
                 }
                 is EditTransactionSideEffect.ShowError -> {
                     launch {
-                        snackBarHostState.showSnackbar(sideEffect.message)
+                        snackBarHostState.showSnackbar(sideEffect.message.asString(context))
                     }
                 }
                 is EditTransactionSideEffect.ShowSuccess -> {
                     launch {
-                        snackBarHostState.showSnackbar(sideEffect.message)
+                        snackBarHostState.showSnackbar(sideEffect.message.asString(context))
                     }
                 }
             }

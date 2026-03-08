@@ -22,6 +22,8 @@ import com.example.personalfinancetracker.features.budget.utils.calculateDaysEla
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.core.R
+import com.example.core.common.UiText
 
 class EditBudgetViewModel(
     savedStateHandle: SavedStateHandle,
@@ -48,7 +50,7 @@ class EditBudgetViewModel(
         _uiState.update { it.update() }
     }
 
-    private fun showError(message: String) {
+    private fun showError(message: UiText) {
         viewModelScope.launch {
             triggerSideEffect(EditBudgetSideEffect.ShowError(message))
         }
@@ -56,7 +58,7 @@ class EditBudgetViewModel(
 
     private fun loadData() {
         if (budgetId.isBlank()) {
-            updateState { copy(isLoading = false, error = "Invalid budget ID") }
+            updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_invalid_budget_id)) }
             return
         }
 
@@ -66,21 +68,21 @@ class EditBudgetViewModel(
             getBudgetByIdUseCase(budgetId)
                 .onSuccess { budget ->
                     if (budget == null) {
-                        updateState { copy(isLoading = false, error = "Budget not found") }
+                        updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_budget_not_found)) }
                         return@launch
                     }
                     collectTransactions(budget)
                 }
                 .onFailure {
-                    updateState { copy(isLoading = false, error = "Failed to load budget") }
-                    showError("Failed to load budget")
+                    updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_load_budget)) }
+                    showError(UiText.StringResource(R.string.error_failed_load_budget))
                 }
         }
     }
 
     private suspend fun collectTransactions(budget: Budget) {
         getBudgetTransactionsUseCase(budgetId)
-            .catch { showError("Failed to load transactions") }
+            .catch { showError(UiText.StringResource(R.string.error_failed_load_transactions)) }
             .collect { transactions ->
                 val spent = transactions.sumOf { it.amount }
                 val budgetUi = budget.toBudgetUi(spent)
@@ -157,7 +159,7 @@ class EditBudgetViewModel(
         )
 
         if (validationResult is ValidationResult.Error) {
-            showError(validationResult.message)
+            showError(UiText.DynamicString(validationResult.message))
             return
         }
 
@@ -180,11 +182,11 @@ class EditBudgetViewModel(
             updateBudgetUseCase(budget.toBudget())
                 .onSuccess {
                     updateState { copy(isLoading = false, isEditing = false) }
-                    triggerSideEffect(EditBudgetSideEffect.ShowSuccess("Budget updated"))
+                    triggerSideEffect(EditBudgetSideEffect.ShowSuccess(UiText.StringResource(R.string.success_budget_updated)))
                 }
                 .onFailure {
                     updateState { copy(isLoading = false) }
-                    showError("Failed to update: ${it.message}")
+                    showError(UiText.DynamicString("Failed to update: ${it.message}"))
                 }
         }
     }
@@ -196,12 +198,12 @@ class EditBudgetViewModel(
             deleteBudgetUseCase(budgetId)
                 .onSuccess {
                     updateState { copy(isLoading = false) }
-                    triggerSideEffect(EditBudgetSideEffect.ShowSuccess("Budget deleted"))
+                    triggerSideEffect(EditBudgetSideEffect.ShowSuccess(UiText.StringResource(R.string.success_budget_deleted)))
                     triggerSideEffect(EditBudgetSideEffect.NavigateBack)
                 }
                 .onFailure {
                     updateState { copy(isLoading = false) }
-                    showError("Failed to delete: ${it.message}")
+                    showError(UiText.DynamicString("Failed to delete: ${it.message}"))
                 }
         }
     }

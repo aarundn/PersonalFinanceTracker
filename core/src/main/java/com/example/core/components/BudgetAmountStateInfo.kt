@@ -6,7 +6,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.core.R
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
 import com.example.core.utils.formatAmountLeft
@@ -27,12 +29,12 @@ fun BudgetAmountStateInfo(
     ) {
         if (isOverBudget) {
             BudgetStatusBadge(
-                text = "Over Budget",
+                text = stringResource(R.string.budget_over_budget),
                 color = ProgressError
             )
         } else if (isWarning) {
             BudgetStatusBadge(
-                text = "Almost Full",
+                text = stringResource(R.string.budget_almost_full),
                 color = Warning
             )
         }

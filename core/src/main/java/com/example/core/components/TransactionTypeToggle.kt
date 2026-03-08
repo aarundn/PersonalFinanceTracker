@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 
@@ -49,7 +51,7 @@ fun TransactionTypeToggle(
             Text(
                 modifier = Modifier.weight(1f),
                 maxLines = 1,
-                text = "Transaction Type",
+                text = stringResource(R.string.transaction_type_label),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 overflow = TextOverflow.Ellipsis
@@ -60,7 +62,7 @@ fun TransactionTypeToggle(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Expense",
+                    text = stringResource(R.string.transaction_type_expense),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (!isIncome) {
                         Expense
@@ -76,7 +78,7 @@ fun TransactionTypeToggle(
                 )
 
                 Text(
-                    text = "Income",
+                    text = stringResource(R.string.transaction_type_income),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (isIncome) {
                         Income // Green for income

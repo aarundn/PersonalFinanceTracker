@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun BudgetRoute(
@@ -20,6 +21,7 @@ fun BudgetRoute(
 ) {
     val budgetsUiState by viewModel.budgetsUiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -31,7 +33,7 @@ fun BudgetRoute(
                     onNavigateToEditBudget(effect.budgetId)
                 }
                 is BudgetsSideEffect.ShowError -> {
-                    snackBarHostState.showSnackbar(effect.message)
+                    snackBarHostState.showSnackbar(effect.message.asString(context))
                 }
             }
         }

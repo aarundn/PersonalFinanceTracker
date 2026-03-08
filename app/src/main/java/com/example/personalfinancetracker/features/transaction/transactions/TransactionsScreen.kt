@@ -22,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.personalfinancetracker.R
 import com.example.core.components.EmptyState
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
@@ -38,7 +40,7 @@ fun TransactionsScreen(
         topBar = {
             val state = transactionsUiState as? TransactionsUiState.Success
             if (state?.transactions?.isEmpty() == false)
-                HeaderSection(title = "Recent Transactions", showBackIcon = false)
+                HeaderSection(title = stringResource(R.string.transactions_recent_title), showBackIcon = false)
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { paddingValues ->
@@ -52,7 +54,7 @@ fun TransactionsScreen(
 
                 is TransactionsUiState.Error -> {
                     Text(
-                        text = transactionsUiState.message,
+                        text = transactionsUiState.message.asString(),
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
@@ -60,9 +62,9 @@ fun TransactionsScreen(
                 is TransactionsUiState.Success -> {
                     if (transactionsUiState.transactions.isEmpty()) {
                         EmptyState(
-                            title = "No transactions yet",
-                            description = "Add your first transaction to start tracking",
-                            buttonText = "Add Transaction",
+                            title = stringResource(R.string.transactions_empty_title),
+                            description = stringResource(R.string.transactions_empty_description),
+                            buttonText = stringResource(R.string.action_add_transaction),
                             onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
                         )
                     } else {
@@ -83,7 +85,7 @@ fun TransactionsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Add Transaction"
+                                contentDescription = stringResource(R.string.action_add_transaction)
                             )
                         }
                     }

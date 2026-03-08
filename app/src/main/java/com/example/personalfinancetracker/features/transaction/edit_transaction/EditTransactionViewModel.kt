@@ -17,6 +17,8 @@ import com.example.personalfinancetracker.features.transaction.mapper.toTransact
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.core.R
+import com.example.core.common.UiText
 
 class EditTransactionViewModel(
     private val savedStateHandle: SavedStateHandle,
@@ -41,7 +43,7 @@ class EditTransactionViewModel(
 
     private fun loadTransaction() {
         if (transactionId.isEmpty()) {
-            updateState { copy(isLoading = false, error = "Invalid transaction ID") }
+            updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_invalid_transaction_id)) }
             return
         }
         updateState { copy(isLoading = true) }
@@ -50,7 +52,7 @@ class EditTransactionViewModel(
 
             getTransactionByIdUseCase(transactionId).onSuccess { transaction ->
                 if (transaction == null)
-                    updateState { copy(isLoading = false, error = "Transaction not found") }
+                    updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_transaction_not_found)) }
 
                 val txn = transaction?.toTransactionUi() ?: return@onSuccess
 
@@ -71,7 +73,7 @@ class EditTransactionViewModel(
                     )
                 }
             }.onFailure { e ->
-                updateState { copy(isLoading = false, error = "Failed to load transaction: ${e.message}") }
+                updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_load_transaction)) }
             }
 
         }
@@ -121,7 +123,7 @@ class EditTransactionViewModel(
         )
 
         if (validationResult is ValidationResult.Error) {
-            showError(validationResult.message)
+            showError(UiText.DynamicString(validationResult.message))
             return
         }
 
@@ -145,16 +147,16 @@ class EditTransactionViewModel(
 
                 updateTransactionUseCase(transactionData).onSuccess {
                     updateState { copy(isLoading = false, isEditing = false) }
-                    triggerSideEffect(EditTransactionSideEffect.ShowSuccess("Transaction updated successfully"))
+                    triggerSideEffect(EditTransactionSideEffect.ShowSuccess(UiText.StringResource(R.string.success_transaction_updated)))
                     triggerSideEffect(EditTransactionSideEffect.NavigateBack)
                 }.onFailure { e ->
-                    updateState { copy(isLoading = false, error = "Failed to update transaction") }
-                    triggerSideEffect(EditTransactionSideEffect.ShowError("Failed to update transaction: ${e.message}"))
+                    updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_update_transaction)) }
+                    triggerSideEffect(EditTransactionSideEffect.ShowError(UiText.DynamicString("Failed to update transaction: ${e.message}")))
                 }
 
             } catch (e: Exception) {
-                updateState { copy(isLoading = false, error = e.message) }
-                showError(e.message ?: "Failed to update transaction")
+                updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_update_transaction)) }
+                showError(UiText.DynamicString(e.message ?: "Failed to update transaction"))
             }
         }
     }
@@ -165,11 +167,11 @@ class EditTransactionViewModel(
         viewModelScope.launch {
             deleteTransactionUseCase(transactionId).onSuccess {
                 updateState { copy(isLoading = false) }
-                triggerSideEffect(EditTransactionSideEffect.ShowSuccess("Transaction deleted successfully"))
+                triggerSideEffect(EditTransactionSideEffect.ShowSuccess(UiText.StringResource(R.string.success_transaction_deleted)))
                 triggerSideEffect(EditTransactionSideEffect.NavigateBack)
             }.onFailure { e ->
-                updateState { copy(isLoading = false, error = "Failed to delete transaction") }
-                triggerSideEffect(EditTransactionSideEffect.ShowError("Failed to delete transaction: ${e.message}"))
+                updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_delete_transaction)) }
+                triggerSideEffect(EditTransactionSideEffect.ShowError(UiText.DynamicString("Failed to delete transaction: ${e.message}")))
             }
         }
     }
@@ -180,7 +182,7 @@ class EditTransactionViewModel(
         }
     }
 
-    private fun showError(message: String) {
+    private fun showError(message: UiText) {
         viewModelScope.launch {
             triggerSideEffect(EditTransactionSideEffect.ShowError(message))
         }

@@ -7,6 +7,7 @@ import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
+import com.example.core.common.UiText
 
 @Immutable
 data class EditTransactionState(
@@ -18,7 +19,7 @@ data class EditTransactionState(
     val date: Long = 0L,
     val notes: String = "",
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: UiText? = null,
     val isEditing: Boolean = false,
     val showDeleteConfirmation: Boolean = false,
     val categories: List<Category> = emptyList(),
@@ -42,6 +43,6 @@ sealed class EditTransactionEvent : MVIUiEvent {
 sealed class EditTransactionSideEffect : MVIUiSideEffect {
     object NavigateBack : EditTransactionSideEffect()
     object NavigateToTransactions : EditTransactionSideEffect()
-    data class ShowError(val message: String) : EditTransactionSideEffect()
-    data class ShowSuccess(val message: String) : EditTransactionSideEffect()
+    data class ShowError(val message: UiText) : EditTransactionSideEffect()
+    data class ShowSuccess(val message: UiText) : EditTransactionSideEffect()
 }

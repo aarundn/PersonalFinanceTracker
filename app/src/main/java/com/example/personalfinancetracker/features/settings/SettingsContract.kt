@@ -5,6 +5,7 @@ import com.example.core.common.MVIState
 import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Currency
+import com.example.core.common.UiText
 
 @Immutable
 data class SettingsState(
@@ -15,7 +16,7 @@ data class SettingsState(
     val targetCurrency: Currency? = null,
     val conversionResult: String? = null,
     val isConverting: Boolean = false,
-    val conversionError: String? = null,
+    val conversionError: UiText? = null,
     // Providers
     val availableProviders: List<Pair<String, String>> = emptyList(),
     val selectedProviderId: String? = null,

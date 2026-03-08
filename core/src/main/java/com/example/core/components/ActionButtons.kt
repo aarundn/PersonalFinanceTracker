@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -43,10 +45,10 @@ fun ActionButtons(
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = "Cancel",
+                contentDescription = stringResource(R.string.action_cancel),
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text("Cancel")
+            Text(stringResource(R.string.action_cancel))
         }
         
         Button(
@@ -66,11 +68,11 @@ fun ActionButtons(
             } else {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = "Save",
+                    contentDescription = stringResource(R.string.action_save),
                     modifier = Modifier.padding(end = 8.dp)
                 )
             }
-            Text("Save")
+            Text(stringResource(R.string.action_save))
         }
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
+import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -75,7 +76,7 @@ fun TransactionInputForm(
                 }
 
                 TransactionDropdown(
-                    label = "Category",
+                    label = stringResource(R.string.form_label_category),
                     items = categories,
                     selectedItem = selectedCategory,
                     onItemSelected = onCategorySelected,
@@ -91,7 +92,7 @@ fun TransactionInputForm(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (selectedBudgetName != null) "Budget: $selectedBudgetName" else "No budget linked",
+                            text = if (selectedBudgetName != null) stringResource(R.string.form_budget_linked, selectedBudgetName) else stringResource(R.string.form_no_budget_linked),
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (selectedBudgetName != null)
                                 MaterialTheme.colorScheme.primary
@@ -99,13 +100,13 @@ fun TransactionInputForm(
                                 MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         TextButton(onClick = onLinkBudgetClicked) {
-                            Text(if (selectedBudgetName != null) "Change" else "Link Budget")
+                            Text(if (selectedBudgetName != null) stringResource(R.string.form_change_budget) else stringResource(R.string.form_link_budget))
                         }
                     }
                 }
 
                 TransactionDropdown(
-                    label = "Currency",
+                    label = stringResource(R.string.form_label_currency),
                     items = DefaultCurrencies.all,
                     selectedItem = selectedCurrency,
                     onItemSelected = onCurrencySelected,
@@ -113,18 +114,18 @@ fun TransactionInputForm(
                     enabled = !isReadOnly
                 )
                 FormInput(
-                    label = "Amount (${selectedCurrency?.symbol ?: ""})",
+                    label = stringResource(R.string.form_label_amount) + " (${selectedCurrency?.symbol ?: ""})",
                     value = amount,
-                    placeholder = "Enter amount",
+                    placeholder = stringResource(R.string.form_placeholder_amount),
                     onValueChange = onAmountChanged,
                     enabled = !isReadOnly
                 )
 
                 FormInput(
-                    label = "Date",
+                    label = stringResource(R.string.form_label_date),
                     value = date,
                     onValueChange = onDateChanged,
-                    placeholder = "Select date",
+                    placeholder = stringResource(R.string.form_placeholder_date),
                     enabled = !isReadOnly
                 )
 
@@ -162,7 +163,7 @@ private fun TransactionHeaderForm() {
             tint = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Transaction Details",
+            text = stringResource(R.string.form_transaction_details),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )

@@ -11,6 +11,7 @@ import com.example.domain.repo.UserPreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
+import com.example.core.common.UiText
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -134,7 +135,7 @@ class SettingsViewModel(
                 setState {
                     copy(
                         isConverting = false,
-                        conversionError = error.message ?: "Conversion failed",
+                        conversionError = UiText.DynamicString(error.message ?: "Conversion failed"),
                     )
                 }
             }

@@ -12,6 +12,7 @@ import com.example.domain.model.Type
 import com.example.domain.repo.UserPreferencesRepository
 import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
+import com.example.core.common.UiText
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import kotlinx.coroutines.Dispatchers
@@ -87,12 +88,12 @@ class HomeViewModel(
                     )
                 ) as HomeUiState
             } catch (e: Exception) {
-                HomeUiState.Error(e.message ?: "Failed to load data")
+                HomeUiState.Error(UiText.DynamicString(e.message ?: "Failed to load data"))
             }
         }
             .flowOn(Dispatchers.IO)
             .onStart { emit(HomeUiState.Loading) }
-            .catch { e -> emit(HomeUiState.Error(e.message ?: "Failed to load data")) }
+            .catch { e -> emit(HomeUiState.Error(UiText.DynamicString(e.message ?: "Failed to load data"))) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -106,8 +107,8 @@ class HomeViewModel(
                 HomeEvent.OnClickAddIncome -> _sideEffect.emit(HomeSideEffect.NavigateAddIncome)
                 HomeEvent.OnClickCurrency -> _sideEffect.emit(HomeSideEffect.NavigateCurrency)
                 HomeEvent.OnClickSettings -> _sideEffect.emit(HomeSideEffect.NavigateSettings)
-                is HomeEvent.OnClickBudgetItem -> _sideEffect.emit(HomeSideEffect.ShowMessage("${event.budgetId} tapped"))
-                HomeEvent.OnClickSavings -> _sideEffect.emit(HomeSideEffect.ShowMessage("Savings tapped"))
+                is HomeEvent.OnClickBudgetItem -> _sideEffect.emit(HomeSideEffect.ShowMessage(UiText.DynamicString("${event.budgetId} tapped")))
+                HomeEvent.OnClickSavings -> _sideEffect.emit(HomeSideEffect.ShowMessage(UiText.DynamicString("Savings tapped")))
                 HomeEvent.OnRetry -> { /* State is reactive — no manual retry needed */
                 }
             }

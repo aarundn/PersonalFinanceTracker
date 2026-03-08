@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun TransactionsRoute(
@@ -18,6 +19,7 @@ fun TransactionsRoute(
 ) {
     val transactionsUiState = viewModel.transactionsUiState.collectAsStateWithLifecycle().value
     val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -29,7 +31,7 @@ fun TransactionsRoute(
                     onNavigateToEditTransaction(effect.transactionId)
                 }
                 is TransactionsSideEffect.ShowError -> {
-                    snackBarHostState.showSnackbar(effect.message)
+                    snackBarHostState.showSnackbar(effect.message.asString(context))
                 }
             }
         }

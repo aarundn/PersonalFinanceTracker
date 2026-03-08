@@ -72,7 +72,7 @@ fun AddBudgetScreen(
 
             state.error?.let { errorMessage ->
                 Text(
-                    text = errorMessage,
+                    text = errorMessage.asString(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.fillMaxWidth()

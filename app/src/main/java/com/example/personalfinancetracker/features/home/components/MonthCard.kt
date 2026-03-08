@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.components.CustomProgressBar
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
-import com.example.personalfinancetracker.features.home.utils.TextFormattingUtils
 
 @Composable
 fun MonthCard(
@@ -46,7 +46,7 @@ fun MonthCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(ImageVector.vectorResource(R.drawable.calendar), contentDescription = null)
-                Text("This Month", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.home_this_month), style = MaterialTheme.typography.titleMedium)
             }
             Spacer(Modifier.height(16.dp))
             Row(
@@ -55,7 +55,7 @@ fun MonthCard(
             ) {
                 Column {
                     Text(
-                        "Total Transactions",
+                        stringResource(R.string.home_total_transactions),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -67,7 +67,7 @@ fun MonthCard(
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        "Daily Average",
+                        stringResource(R.string.home_daily_average),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -85,7 +85,7 @@ fun MonthCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Days passed",
+                        stringResource(R.string.home_days_passed),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
