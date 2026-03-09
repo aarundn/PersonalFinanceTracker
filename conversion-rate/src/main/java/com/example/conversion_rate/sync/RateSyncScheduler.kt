@@ -12,6 +12,9 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -79,12 +82,12 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
      */
     override fun observeStatus(): Flow<String> {
         return workManager
-            .getWorkInfosForUniqueWorkFlow(PERIODIC_WORK_NAME)
+            .getWorkInfosForUniqueWorkFlow(IMMEDIATE_WORK_NAME)
             .map { infos ->
                 val info = infos.firstOrNull()
                 when (info?.state) {
                     WorkInfo.State.RUNNING ->"Syncing..."
-                    WorkInfo.State.SUCCEEDED -> "SyncStatus.Success ${System.currentTimeMillis()}"
+                    WorkInfo.State.SUCCEEDED -> "Last sync: ${parseDateString( System.currentTimeMillis())}"
                     WorkInfo.State.FAILED -> info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
                     WorkInfo.State.ENQUEUED -> "Queued for sync"
                     WorkInfo.State.BLOCKED -> "Sync blocked"
@@ -109,4 +112,10 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
         const val IMMEDIATE_WORK_NAME = "rate_sync_immediate"
         const val DEFAULT_INTERVAL_HOURS = 10L
     }
+}
+
+
+fun parseDateString(dateString: Long): String {
+    val dateFormatter = SimpleDateFormat("MMM dd, yyyy , hh:mm a", Locale.getDefault())
+    return dateFormatter.format(Date(dateString))
 }

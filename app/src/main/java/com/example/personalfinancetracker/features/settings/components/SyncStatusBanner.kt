@@ -1,51 +1,58 @@
 package com.example.personalfinancetracker.features.settings.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.Expense
+import com.example.core.ui.theme.Income
+import com.example.core.ui.theme.MutedForeground
+import com.example.core.ui.theme.statusContainer
 
 @Composable
 fun SyncStatusBanner(
     syncStatus: String,
     modifier: Modifier = Modifier
 ) {
+    val isSyncing = syncStatus.contains("Syncing", ignoreCase = true)
+    val isSuccess = syncStatus.contains("Last sync", ignoreCase = true)
+    
+    val baseColor = when {
+        isSyncing -> MutedForeground
+        isSuccess -> Income
+        else -> Expense
+    }
+
     SyncStatusBannerContent(
         modifier = modifier,
-        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        baseColor = baseColor,
         text = syncStatus,
-        isSyncing = syncStatus.contains("Syncing", ignoreCase = true)
+        isSyncing = isSyncing
     )
 }
 
 @Composable
 private fun SyncStatusBannerContent(
     text: String,
-    backgroundColor: Color,
-    contentColor: Color,
+    baseColor: Color,
     isSyncing: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(backgroundColor)
+            .statusContainer(baseColor = baseColor, cornerRadius = 8.dp)
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         Row(
@@ -55,7 +62,7 @@ private fun SyncStatusBannerContent(
             if (isSyncing) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
-                    color = contentColor,
+                    color = baseColor,
                     strokeWidth = 2.dp
                 )
             }
@@ -63,7 +70,7 @@ private fun SyncStatusBannerContent(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = contentColor,
+                color = baseColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

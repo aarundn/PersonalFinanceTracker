@@ -1,6 +1,5 @@
 package com.example.personalfinancetracker.features.home.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.statusContainer
 
 @Composable
 fun MoneyCard(
@@ -31,16 +31,13 @@ fun MoneyCard(
     modifier: Modifier = Modifier,
     currencySymbol: String = "$",
     icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
-    borderColor: Color = MaterialTheme.colorScheme.outline,
-    textColor: Color = MaterialTheme.colorScheme.onSurface
+    baseColor: Color = MaterialTheme.colorScheme.onSurface,
+    textColor: Color = baseColor
 ) {
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = backgroundColor
-        ),
-        border = BorderStroke(1.dp, borderColor)
+        modifier = modifier.statusContainer(baseColor = baseColor, cornerRadius = 12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = null
     ) {
         Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.Start) {
             Row(

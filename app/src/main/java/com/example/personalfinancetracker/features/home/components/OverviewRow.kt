@@ -2,7 +2,6 @@ package com.example.personalfinancetracker.features.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +12,7 @@ import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PrimaryLight
+
 @Composable
 fun OverviewRow(
     totalIncome: Double,
@@ -30,9 +30,7 @@ fun OverviewRow(
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_up),
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = Income.copy(alpha = 0.1f),
-            borderColor = Income.copy(alpha = 0.2f),
-            textColor = Income
+            baseColor = Income
         )
         MoneyCard(
             title = "Expense",
@@ -40,9 +38,7 @@ fun OverviewRow(
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.trending_down),
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = Expense.copy(alpha = 0.1f),
-            borderColor = Expense.copy(alpha = 0.2f),
-            textColor = Expense
+            baseColor = Expense
         )
         MoneyCard(
             title = "Balance",
@@ -50,9 +46,7 @@ fun OverviewRow(
             currencySymbol = currencySymbol,
             icon = ImageVector.vectorResource(R.drawable.bank),
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = PrimaryLight.copy(alpha = 0.1f),
-            borderColor = PrimaryLight.copy(alpha = 0.2f),
-            textColor = PrimaryLight
+            baseColor = PrimaryLight
         )
     }
 }
