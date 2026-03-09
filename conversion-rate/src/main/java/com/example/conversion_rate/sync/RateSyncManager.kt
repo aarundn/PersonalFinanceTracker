@@ -10,5 +10,5 @@ interface RateSyncManager {
     fun triggerImmediateSync(baseCurrency: String, providerId: String)
     fun cancelPeriodicSync()
     fun cancelAll()
-    fun observeStatus(): Flow<SyncStatus>
+    fun observeStatus(): Flow<String>
 }

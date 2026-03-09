@@ -1,5 +1,6 @@
 package com.example.conversion_rate.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 
 /**
@@ -39,4 +40,9 @@ interface ExchangeRateRepository {
         fromCurrencyCode: String,
         toCurrencyCode: String,
     ): Result<Unit>
+
+    /**
+     * Observes the current state of background synchronization.
+     */
+    fun observeSyncStatus(): Flow<String>
 }

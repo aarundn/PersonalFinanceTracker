@@ -6,7 +6,7 @@ import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Currency
 import com.example.core.common.UiText
-
+ 
 @Immutable
 data class SettingsState(
     val selectedCurrency: Currency,
@@ -20,6 +20,8 @@ data class SettingsState(
     // Providers
     val availableProviders: List<Pair<String, String>> = emptyList(),
     val selectedProviderId: String? = null,
+    // Background Sync state
+    val syncStatus: String = "No sync scheduled"
 ) : MVIState
 
 sealed interface SettingsEvent : MVIUiEvent {

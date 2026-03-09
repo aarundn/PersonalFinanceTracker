@@ -77,20 +77,19 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
     /**
      * Observes the status of the most recent sync work (periodic or immediate).
      */
-    override fun observeStatus(): Flow<SyncStatus> {
+    override fun observeStatus(): Flow<String> {
         return workManager
             .getWorkInfosForUniqueWorkFlow(PERIODIC_WORK_NAME)
             .map { infos ->
                 val info = infos.firstOrNull()
                 when (info?.state) {
-                    WorkInfo.State.RUNNING -> SyncStatus.Syncing
-                    WorkInfo.State.SUCCEEDED -> SyncStatus.Success(
-                        System.currentTimeMillis()
-                    )
-                    WorkInfo.State.FAILED -> SyncStatus.Failed(
-                        info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
-                    )
-                    else -> SyncStatus.Idle
+                    WorkInfo.State.RUNNING ->"Syncing..."
+                    WorkInfo.State.SUCCEEDED -> "SyncStatus.Success ${System.currentTimeMillis()}"
+                    WorkInfo.State.FAILED -> info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
+                    WorkInfo.State.ENQUEUED -> "Queued for sync"
+                    WorkInfo.State.BLOCKED -> "Sync blocked"
+                    WorkInfo.State.CANCELLED -> "Sync cancelled"
+                    else -> "No sync scheduled"
                 }
             }
     }
@@ -108,6 +107,6 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
     companion object {
         const val PERIODIC_WORK_NAME = "rate_sync_periodic"
         const val IMMEDIATE_WORK_NAME = "rate_sync_immediate"
-        const val DEFAULT_INTERVAL_HOURS = 4L
+        const val DEFAULT_INTERVAL_HOURS = 10L
     }
 }

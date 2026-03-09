@@ -8,6 +8,7 @@ import com.example.conversion_rate.domain.port.ExchangeRateProviderPort
 import com.example.conversion_rate.domain.repository.ExchangeRateRepository
 import com.example.conversion_rate.sync.RateSyncManager
 import com.example.conversion_rate.util.ConversionConstants
+import kotlinx.coroutines.flow.Flow
 import java.io.IOException
 import java.math.BigDecimal
 
@@ -53,6 +54,9 @@ class ExchangeRateRepositoryImpl(
         cacheRate(providerId, fromCurrencyCode, toCurrencyCode, freshRate)
     }
 
+    override fun observeSyncStatus(): Flow<String> {
+        return syncManager.observeStatus()
+    }
 
     private suspend fun getOrFetchRate(
         providerId: String,

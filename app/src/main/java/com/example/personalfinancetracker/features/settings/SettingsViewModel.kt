@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.conversion_rate.domain.usecase.ConvertCurrencyUseCase
 import com.example.conversion_rate.domain.usecase.GetProvidersUseCase
 import com.example.conversion_rate.domain.usecase.InitializeRateSyncUseCase
+import com.example.conversion_rate.domain.usecase.ObserveSyncStatusUseCase
 import com.example.core.common.BaseViewModel
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
@@ -12,12 +13,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import com.example.core.common.UiText
+import kotlinx.coroutines.flow.collectLatest
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val convertCurrency: ConvertCurrencyUseCase,
     private val initializeRateSync: InitializeRateSyncUseCase,
     private val getProviders: GetProvidersUseCase,
+    private val observeSyncStatus: ObserveSyncStatusUseCase,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsSideEffect>() {
 
     override fun createInitialState(): SettingsState = SettingsState(
@@ -53,6 +56,12 @@ class SettingsViewModel(
                                 ?: providers.firstOrNull()?.first,
                         )
                     }
+                }
+            }
+
+            launch {
+                observeSyncStatus().collectLatest { status ->
+                    setState { copy(syncStatus = status) }
                 }
             }
         }

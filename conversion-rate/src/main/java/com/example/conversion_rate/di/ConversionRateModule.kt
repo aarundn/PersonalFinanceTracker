@@ -8,6 +8,7 @@ import com.example.conversion_rate.domain.repository.ExchangeRateRepository
 import com.example.conversion_rate.domain.usecase.ConvertCurrencyUseCase
 import com.example.conversion_rate.domain.usecase.GetProvidersUseCase
 import com.example.conversion_rate.domain.usecase.InitializeRateSyncUseCase
+import com.example.conversion_rate.domain.usecase.ObserveSyncStatusUseCase
 import com.example.conversion_rate.domain.usecase.SchedulePeriodicRateSyncUseCase
 import com.example.conversion_rate.domain.usecase.SyncExchangeRatesUseCase
 import com.example.conversion_rate.sync.RateSyncManager
@@ -50,6 +51,7 @@ val conversionRateModule = module {
     factoryOf(::SyncExchangeRatesUseCase)
     factoryOf(::InitializeRateSyncUseCase)
     factoryOf(::SchedulePeriodicRateSyncUseCase)
+    factoryOf(::ObserveSyncStatusUseCase)
 
 
     // Sync

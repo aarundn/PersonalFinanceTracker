@@ -15,6 +15,7 @@ import com.example.personalfinancetracker.R
 import com.example.core.components.HeaderSection
 import com.example.core.components.TransactionDropdown
 import com.example.personalfinancetracker.features.settings.components.ConversionTestCard
+import com.example.personalfinancetracker.features.settings.components.SyncStatusBanner
 
 @Composable
 fun SettingsScreen(
@@ -44,6 +45,11 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.primary
             )
             
+            SyncStatusBanner(
+                syncStatus = state.syncStatus,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
             TransactionDropdown(
                 label = stringResource(R.string.settings_base_currency),
                 items = state.availableCurrencies,
