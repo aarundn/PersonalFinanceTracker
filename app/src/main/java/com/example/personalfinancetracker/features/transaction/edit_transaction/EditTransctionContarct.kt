@@ -23,6 +23,7 @@ data class EditTransactionState(
     val isEditing: Boolean = false,
     val showDeleteConfirmation: Boolean = false,
     val categories: List<Category> = emptyList(),
+    val showDatePicker: Boolean = false,
 ) : MVIState
 
 sealed class EditTransactionEvent : MVIUiEvent {
@@ -32,6 +33,8 @@ sealed class EditTransactionEvent : MVIUiEvent {
     data class OnCurrencyChanged(val currency: Currency) : EditTransactionEvent()
     data class OnDateChanged(val date: Long) : EditTransactionEvent()
     data class OnNotesChanged(val notes: String) : EditTransactionEvent()
+    object OnShowDatePicker : EditTransactionEvent()
+    object OnHideDatePicker : EditTransactionEvent()
     object OnSave : EditTransactionEvent()
     object OnCancel : EditTransactionEvent()
     object OnDelete : EditTransactionEvent()

@@ -70,12 +70,14 @@ class AddTransactionViewModel(
             }
             is AddTransactionEvent.OnAmountChanged -> setState { copy(amount = event.amount) }
             is AddTransactionEvent.OnCurrencyChanged -> setState { copy(selectedCurrency = event.currency) }
-            is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date) }
+            is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date, showDatePicker = false) }
             is AddTransactionEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
             is AddTransactionEvent.OnBudgetSelected -> setState { copy(selectedBudgetId = event.budgetId, showBudgetSelector = false) }
             AddTransactionEvent.OnAddBudgetClicked -> navigateToAddBudget()
             AddTransactionEvent.OnShowBudgetSelector -> setState { copy(showBudgetSelector = true) }
             AddTransactionEvent.OnHideBudgetSelector -> setState { copy(showBudgetSelector = false) }
+            AddTransactionEvent.OnShowDatePicker -> setState { copy(showDatePicker = true) }
+            AddTransactionEvent.OnHideDatePicker -> setState { copy(showDatePicker = false) }
             AddTransactionEvent.OnSave -> saveTransaction()
             AddTransactionEvent.OnCancel -> navigateBack()
         }

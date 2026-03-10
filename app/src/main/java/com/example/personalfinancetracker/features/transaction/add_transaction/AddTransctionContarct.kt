@@ -24,7 +24,8 @@ data class AddTransactionState(
     val error: UiText? = null,
     val availableBudgets: List<BudgetUi> = emptyList(),
     val selectedBudgetId: String? = null,
-    val showBudgetSelector: Boolean = false
+    val showBudgetSelector: Boolean = false,
+    val showDatePicker: Boolean = false,
 ) : MVIState
 
 sealed class AddTransactionEvent : MVIUiEvent {
@@ -38,6 +39,8 @@ sealed class AddTransactionEvent : MVIUiEvent {
     object OnAddBudgetClicked : AddTransactionEvent()
     object OnShowBudgetSelector : AddTransactionEvent()
     object OnHideBudgetSelector : AddTransactionEvent()
+    object OnShowDatePicker : AddTransactionEvent()
+    object OnHideDatePicker : AddTransactionEvent()
     object OnSave : AddTransactionEvent()
     object OnCancel : AddTransactionEvent()
 }

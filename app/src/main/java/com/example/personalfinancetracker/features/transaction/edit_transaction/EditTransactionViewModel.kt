@@ -98,6 +98,8 @@ class EditTransactionViewModel(
             EditTransactionEvent.OnDismissDelete -> updateState { copy(showDeleteConfirmation = false) }
             EditTransactionEvent.OnConfirmDelete -> deleteTransaction()
             EditTransactionEvent.OnEdit -> updateState { copy(isEditing = true) }
+            EditTransactionEvent.OnShowDatePicker -> updateState { copy(showDatePicker = true) }
+            EditTransactionEvent.OnHideDatePicker -> updateState { copy(showDatePicker = false) }
         }
     }
 
@@ -138,9 +140,9 @@ class EditTransactionViewModel(
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
                     currency = currentState.selectedCurrency?.id ?: "",
                     categoryId = currentState.selectedCategory?.id ?: "",
-                    date = System.currentTimeMillis(),
+                    date = currentState.date,
                     notes = currentState.notes,
-                    createdAt = currentState.date,
+                    createdAt = currentState.transaction?.date ?: currentState.date,
                     updatedAt = System.currentTimeMillis(),
                     type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
                 ).toTransaction()

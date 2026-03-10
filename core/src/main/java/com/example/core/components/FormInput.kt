@@ -16,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
@@ -29,7 +32,8 @@ fun FormInput(
     maxLine: Int = 1,
     minLine: Int = 1,
     keyboardType: KeyboardType = KeyboardType.Text,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onClick: (() -> Unit)? = null,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -39,17 +43,19 @@ fun FormInput(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
+        val interactionSource = remember { MutableInteractionSource() }
+
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
-            enabled = enabled,
+            enabled = enabled && onClick == null, 
             textStyle = MaterialTheme.typography.bodyLarge.copy(
                 color = if (enabled) MaterialTheme.colorScheme.onSurface 
                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             ),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceContainer,
@@ -59,6 +65,15 @@ fun FormInput(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                     shape = RoundedCornerShape(8.dp)
+                )
+                .then(
+                    if (onClick != null) {
+                       Modifier.clickable(
+                           interactionSource = interactionSource,
+                           indication = null, // Disable ripple for custom text field
+                           onClick = onClick
+                       )
+                    } else Modifier
                 )
                 .padding(12.dp),
             singleLine = keyboardType != KeyboardType.Text,

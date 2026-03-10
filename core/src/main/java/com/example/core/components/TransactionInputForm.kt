@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.R
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
-import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 
 @Composable
@@ -34,7 +34,6 @@ fun TransactionInputForm(
     onTypeChanged: (Boolean) -> Unit,
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit,
-    onDateChanged: (String) -> Unit,
     onAmountChanged: (String) -> Unit,
     onNotesChanged: (String) -> Unit,
     onCurrencySelected: (Currency) -> Unit,
@@ -44,6 +43,7 @@ fun TransactionInputForm(
     isLoading: Boolean,
     amount: String,
     date: String,
+    onDatePickerClicked: () -> Unit,
     notes: String,
     isReadOnly: Boolean = false,
     showTypeToggle: Boolean = true,
@@ -124,9 +124,10 @@ fun TransactionInputForm(
                 FormInput(
                     label = stringResource(R.string.form_label_date),
                     value = date,
-                    onValueChange = onDateChanged,
+                    onValueChange = {},
                     placeholder = stringResource(R.string.form_placeholder_date),
-                    enabled = !isReadOnly
+                    enabled = !isReadOnly,
+                    onClick = { if (!isReadOnly) onDatePickerClicked() }
                 )
 
                 FormInput(
@@ -180,7 +181,6 @@ private fun TransactionInputFormPreview() {
             onTypeChanged = {},
             selectedCategory = null,
             onCategorySelected = {},
-            onDateChanged = {},
             onAmountChanged = {},
             onNotesChanged = {},
             onCurrencySelected = {},
@@ -190,6 +190,7 @@ private fun TransactionInputFormPreview() {
             isLoading = false,
             amount = "",
             date = "",
+            onDatePickerClicked = {},
             notes = "",
         )
     }

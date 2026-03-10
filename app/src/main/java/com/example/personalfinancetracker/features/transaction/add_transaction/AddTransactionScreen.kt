@@ -22,6 +22,7 @@ import com.example.core.components.HeaderSection
 import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
+import com.example.core.components.CustomDatePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,6 @@ fun AddTransactionScreen(
             onCategorySelected = { onEvent(AddTransactionEvent.OnCategoryChanged(it)) },
             selectedBudgetName = selectedBudgetName,
             onLinkBudgetClicked = { onEvent(AddTransactionEvent.OnShowBudgetSelector) },
-            onDateChanged = { onEvent(AddTransactionEvent.OnDateChanged(it.toLongOrNull() ?: 0L)) },
             onAmountChanged = { onEvent(AddTransactionEvent.OnAmountChanged(it)) },
             onNotesChanged = { onEvent(AddTransactionEvent.OnNotesChanged(it)) },
             onCurrencySelected = { onEvent(AddTransactionEvent.OnCurrencyChanged(it)) },
@@ -71,6 +71,7 @@ fun AddTransactionScreen(
             isLoading = state.isLoading,
             amount = state.amount,
             date = parseDateString(state.date),
+            onDatePickerClicked = { onEvent(AddTransactionEvent.OnShowDatePicker) },
             notes = state.notes,
         )
     }
@@ -83,6 +84,16 @@ fun AddTransactionScreen(
             onAddBudgetClicked = { onEvent(AddTransactionEvent.OnAddBudgetClicked) },
             onDismiss = { onEvent(AddTransactionEvent.OnHideBudgetSelector) },
             sheetState = budgetSheetState
+        )
+    }
+
+    if (state.showDatePicker) {
+        CustomDatePickerDialog(
+            initialSelectedDateMillis = state.date,
+            onDateSelected = {
+                onEvent(AddTransactionEvent.OnDateChanged(it))
+            },
+            onDismiss = { onEvent(AddTransactionEvent.OnHideDatePicker) }
         )
     }
 }

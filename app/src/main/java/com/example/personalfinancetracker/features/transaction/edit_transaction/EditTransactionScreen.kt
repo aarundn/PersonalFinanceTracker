@@ -39,6 +39,7 @@ import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
+import com.example.core.components.CustomDatePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,8 +101,6 @@ fun EditTransactionScreen(
                     selectedCategory = state.selectedCategory,
                     onCategorySelected = { if (state.isEditing)
                         onEvent(EditTransactionEvent.OnCategoryChanged(it)) },
-                    onDateChanged = { if (state.isEditing)
-                        onEvent(EditTransactionEvent.OnDateChanged(it.toLong())) },
                     onAmountChanged = { if (state.isEditing)
                         onEvent(EditTransactionEvent.OnAmountChanged(it)) },
                     onNotesChanged = { if (state.isEditing)
@@ -114,6 +113,7 @@ fun EditTransactionScreen(
                     isLoading = false,
                     amount = state.amount,
                     date = parseDateString(state.date),
+                    onDatePickerClicked = { if (state.isEditing) onEvent(EditTransactionEvent.OnShowDatePicker) },
                     notes = state.notes,
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
@@ -153,6 +153,17 @@ fun EditTransactionScreen(
                 onDismiss = { onEvent(EditTransactionEvent.OnDismissDelete) }
             )
         }
+
+        if (state.showDatePicker) {
+            CustomDatePickerDialog(
+                initialSelectedDateMillis = state.date,
+                onDateSelected = {
+                    onEvent(EditTransactionEvent.OnDateChanged(it))
+                    onEvent(EditTransactionEvent.OnHideDatePicker)
+                },
+                onDismiss = { onEvent(EditTransactionEvent.OnHideDatePicker) }
+            )
+        }
     }
 }
 
@@ -167,7 +178,7 @@ private fun EditTransactionScreenPreview() {
                 selectedCategory = DefaultCategories.FOOD,
                 amount = "85.50",
                 selectedCurrency = DefaultCurrencies.USD,
-                date = "2024-03-15".toLong(),
+                date = 1710460800000L, // "2024-03-15"
                 notes = "Weekly grocery shopping at Whole Foods",
                 isEditing = false,
             ),
@@ -187,7 +198,7 @@ private fun EditTransactionScreenEditingPreview() {
                 selectedCategory = DefaultCategories.SALARY,
                 amount = "800.00",
                 selectedCurrency = DefaultCurrencies.USD,
-                date = "2024-03-12".toLong(),
+                date = 1710201600000L, // "2024-03-12"
                 notes = "Website development project",
                 isEditing = true,
             ),
