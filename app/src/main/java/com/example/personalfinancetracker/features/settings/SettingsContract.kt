@@ -6,6 +6,7 @@ import com.example.core.common.MVIUiEvent
 import com.example.core.common.MVIUiSideEffect
 import com.example.core.model.Currency
 import com.example.core.common.UiText
+import com.example.conversion_rate.sync.SyncStatus
  
 @Immutable
 data class SettingsState(
@@ -21,7 +22,7 @@ data class SettingsState(
     val availableProviders: List<Pair<String, String>> = emptyList(),
     val selectedProviderId: String? = null,
     // Background Sync state
-    val syncStatus: String = "No sync scheduled"
+    val syncStatus: SyncStatus = SyncStatus.Idle
 ) : MVIState
 
 sealed interface SettingsEvent : MVIUiEvent {

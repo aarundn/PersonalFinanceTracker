@@ -12,9 +12,6 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -83,23 +80,23 @@ class RateSyncScheduler(
     /**
      * Observes the status of the most recent sync work (periodic or immediate).
      */
-    override fun observeStatus(): Flow<String> {
+    override fun observeStatus(): Flow<SyncStatus> {
         return combine(
             workManager.getWorkInfosForUniqueWorkFlow(PERIODIC_WORK_NAME),
             syncPreferences.lastSyncTime
         ) { infos, lastSyncTime ->
             val info = infos.firstOrNull()
             when (info?.state) {
-                WorkInfo.State.RUNNING ->"Syncing..."
-                WorkInfo.State.SUCCEEDED -> "Last sync: ${parseDateString(lastSyncTime ?: System.currentTimeMillis())}"
-                WorkInfo.State.FAILED -> info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
+                WorkInfo.State.RUNNING -> SyncStatus.Syncing
+                WorkInfo.State.SUCCEEDED -> SyncStatus.Success(lastSyncTime ?: System.currentTimeMillis())
+                WorkInfo.State.FAILED -> SyncStatus.Failed(info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error")
                 WorkInfo.State.ENQUEUED -> {
-                    if (lastSyncTime != null) "Last sync: ${parseDateString(lastSyncTime)} \nQueued for next sync"
-                    else "Queued for sync"
+                    if (lastSyncTime != null) SyncStatus.Success(lastSyncTime)
+                    else SyncStatus.Idle
                 }
-                WorkInfo.State.BLOCKED -> "Sync blocked"
-                WorkInfo.State.CANCELLED -> "Sync cancelled"
-                else -> "No sync scheduled"
+                WorkInfo.State.BLOCKED -> SyncStatus.Idle
+                WorkInfo.State.CANCELLED -> SyncStatus.Idle
+                else -> SyncStatus.Idle
             }
         }
     }
@@ -121,8 +118,3 @@ class RateSyncScheduler(
     }
 }
 
-
-fun parseDateString(dateString: Long): String {
-    val dateFormatter = SimpleDateFormat("MMM dd, yyyy , hh:mm a", Locale.getDefault())
-    return dateFormatter.format(Date(dateString))
-}

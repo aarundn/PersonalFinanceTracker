@@ -15,29 +15,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.conversion_rate.sync.SyncStatus
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.MutedForeground
 import com.example.core.ui.theme.statusContainer
+import com.example.core.utils.parseDateString
 
 @Composable
 fun SyncStatusBanner(
-    syncStatus: String,
+    syncStatus: SyncStatus,
     modifier: Modifier = Modifier
 ) {
-    val isSyncing = syncStatus.contains("Syncing", ignoreCase = true)
-    val isSuccess = syncStatus.contains("Last sync", ignoreCase = true)
-    
-    val baseColor = when {
-        isSyncing -> MutedForeground
-        isSuccess -> Income
-        else -> Expense
+    val isSyncing = syncStatus is SyncStatus.Syncing
+
+    val baseColor = when (syncStatus) {
+        is SyncStatus.Syncing -> MutedForeground
+        is SyncStatus.Success -> Income
+        is SyncStatus.Failed -> Expense
+        is SyncStatus.Idle -> Expense
+    }
+
+    val displayString = when (syncStatus) {
+        is SyncStatus.Syncing -> "Syncing..."
+        is SyncStatus.Success -> "Last sync: ${
+            parseDateString(
+                syncStatus.timestamp,
+                isBoth = true
+            )
+        } \nQueued for next sync"
+
+        is SyncStatus.Failed -> syncStatus.error
+        is SyncStatus.Idle -> "Queued for sync"
     }
 
     SyncStatusBannerContent(
         modifier = modifier,
         baseColor = baseColor,
-        text = syncStatus,
+        text = displayString,
         isSyncing = isSyncing
     )
 }
@@ -66,9 +81,10 @@ private fun SyncStatusBannerContent(
                     strokeWidth = 2.dp
                 )
             }
-            
+
             Text(
                 text = text,
+                color = baseColor,
                 style = MaterialTheme.typography.bodySmall,
                 overflow = TextOverflow.Ellipsis
             )

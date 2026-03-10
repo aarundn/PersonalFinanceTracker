@@ -7,6 +7,7 @@ import com.example.conversion_rate.data.repository.ExchangeRateRepositoryImpl.Co
 import com.example.conversion_rate.domain.port.ExchangeRateProviderPort
 import com.example.conversion_rate.domain.repository.ExchangeRateRepository
 import com.example.conversion_rate.sync.RateSyncManager
+import com.example.conversion_rate.sync.SyncStatus
 import com.example.conversion_rate.util.ConversionConstants
 import kotlinx.coroutines.flow.Flow
 import java.io.IOException
@@ -54,7 +55,9 @@ class ExchangeRateRepositoryImpl(
         cacheRate(providerId, fromCurrencyCode, toCurrencyCode, freshRate)
     }
 
-    override fun observeSyncStatus(): Flow<String> {
+
+
+    override fun observeSyncStatus(): Flow<SyncStatus> {
         return syncManager.observeStatus()
     }
 
