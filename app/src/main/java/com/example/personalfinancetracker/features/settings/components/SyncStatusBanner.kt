@@ -70,8 +70,6 @@ private fun SyncStatusBannerContent(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = baseColor,
-                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }

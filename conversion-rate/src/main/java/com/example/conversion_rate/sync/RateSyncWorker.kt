@@ -19,6 +19,7 @@ class RateSyncWorker(
     context: Context,
     params: WorkerParameters,
     private val syncExchangeRates: SyncExchangeRatesUseCase,
+    private val syncPreferences: SyncPreferences,
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -33,6 +34,7 @@ class RateSyncWorker(
             Log.d(TAG, "Syncing rates...")
             syncExchangeRates(baseCurrency, providerId).getOrThrow()
             
+            syncPreferences.saveLastSyncTime(System.currentTimeMillis())
             Log.d(TAG, "Rate sync completed")
             Result.success()
         } catch (e: Exception) {

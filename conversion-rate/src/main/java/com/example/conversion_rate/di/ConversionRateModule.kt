@@ -14,6 +14,7 @@ import com.example.conversion_rate.domain.usecase.SyncExchangeRatesUseCase
 import com.example.conversion_rate.sync.RateSyncManager
 import com.example.conversion_rate.sync.RateSyncScheduler
 import com.example.conversion_rate.sync.RateSyncWorker
+import com.example.conversion_rate.sync.SyncPreferences
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.module.dsl.factoryOf
@@ -55,6 +56,7 @@ val conversionRateModule = module {
 
 
     // Sync
-    single<RateSyncManager> { RateSyncScheduler(WorkManager.getInstance(androidContext())) }
+    single { SyncPreferences(androidContext()) }
+    single<RateSyncManager> { RateSyncScheduler(WorkManager.getInstance(androidContext()), get()) }
     workerOf(::RateSyncWorker)
 }

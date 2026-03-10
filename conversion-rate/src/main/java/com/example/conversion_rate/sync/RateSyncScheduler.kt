@@ -11,7 +11,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,7 +22,10 @@ import java.util.concurrent.TimeUnit
  *
  * Owns scheduling policy — the [RateSyncWorker] owns execution logic.
  */
-class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager {
+class RateSyncScheduler(
+    private val workManager: WorkManager,
+    private val syncPreferences: SyncPreferences
+) : RateSyncManager {
 
     /**
      * Enqueues a periodic job that refreshes exchange rates every [intervalHours].
@@ -34,7 +37,7 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
         providerId: String,
     ) {
         val request = PeriodicWorkRequestBuilder<RateSyncWorker>(
-            DEFAULT_INTERVAL_HOURS, TimeUnit.HOURS
+            DEFAULT_INTERVAL_MINUTES, TimeUnit.MINUTES
         )
             .setConstraints(networkConstraint())
             .setBackoffCriteria(
@@ -81,20 +84,24 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
      * Observes the status of the most recent sync work (periodic or immediate).
      */
     override fun observeStatus(): Flow<String> {
-        return workManager
-            .getWorkInfosForUniqueWorkFlow(IMMEDIATE_WORK_NAME)
-            .map { infos ->
-                val info = infos.firstOrNull()
-                when (info?.state) {
-                    WorkInfo.State.RUNNING ->"Syncing..."
-                    WorkInfo.State.SUCCEEDED -> "Last sync: ${parseDateString( System.currentTimeMillis())}"
-                    WorkInfo.State.FAILED -> info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
-                    WorkInfo.State.ENQUEUED -> "Queued for sync"
-                    WorkInfo.State.BLOCKED -> "Sync blocked"
-                    WorkInfo.State.CANCELLED -> "Sync cancelled"
-                    else -> "No sync scheduled"
+        return combine(
+            workManager.getWorkInfosForUniqueWorkFlow(PERIODIC_WORK_NAME),
+            syncPreferences.lastSyncTime
+        ) { infos, lastSyncTime ->
+            val info = infos.firstOrNull()
+            when (info?.state) {
+                WorkInfo.State.RUNNING ->"Syncing..."
+                WorkInfo.State.SUCCEEDED -> "Last sync: ${parseDateString(lastSyncTime ?: System.currentTimeMillis())}"
+                WorkInfo.State.FAILED -> info.outputData.getString(RateSyncWorker.KEY_ERROR) ?: "Unknown error"
+                WorkInfo.State.ENQUEUED -> {
+                    if (lastSyncTime != null) "Last sync: ${parseDateString(lastSyncTime)} \nQueued for next sync"
+                    else "Queued for sync"
                 }
+                WorkInfo.State.BLOCKED -> "Sync blocked"
+                WorkInfo.State.CANCELLED -> "Sync cancelled"
+                else -> "No sync scheduled"
             }
+        }
     }
 
     private fun networkConstraint() = Constraints.Builder()
@@ -110,7 +117,7 @@ class RateSyncScheduler(private val workManager: WorkManager) : RateSyncManager 
     companion object {
         const val PERIODIC_WORK_NAME = "rate_sync_periodic"
         const val IMMEDIATE_WORK_NAME = "rate_sync_immediate"
-        const val DEFAULT_INTERVAL_HOURS = 10L
+        const val DEFAULT_INTERVAL_MINUTES = 15L
     }
 }
 
