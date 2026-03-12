@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,17 +20,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.ConfirmationDialog
+import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.utils.parseDateString
 import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.common.BudgetInputForm
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetInsightsCard
 import com.example.personalfinancetracker.features.budget.edit_budget.components.BudgetOverviewCard
 import com.example.personalfinancetracker.features.budget.edit_budget.components.DangerZoneCard
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditBudgetScreen(
     state: EditBudgetState,
@@ -87,12 +91,14 @@ fun EditBudgetScreen(
                     selectedPeriod = state.periodInput,
                     amount = state.amountInput,
                     notes = state.notesInput,
+                    date = parseDateString(state.startDate),
                     selectedCurrency = state.selectedCurrency,
                     onCategorySelected = { onEvent(EditBudgetEvent.OnCategoryChanged(it)) },
                     onPeriodSelected = { onEvent(EditBudgetEvent.OnPeriodChanged(it)) },
                     onAmountChanged = { onEvent(EditBudgetEvent.OnAmountChanged(it)) },
                     onCurrencySelected = { onEvent(EditBudgetEvent.OnCurrencyChanged(it)) },
                     onNotesChanged = { onEvent(EditBudgetEvent.OnNotesChanged(it)) },
+                    onDatePickerClicked = { if (state.isEditing) onEvent(EditBudgetEvent.OnShowDatePicker) },
                     onSave = { onEvent(EditBudgetEvent.OnSave) },
                     onCancel = { onEvent(EditBudgetEvent.OnCancel) },
                     isLoading = state.isLoading,
@@ -121,6 +127,14 @@ fun EditBudgetScreen(
             dismissText = "Cancel",
             onConfirm = { onEvent(EditBudgetEvent.OnConfirmDelete) },
             onDismiss = { onEvent(EditBudgetEvent.OnDismissDelete) }
+        )
+    }
+
+    if (state.showDatePicker) {
+        CustomDatePickerDialog(
+            initialSelectedDateMillis = state.startDate,
+            onDateSelected = { onEvent(EditBudgetEvent.OnDateChanged(it)) },
+            onDismiss = { onEvent(EditBudgetEvent.OnHideDatePicker) }
         )
     }
 }

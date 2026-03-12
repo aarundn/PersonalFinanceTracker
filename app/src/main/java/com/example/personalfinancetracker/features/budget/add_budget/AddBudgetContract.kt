@@ -16,9 +16,11 @@ data class AddBudgetState(
     val selectedCurrency: Currency? = null,
     val period: BudgetPeriod = BudgetPeriod.default,
     val notes: String = "",
+    val startDate: Long = System.currentTimeMillis(),
     val isSaving: Boolean = false,
     val isLoading: Boolean = false,
     val error: UiText? = null,
+    val showDatePicker: Boolean = false,
     val categories: List<Category> = emptyList()
 ) : MVIState
 
@@ -28,6 +30,9 @@ sealed class AddBudgetEvent : MVIUiEvent {
     data class OnCurrencyChanged(val currency: Currency) : AddBudgetEvent()
     data class OnPeriodChanged(val period: BudgetPeriod) : AddBudgetEvent()
     data class OnNotesChanged(val notes: String) : AddBudgetEvent()
+    data class OnDateChanged(val date: Long) : AddBudgetEvent()
+    data object OnShowDatePicker : AddBudgetEvent()
+    data object OnHideDatePicker : AddBudgetEvent()
     data object OnSave : AddBudgetEvent()
     data object OnCancel : AddBudgetEvent()
 }

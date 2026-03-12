@@ -99,6 +99,7 @@ class EditBudgetViewModel(
                         amountInput = budgetUi.amount.toString(),
                         periodInput = BudgetPeriod.fromId(budgetUi.period),
                         notesInput = budgetUi.notes ?: "",
+                        startDate = budgetUi.createdAt,
                         isLoading = false
                     )
                 }
@@ -128,21 +129,21 @@ class EditBudgetViewModel(
             EditBudgetEvent.OnDelete -> updateState { copy(showDeleteConfirmation = true) }
             EditBudgetEvent.OnConfirmDelete -> deleteBudget()
             EditBudgetEvent.OnDismissDelete -> updateState { copy(showDeleteConfirmation = false) }
+            EditBudgetEvent.OnShowDatePicker -> updateState { copy(showDatePicker = true) }
+            EditBudgetEvent.OnHideDatePicker -> updateState { copy(showDatePicker = false) }
+            is EditBudgetEvent.OnDateChanged -> updateState { copy(startDate = event.date, showDatePicker = false) }
             is EditBudgetEvent.OnCategoryChanged -> updateState { copy(selectedCategory = event.category) }
             is EditBudgetEvent.OnAmountChanged -> updateState {
                 copy(amountInput = sanitizeAmount(event.amount))
             }
-
             is EditBudgetEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
             is EditBudgetEvent.OnPeriodChanged -> updateState {
-
                val insights = calculateInsights(budget!!, event.period.days)
                 copy(
                     periodInput = event.period,
                     insights = insights
                 )
             }
-
             is EditBudgetEvent.OnNotesChanged -> updateState { copy(notesInput = event.notes) }
         }
     }

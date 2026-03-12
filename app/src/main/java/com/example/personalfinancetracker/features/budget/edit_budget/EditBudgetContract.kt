@@ -19,10 +19,12 @@ data class EditBudgetState(
     val periodInput: BudgetPeriod = BudgetPeriod.default,
     val notesInput: String = "",
     val selectedCurrency: Currency? = null,
+    val startDate: Long = System.currentTimeMillis(),
     val isEditing: Boolean = false,
     val isLoading: Boolean = false,
     val error: UiText? = null,
     val showDeleteConfirmation: Boolean = false,
+    val showDatePicker: Boolean = false,
     val categories: List<Category> = emptyList(),
     val insights: BudgetInsightsUi? = null
 ) : MVIState
@@ -33,6 +35,9 @@ sealed class EditBudgetEvent : MVIUiEvent {
     data class OnCurrencyChanged(val currency: Currency) : EditBudgetEvent()
     data class OnPeriodChanged(val period: BudgetPeriod) : EditBudgetEvent()
     data class OnNotesChanged(val notes: String) : EditBudgetEvent()
+    data class OnDateChanged(val date: Long) : EditBudgetEvent()
+    data object OnShowDatePicker : EditBudgetEvent()
+    data object OnHideDatePicker : EditBudgetEvent()
     data object OnSave : EditBudgetEvent()
     data object OnCancel : EditBudgetEvent()
     data object OnEdit : EditBudgetEvent()

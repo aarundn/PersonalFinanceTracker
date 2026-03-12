@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -16,12 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.components.HeaderSection
+import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.budget.common.BudgetInputForm
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddBudgetScreen(
     snackBarHostState: SnackbarHostState,
@@ -59,18 +63,20 @@ fun AddBudgetScreen(
                 selectedPeriod = state.period,
                 amount = state.amountInput,
                 notes = state.notes,
+                date = parseDateString(state.startDate),
                 selectedCurrency = state.selectedCurrency,
                 onCategorySelected = { onEvent(AddBudgetEvent.OnCategorySelected(it)) },
                 onPeriodSelected = { onEvent(AddBudgetEvent.OnPeriodChanged(it)) },
                 onAmountChanged = { onEvent(AddBudgetEvent.OnAmountChanged(it)) },
                 onCurrencySelected = { onEvent(AddBudgetEvent.OnCurrencyChanged(it)) },
                 onNotesChanged = { onEvent(AddBudgetEvent.OnNotesChanged(it)) },
+                onDatePickerClicked = { onEvent(AddBudgetEvent.OnShowDatePicker) },
                 onSave = { onEvent(AddBudgetEvent.OnSave) },
                 onCancel = { onEvent(AddBudgetEvent.OnCancel) },
                 isLoading = state.isSaving,
             )
 
-            state.error?.let { errorMessage ->
+        state.error?.let { errorMessage ->
                 Text(
                     text = errorMessage.asString(),
                     style = MaterialTheme.typography.bodySmall,
@@ -79,6 +85,14 @@ fun AddBudgetScreen(
                 )
             }
         }
+    }
+
+    if (state.showDatePicker) {
+        CustomDatePickerDialog(
+            initialSelectedDateMillis = state.startDate,
+            onDateSelected = { onEvent(AddBudgetEvent.OnDateChanged(it)) },
+            onDismiss = { onEvent(AddBudgetEvent.OnHideDatePicker) }
+        )
     }
 }
 

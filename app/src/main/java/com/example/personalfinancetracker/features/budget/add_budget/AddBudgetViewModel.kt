@@ -36,6 +36,9 @@ class AddBudgetViewModel(
             is AddBudgetEvent.OnCurrencyChanged -> updateCurrency(event.currency)
             is AddBudgetEvent.OnPeriodChanged -> setState { copy(period = event.period) }
             is AddBudgetEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
+            is AddBudgetEvent.OnDateChanged -> setState { copy(startDate = event.date, showDatePicker = false) }
+            AddBudgetEvent.OnShowDatePicker -> setState { copy(showDatePicker = true) }
+            AddBudgetEvent.OnHideDatePicker -> setState { copy(showDatePicker = false) }
             AddBudgetEvent.OnSave -> saveBudget()
             AddBudgetEvent.OnCancel -> navigateBack()
         }
@@ -91,7 +94,7 @@ class AddBudgetViewModel(
                     currency = currentState.selectedCurrency?.id ?: "",
                     period = currentState.period.id,
                     notes = currentState.notes.ifBlank { null },
-                    createdAt = System.currentTimeMillis(),
+                    createdAt = currentState.startDate,
                     updatedAt = System.currentTimeMillis()
                 )
 

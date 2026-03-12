@@ -37,6 +37,7 @@ fun BudgetInputForm(
     selectedPeriod: BudgetPeriod,
     amount: String,
     notes: String,
+    date: String,
     selectedCurrency: Currency?,
     modifier: Modifier = Modifier,
     onCategorySelected: (Category) -> Unit,
@@ -44,6 +45,7 @@ fun BudgetInputForm(
     onAmountChanged: (String) -> Unit,
     onCurrencySelected: (Currency) -> Unit,
     onNotesChanged: (String) -> Unit,
+    onDatePickerClicked: () -> Unit,
     onSave: () -> Unit,
     onCancel: () -> Unit,
     isLoading: Boolean = false,
@@ -103,6 +105,15 @@ fun BudgetInputForm(
                 )
 
                 FormInput(
+                    label = "Start Date",
+                    value = date,
+                    onValueChange = {},
+                    placeholder = "Select start date",
+                    enabled = !isReadOnly,
+                    onClick = { if (!isReadOnly) onDatePickerClicked() }
+                )
+
+                FormInput(
                     label = "Notes (Optional)",
                     value = notes,
                     maxLine = 5,
@@ -154,12 +165,14 @@ private fun BudgetInputFormPreview() {
             selectedPeriod = BudgetPeriod.Monthly,
             amount = "500.00",
             notes = "",
+            date = "Mar 12, 2026",
             selectedCurrency = DefaultCurrencies.USD,
             onCategorySelected = {},
             onPeriodSelected = {},
             onAmountChanged = {},
             onCurrencySelected = {},
             onNotesChanged = {},
+            onDatePickerClicked = {},
             onSave = {},
             onCancel = {},
         )
