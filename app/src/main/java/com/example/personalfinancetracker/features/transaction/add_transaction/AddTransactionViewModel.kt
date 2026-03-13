@@ -49,18 +49,19 @@ class AddTransactionViewModel(
                     copy(
                         isIncome = event.isIncome,
                         selectedCategory = null,
-                        selectedBudgetId = null,
+                        selectedBudget = null,
                         availableBudgets = emptyList()
                     )
                 }
                 refreshCategories()
                 cancelBudgetCollection()
             }
+
             is AddTransactionEvent.OnCategoryChanged -> {
                 setState {
                     copy(
                         selectedCategory = event.category,
-                        selectedBudgetId = null,
+                        selectedBudget = null,
                         availableBudgets = emptyList()
                     )
                 }
@@ -68,11 +69,24 @@ class AddTransactionViewModel(
                     loadBudgetsForCategory(event.category.id)
                 }
             }
+
             is AddTransactionEvent.OnAmountChanged -> setState { copy(amount = event.amount) }
             is AddTransactionEvent.OnCurrencyChanged -> setState { copy(selectedCurrency = event.currency) }
-            is AddTransactionEvent.OnDateChanged -> setState { copy(date = event.date, showDatePicker = false) }
+            is AddTransactionEvent.OnDateChanged -> setState {
+                copy(
+                    date = event.date,
+                    showDatePicker = false
+                )
+            }
+
             is AddTransactionEvent.OnNotesChanged -> setState { copy(notes = event.notes) }
-            is AddTransactionEvent.OnBudgetSelected -> setState { copy(selectedBudgetId = event.budgetId, showBudgetSelector = false) }
+            is AddTransactionEvent.OnBudgetSelected -> setState {
+                copy(
+                    selectedBudget = _uiState.value.availableBudgets.find { it.id == event.budgetId },
+                    showBudgetSelector = false
+                )
+            }
+
             AddTransactionEvent.OnAddBudgetClicked -> navigateToAddBudget()
             AddTransactionEvent.OnShowBudgetSelector -> setState { copy(showBudgetSelector = true) }
             AddTransactionEvent.OnHideBudgetSelector -> setState { copy(showBudgetSelector = false) }
@@ -150,7 +164,7 @@ class AddTransactionViewModel(
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
                     currency = currentState.selectedCurrency?.id ?: "",
                     categoryId = currentState.selectedCategory?.id ?: "",
-                    budgetId = currentState.selectedBudgetId,
+                    budgetId = currentState.selectedBudget?.id,
                     date = currentState.date,
                     notes = currentState.notes,
                     createdAt = System.currentTimeMillis(),
@@ -163,12 +177,22 @@ class AddTransactionViewModel(
                     triggerSideEffect(AddTransactionSideEffect.NavigateBack)
                     triggerSideEffect(AddTransactionSideEffect.ShowSuccess(UiText.DynamicString("Transaction saved successfully")))
                 }.onFailure { e ->
-                    setState { copy(isLoading = false, error = UiText.DynamicString("Failed to save transaction")) }
+                    setState {
+                        copy(
+                            isLoading = false,
+                            error = UiText.DynamicString("Failed to save transaction")
+                        )
+                    }
                     triggerSideEffect(AddTransactionSideEffect.ShowError(UiText.DynamicString("Failed to save transaction: ${e.message}")))
                 }
 
             } catch (e: Exception) {
-                setState { copy(isLoading = false, error = UiText.DynamicString("Failed to save transaction")) }
+                setState {
+                    copy(
+                        isLoading = false,
+                        error = UiText.DynamicString("Failed to save transaction")
+                    )
+                }
                 triggerSideEffect(AddTransactionSideEffect.ShowError(UiText.DynamicString("Failed to save transaction: ${e.message}")))
             }
         }

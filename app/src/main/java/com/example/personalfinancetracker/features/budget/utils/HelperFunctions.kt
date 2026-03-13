@@ -8,6 +8,6 @@ fun calculateDaysElapsed(createdAt: Long, daysInPeriod: Int): Int {
     val days = (diff / (1000 * 60 * 60 * 24)).toInt()
     return max(0, minOf(days, daysInPeriod))
 }
-
+//todo : extract it to core module
 @SuppressLint("DefaultLocale")
 fun Double.formatCurrency(): String = String.format("%,.2f", this)

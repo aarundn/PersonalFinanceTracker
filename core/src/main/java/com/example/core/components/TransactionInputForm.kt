@@ -25,6 +25,7 @@ import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.model.BudgetDisplayData
 
 @Composable
 fun TransactionInputForm(
@@ -47,7 +48,7 @@ fun TransactionInputForm(
     notes: String,
     isReadOnly: Boolean = false,
     showTypeToggle: Boolean = true,
-    selectedBudgetName: String? = null,
+    selectedBudget: BudgetDisplayData? = null,
     onLinkBudgetClicked: () -> Unit = {},
 ) {
     Column(
@@ -83,24 +84,32 @@ fun TransactionInputForm(
                     itemLabel = { stringResource(it.nameResId) },
                     enabled = !isReadOnly
                 )
-
-                // Budget link button — only for expenses with a category selected
                 if (!isIncome && selectedCategory != null) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = if (selectedBudgetName != null) stringResource(R.string.form_budget_linked, selectedBudgetName) else stringResource(R.string.form_no_budget_linked),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (selectedBudgetName != null)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        if (selectedBudget != null) {
+                            BudgetSelectorCard(
+                                budget = selectedBudget,
+                                isSelected = true,
+                                onClick = onLinkBudgetClicked,
+                                modifier = Modifier.weight(1f)
+                            )
+                        } else {
+                            Text(
+                                text = stringResource(R.string.form_no_budget_linked),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                         TextButton(onClick = onLinkBudgetClicked) {
-                            Text(if (selectedBudgetName != null) stringResource(R.string.form_change_budget) else stringResource(R.string.form_link_budget))
+                            Text(
+                                if (selectedBudget != null) stringResource(R.string.form_change_budget) else stringResource(
+                                    R.string.form_link_budget
+                                )
+                            )
                         }
                     }
                 }

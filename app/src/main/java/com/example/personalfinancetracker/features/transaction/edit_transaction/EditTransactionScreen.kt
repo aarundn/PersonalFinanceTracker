@@ -117,7 +117,8 @@ fun EditTransactionScreen(
                     notes = state.notes,
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
-                    categories = state.categories
+                    categories = state.categories,
+                    selectedBudget = null
                 )
 
                 if (!state.isEditing) {

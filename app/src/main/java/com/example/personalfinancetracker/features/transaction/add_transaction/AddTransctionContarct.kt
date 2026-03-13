@@ -23,7 +23,7 @@ data class AddTransactionState(
     val isLoading: Boolean = false,
     val error: UiText? = null,
     val availableBudgets: List<BudgetUi> = emptyList(),
-    val selectedBudgetId: String? = null,
+    val selectedBudget: BudgetUi? = null,
     val showBudgetSelector: Boolean = false,
     val showDatePicker: Boolean = false,
 ) : MVIState

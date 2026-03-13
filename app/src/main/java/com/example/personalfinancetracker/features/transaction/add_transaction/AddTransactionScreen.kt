@@ -12,17 +12,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.components.CustomSnackBar
-import com.example.core.components.TransactionInputForm
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.components.HeaderSection
-import com.example.core.model.DefaultCurrencies
-import com.example.core.utils.parseDateString
-import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
 import com.example.core.components.CustomDatePickerDialog
+import com.example.core.components.CustomSnackBar
+import com.example.core.components.HeaderSection
+import com.example.core.components.TransactionInputForm
+import com.example.core.model.DefaultCurrencies
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.utils.parseDateString
+import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
+import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,13 +41,7 @@ fun AddTransactionScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = { HeaderSection(onBackClick = { onEvent(AddTransactionEvent.OnCancel) }) }
     ) { innerPadding ->
-
-        val selectedBudgetName = state.availableBudgets
-            .find { it.id == state.selectedBudgetId }
-            ?.let { budget ->
-                stringResource(budget.currentCategory.nameResId)
-            }
-
+ 
         TransactionInputForm(
             modifier = Modifier
                 .padding(top = 16.dp)
@@ -60,7 +54,7 @@ fun AddTransactionScreen(
             onTypeChanged = { onEvent(AddTransactionEvent.OnTransactionTypeChanged(it)) },
             selectedCategory = state.selectedCategory,
             onCategorySelected = { onEvent(AddTransactionEvent.OnCategoryChanged(it)) },
-            selectedBudgetName = selectedBudgetName,
+            selectedBudget = state.selectedBudget?.toDisplayData(),
             onLinkBudgetClicked = { onEvent(AddTransactionEvent.OnShowBudgetSelector) },
             onAmountChanged = { onEvent(AddTransactionEvent.OnAmountChanged(it)) },
             onNotesChanged = { onEvent(AddTransactionEvent.OnNotesChanged(it)) },
@@ -79,7 +73,7 @@ fun AddTransactionScreen(
     if (state.showBudgetSelector) {
         BudgetSelectorBottomSheet(
             budgets = state.availableBudgets,
-            selectedBudgetId = state.selectedBudgetId,
+            selectedBudgetId = state.selectedBudget?.id,
             onBudgetSelected = { onEvent(AddTransactionEvent.OnBudgetSelected(it)) },
             onAddBudgetClicked = { onEvent(AddTransactionEvent.OnAddBudgetClicked) },
             onDismiss = { onEvent(AddTransactionEvent.OnHideBudgetSelector) },
