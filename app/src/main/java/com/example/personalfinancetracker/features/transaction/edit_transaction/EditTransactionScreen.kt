@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +39,8 @@ import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.ProgressError
 import com.example.core.utils.parseDateString
+import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
+import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
 import com.example.core.components.CustomDatePickerDialog
 
@@ -48,7 +51,7 @@ fun EditTransactionScreen(
     onEvent: (EditTransactionEvent) -> Unit,
     snackBarHostState: SnackbarHostState,
 ) {
-
+    val budgetSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -118,7 +121,8 @@ fun EditTransactionScreen(
                     isReadOnly = !state.isEditing,
                     showTypeToggle = state.isEditing,
                     categories = state.categories,
-                    selectedBudget = null
+                    selectedBudget = state.selectedBudget?.toDisplayData(),
+                    onLinkBudgetClicked = { if (state.isEditing) onEvent(EditTransactionEvent.OnShowBudgetSelector) }
                 )
 
                 if (!state.isEditing) {
@@ -160,9 +164,19 @@ fun EditTransactionScreen(
                 initialSelectedDateMillis = state.date,
                 onDateSelected = {
                     onEvent(EditTransactionEvent.OnDateChanged(it))
-                    onEvent(EditTransactionEvent.OnHideDatePicker)
                 },
                 onDismiss = { onEvent(EditTransactionEvent.OnHideDatePicker) }
+            )
+        }
+
+        if (state.showBudgetSelector) {
+            BudgetSelectorBottomSheet(
+                budgets = state.availableBudgets,
+                selectedBudgetId = state.selectedBudget?.id,
+                onBudgetSelected = { onEvent(EditTransactionEvent.OnBudgetSelected(it)) },
+                onAddBudgetClicked = { onEvent(EditTransactionEvent.OnAddBudgetClicked) },
+                onDismiss = { onEvent(EditTransactionEvent.OnHideBudgetSelector) },
+                sheetState = budgetSheetState
             )
         }
     }

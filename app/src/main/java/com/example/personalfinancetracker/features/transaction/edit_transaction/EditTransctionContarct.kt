@@ -8,6 +8,7 @@ import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import com.example.core.common.UiText
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
 @Immutable
 data class EditTransactionState(
@@ -24,6 +25,9 @@ data class EditTransactionState(
     val showDeleteConfirmation: Boolean = false,
     val categories: List<Category> = emptyList(),
     val showDatePicker: Boolean = false,
+    val availableBudgets: List<BudgetUi> = emptyList(),
+    val selectedBudget: BudgetUi? = null,
+    val showBudgetSelector: Boolean = false,
 ) : MVIState
 
 sealed class EditTransactionEvent : MVIUiEvent {
@@ -41,11 +45,16 @@ sealed class EditTransactionEvent : MVIUiEvent {
     object OnDismissDelete : EditTransactionEvent()
     object OnConfirmDelete : EditTransactionEvent()
     object OnEdit : EditTransactionEvent()
+    data class OnBudgetSelected(val budgetId: String) : EditTransactionEvent()
+    object OnAddBudgetClicked : EditTransactionEvent()
+    object OnShowBudgetSelector : EditTransactionEvent()
+    object OnHideBudgetSelector : EditTransactionEvent()
 }
 
 sealed class EditTransactionSideEffect : MVIUiSideEffect {
     object NavigateBack : EditTransactionSideEffect()
     object NavigateToTransactions : EditTransactionSideEffect()
+    object NavigateToAddBudget : EditTransactionSideEffect()
     data class ShowError(val message: UiText) : EditTransactionSideEffect()
     data class ShowSuccess(val message: UiText) : EditTransactionSideEffect()
 }

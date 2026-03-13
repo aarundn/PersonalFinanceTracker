@@ -36,6 +36,9 @@ class TransactionFeatureImpl(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToAddBudget = { navController.navigate(budgetFeature.addBudgetRoute()) }
         )
-        navGraphBuilder.editTransactionRoute(onNavigateBack = { navController.popBackStack() })
+        navGraphBuilder.editTransactionRoute(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddBudget = { navController.navigate(budgetFeature.addBudgetRoute()) }
+        )
     }
 }

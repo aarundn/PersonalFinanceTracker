@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun EditTransactionRoute(
     onNavigateBack: () -> Unit,
+    onNavigateToAddBudget: () -> Unit,
     viewModel: EditTransactionViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -29,6 +30,9 @@ fun EditTransactionRoute(
                 }
                 is EditTransactionSideEffect.NavigateToTransactions -> {
                     onNavigateBack()
+                }
+                is EditTransactionSideEffect.NavigateToAddBudget -> {
+                    onNavigateToAddBudget()
                 }
                 is EditTransactionSideEffect.ShowError -> {
                     launch {

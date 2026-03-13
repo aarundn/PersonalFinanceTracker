@@ -12,9 +12,16 @@ import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.transaction_usecases.DeleteTransactionUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionByIdUseCase
 import com.example.domain.usecase.transaction_usecases.UpdateTransactionUseCase
+import com.example.domain.usecase.budget_usecases.GetBudgetTransactionsUseCase
+import com.example.domain.usecase.budget_usecases.GetBudgetsByCategoryUseCase
+import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.transaction.mapper.toTransaction
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.core.R
@@ -25,7 +32,9 @@ class EditTransactionViewModel(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
-    private val validateInputsUseCase: ValidateInputsUseCase
+    private val validateInputsUseCase: ValidateInputsUseCase,
+    private val getBudgetsByCategoryUseCase: GetBudgetsByCategoryUseCase,
+    private val getBudgetTransactionsUseCase: GetBudgetTransactionsUseCase
 ) : BaseViewModel<EditTransactionState, MVIUiEvent, EditTransactionSideEffect>() {
 
     companion object {
@@ -33,6 +42,7 @@ class EditTransactionViewModel(
     }
 
     private val transactionId: String = savedStateHandle.get<String>(TRANSACTION_ID_KEY) ?: ""
+    private var budgetCollectionJob: Job? = null
 
     override fun createInitialState() = EditTransactionState()
 
@@ -72,6 +82,10 @@ class EditTransactionViewModel(
                         categories = categories
                     )
                 }
+
+                if (!txn.isIncome && selectedCategory != null) {
+                    loadBudgetsForCategory(selectedCategory.id, txn.budgetId)
+                }
             }.onFailure { e ->
                 updateState { copy(isLoading = false, error = UiText.StringResource(R.string.error_failed_load_transaction)) }
             }
@@ -82,14 +96,20 @@ class EditTransactionViewModel(
     override fun handleEvent(event: MVIUiEvent) {
         when (event) {
             is EditTransactionEvent.OnTransactionTypeChanged -> {
-                updateState { copy(isIncome = event.isIncome, selectedCategory = null) }
+                updateState { copy(isIncome = event.isIncome, selectedCategory = null, selectedBudget = null, availableBudgets = emptyList()) }
                 refreshCategories()
+                cancelBudgetCollection()
             }
 
-            is EditTransactionEvent.OnCategoryChanged -> updateState { copy(selectedCategory = event.category) }
+            is EditTransactionEvent.OnCategoryChanged -> {
+                updateState { copy(selectedCategory = event.category, selectedBudget = null, availableBudgets = emptyList()) }
+                if (!_uiState.value.isIncome) {
+                    loadBudgetsForCategory(event.category.id)
+                }
+            }
             is EditTransactionEvent.OnAmountChanged -> updateState { copy(amount = event.amount) }
             is EditTransactionEvent.OnCurrencyChanged -> updateState { copy(selectedCurrency = event.currency) }
-            is EditTransactionEvent.OnDateChanged -> updateState { copy(date = event.date) }
+            is EditTransactionEvent.OnDateChanged -> updateState { copy(date = event.date, showDatePicker = false) }
             is EditTransactionEvent.OnNotesChanged -> updateState { copy(notes = event.notes) }
             EditTransactionEvent.OnSave -> saveTransaction()
             EditTransactionEvent.OnCancel -> navigateBack()
@@ -100,6 +120,55 @@ class EditTransactionViewModel(
             EditTransactionEvent.OnEdit -> updateState { copy(isEditing = true) }
             EditTransactionEvent.OnShowDatePicker -> updateState { copy(showDatePicker = true) }
             EditTransactionEvent.OnHideDatePicker -> updateState { copy(showDatePicker = false) }
+
+            is EditTransactionEvent.OnBudgetSelected -> updateState {
+                copy(
+                    selectedBudget = _uiState.value.availableBudgets.find { it.id == event.budgetId },
+                    showBudgetSelector = false
+                )
+            }
+            EditTransactionEvent.OnShowBudgetSelector -> updateState { copy(showBudgetSelector = true) }
+            EditTransactionEvent.OnHideBudgetSelector -> updateState { copy(showBudgetSelector = false) }
+            EditTransactionEvent.OnAddBudgetClicked -> triggerNavigateToAddBudget()
+        }
+    }
+
+    private fun triggerNavigateToAddBudget() {
+        viewModelScope.launch {
+            triggerSideEffect(EditTransactionSideEffect.NavigateToAddBudget)
+        }
+    }
+
+    private fun cancelBudgetCollection() {
+        budgetCollectionJob?.cancel()
+        budgetCollectionJob = null
+    }
+
+    private fun loadBudgetsForCategory(categoryId: String, initialBudgetId: String? = null) {
+        cancelBudgetCollection()
+        budgetCollectionJob = viewModelScope.launch {
+            getBudgetsByCategoryUseCase(categoryId).collectLatest { budgets ->
+                if (budgets.isEmpty()) {
+                    updateState { copy(availableBudgets = emptyList(), selectedBudget = null) }
+                } else {
+                    val budgetFlows = budgets.map { budget ->
+                        getBudgetTransactionsUseCase(budget.id).map { transactions ->
+                            val spent = transactions.sumOf { it.amount }
+                            budget.toBudgetUi(spent)
+                        }
+                    }
+                    combine(budgetFlows) { budgetUis ->
+                        budgetUis.toList()
+                    }.collectLatest { budgetUiList ->
+                        updateState {
+                            copy(
+                                availableBudgets = budgetUiList,
+                                selectedBudget = if (initialBudgetId != null) budgetUiList.find { it.id == initialBudgetId } else selectedBudget
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -140,9 +209,10 @@ class EditTransactionViewModel(
                     amount = currentState.amount.toDoubleOrNull() ?: 0.0,
                     currency = currentState.selectedCurrency?.id ?: "",
                     categoryId = currentState.selectedCategory?.id ?: "",
+                    budgetId = currentState.selectedBudget?.id,
                     date = currentState.date,
                     notes = currentState.notes,
-                    createdAt = currentState.transaction?.date ?: currentState.date,
+                    createdAt = currentState.transaction?.createdAt ?: currentState.date,
                     updatedAt = System.currentTimeMillis(),
                     type = if (currentState.isIncome) Type.INCOME else Type.EXPENSE,
                 ).toTransaction()
