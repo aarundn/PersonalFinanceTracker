@@ -25,10 +25,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.components.BudgetSelectorCard
+import com.example.personalfinancetracker.R
 import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
@@ -82,7 +84,7 @@ fun BudgetSelectorBottomSheet(
 
             if (budgets.isEmpty()) {
                 Text(
-                    text = "No budgets found for this category.",
+                    text = stringResource(R.string.no_budgets_found),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier

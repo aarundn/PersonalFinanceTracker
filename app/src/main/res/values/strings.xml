@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Budget Feature -->
+    <string name="budget_overview_title">Budget Overview</string>
+    <string name="budget_empty_title">No budgets yet</string>
+    <string name="budget_empty_description">Create your first budget to start tracking your spending</string>
+    <string name="action_add_budget">Add Budget</string>
+
+    <!-- Transactions Feature -->
+    <string name="transactions_recent_title">Recent Transactions</string>
+    <string name="transactions_empty_title">No transactions yet</string>
+    <string name="transactions_empty_description">Add your first transaction to start tracking</string>
+    <string name="action_add_transaction">Add Transaction</string>
+
+    <!-- Settings Feature -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_general_section">General</string>
+    <string name="settings_base_currency">Base Currency</string>
+    <string name="no_budgets_found">No budgets found for this category.</string>
+</resources>
