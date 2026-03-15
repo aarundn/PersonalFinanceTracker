@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.statusContainer
+import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
 @Composable
 fun MoneyCard(
@@ -60,7 +61,7 @@ fun MoneyCard(
             }
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "${value} $currencySymbol",
+                text = "${value.formatCurrency()} $currencySymbol",
                 style = MaterialTheme.typography.headlineSmall,
                 color = textColor
             )

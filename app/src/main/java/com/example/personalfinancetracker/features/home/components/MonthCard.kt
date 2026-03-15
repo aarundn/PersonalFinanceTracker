@@ -90,7 +90,7 @@ fun MonthCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        "${daysPassed} of ${daysInMonth}",
+                        "$daysPassed of $daysInMonth",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
