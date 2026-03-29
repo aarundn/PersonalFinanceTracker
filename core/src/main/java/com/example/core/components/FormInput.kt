@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
-import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun FormInput(
@@ -40,7 +40,7 @@ fun FormInput(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
         )
 
         val interactionSource = remember { MutableInteractionSource() }
@@ -59,12 +59,12 @@ fun FormInput(
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceContainer,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
                 )
                 .border(
-                    width = 1.dp,
+                    width = MaterialTheme.dimensions.borderThin,
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
                 )
                 .then(
                     if (onClick != null) {
@@ -75,7 +75,7 @@ fun FormInput(
                        )
                     } else Modifier
                 )
-                .padding(12.dp),
+                .padding(MaterialTheme.dimensions.spacingMedium),
             singleLine = keyboardType != KeyboardType.Text,
             maxLines = maxLine,
             minLines = minLine,
@@ -101,8 +101,8 @@ fun FormInput(
 private fun FormFormComponentsPreview() {
     PersonalFinanceTrackerTheme {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             FormInput(
                 label = "Title",

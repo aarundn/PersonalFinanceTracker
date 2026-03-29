@@ -26,7 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun <T> TransactionDropdown(
@@ -43,7 +43,7 @@ fun <T> TransactionDropdown(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
         )
 
         Box {
@@ -52,15 +52,15 @@ fun <T> TransactionDropdown(
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
                     )
                     .border(
-                        width = 1.dp,
+                        width = MaterialTheme.dimensions.borderThin,
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
                     )
                     .clickable(enabled = enabled) { expanded = true }
-                    .padding(12.dp),
+                    .padding(MaterialTheme.dimensions.spacingMediumSmall),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -100,7 +100,7 @@ fun <T> TransactionDropdown(
                                         Icons.Default.Check,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
                                     )
                                 }
                             }

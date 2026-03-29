@@ -15,6 +15,7 @@ data class Dimensions(
     // Spacing & Padding
     val spacingExtraSmall: Dp = 4.dp,
     val spacingSmall: Dp = 8.dp,
+    val spacingMediumSmall: Dp = 12.dp,
     val spacingMedium: Dp = 16.dp,
     val spacingLarge: Dp = 24.dp,
     val spacingExtraLarge: Dp = 32.dp,
@@ -34,12 +35,15 @@ data class Dimensions(
     val iconSizeSmall: Dp = 16.dp,
     val iconSizeNormal: Dp = 24.dp,
     val iconSizeLarge: Dp = 32.dp,
+    val iconSizeMediumLarge: Dp = 40.dp,
     val iconSizeExtraLarge: Dp = 48.dp,
+    val iconSizeHuge: Dp = 64.dp,
     
     // Optional Radius Fallbacks (Although MaterialTheme.shapes is preferred)
     val radiusSmall: Dp = 8.dp,
     val radiusMedium: Dp = 12.dp,
     val radiusLarge: Dp = 16.dp,
+    val radiusExtraLarge: Dp = 24.dp,
 )
 
 val LocalDimensions = staticCompositionLocalOf { Dimensions() }

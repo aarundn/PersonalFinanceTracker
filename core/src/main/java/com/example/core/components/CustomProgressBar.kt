@@ -17,19 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressBackground
+import com.example.core.ui.theme.dimensions
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.unit.Dp
 import com.example.core.ui.theme.ProgressPrimary
 
 @Composable
 fun CustomProgressBar(
+
     progress: Float,
     modifier: Modifier = Modifier,
     backgroundColor: Color = ProgressBackground,
     progressColor: Color = ProgressPrimary,
-    height: Dp = 8.dp
+    height: Dp = MaterialTheme.dimensions.spacingSmall
 ) {
     val hasAnimated = rememberSaveable { mutableStateOf(false) }
     val animatedProgress = remember { Animatable(if (!hasAnimated.value) 0f else progress.coerceIn(0f, 1f)) }
@@ -49,14 +51,14 @@ fun CustomProgressBar(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(MaterialTheme.dimensions.spacingExtraSmall))
             .background(backgroundColor)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(animatedProgress.value)
                 .height(height)
-                .clip(RoundedCornerShape(4.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimensions.spacingExtraSmall))
                 .background(progressColor)
         )
     }

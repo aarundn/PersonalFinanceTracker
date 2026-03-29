@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun ActionButtons(
@@ -33,8 +33,8 @@ fun ActionButtons(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(bottom = MaterialTheme.dimensions.spacingMedium),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
     ) {
         OutlinedButton(
             onClick = onCancel,
@@ -46,7 +46,7 @@ fun ActionButtons(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = stringResource(R.string.action_cancel),
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
             )
             Text(stringResource(R.string.action_cancel))
         }
@@ -61,15 +61,15 @@ fun ActionButtons(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.padding(end = 8.dp),
-                    strokeWidth = 2.dp,
+                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall),
+                    strokeWidth = MaterialTheme.dimensions.borderNormal,
                     color = Color.White
                 )
             } else {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = stringResource(R.string.action_save),
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
                 )
             }
             Text(stringResource(R.string.action_save))

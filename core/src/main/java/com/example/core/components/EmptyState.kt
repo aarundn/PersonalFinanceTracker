@@ -19,8 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-
+import com.example.core.ui.theme.dimensions
 @Composable
 fun EmptyState(
     title: String,
@@ -34,7 +33,7 @@ fun EmptyState(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(MaterialTheme.dimensions.spacingMedium),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -42,8 +41,8 @@ fun EmptyState(
             imageVector = Icons.Outlined.MailOutline,
             contentDescription = null,
             modifier = Modifier
-                .size(64.dp)
-                .padding(bottom = 16.dp),
+                .size(MaterialTheme.dimensions.iconSizeHuge)
+                .padding(bottom = MaterialTheme.dimensions.spacingMedium),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
@@ -56,12 +55,12 @@ fun EmptyState(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp),
+            modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingSmall),
             textAlign = TextAlign.Center
         )
         Button(
             onClick = onAddClick,
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingLarge),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             )
@@ -69,7 +68,7 @@ fun EmptyState(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
             )
             Text(
                 text = buttonText,
@@ -80,7 +79,7 @@ fun EmptyState(
         if (secondaryButtonText != null && onSecondaryClick != null) {
             OutlinedButton(
                 onClick = onSecondaryClick,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium)
             ) {
                 Text(
                     text = secondaryButtonText,

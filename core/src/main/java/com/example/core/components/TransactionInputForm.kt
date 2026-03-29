@@ -19,13 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.model.Category
 import com.example.core.model.Currency
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.model.BudgetDisplayData
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun TransactionInputForm(
@@ -53,7 +53,7 @@ fun TransactionInputForm(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
     ) {
 
         Card(
@@ -61,11 +61,11 @@ fun TransactionInputForm(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
         ) {
             Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
             ) {
                 TransactionHeaderForm()
 
@@ -165,7 +165,7 @@ private fun TransactionHeaderForm() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
     ) {
         Icon(
             Icons.Outlined.Add,

@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun TransactionTypeToggle(
@@ -33,18 +33,18 @@ fun TransactionTypeToggle(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
             )
             .border(
-                width = 1.dp,
+                width = MaterialTheme.dimensions.borderThin,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
             )
-            .padding(16.dp)
+            .padding(MaterialTheme.dimensions.spacingMedium)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -58,7 +58,7 @@ fun TransactionTypeToggle(
             )
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(

@@ -20,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.core.utils.formatBudgetSpentOfAmount
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun BudgetInfo(
@@ -36,12 +36,12 @@ fun BudgetInfo(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(MaterialTheme.dimensions.iconSizeMediumLarge)
                 .clip(CircleShape)
                 .background(iconBackground),
             contentAlignment = Alignment.Center
@@ -50,7 +50,7 @@ fun BudgetInfo(
                 imageVector = ImageVector.vectorResource(icon),
                 contentDescription = null,
                 tint = iconTint,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
             )
         }
 

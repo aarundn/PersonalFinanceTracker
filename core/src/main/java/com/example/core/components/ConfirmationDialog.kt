@@ -26,10 +26,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun ConfirmationDialog(
@@ -46,24 +46,24 @@ fun ConfirmationDialog(
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusExtraLarge),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(MaterialTheme.dimensions.spacingLarge),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeExtraLarge)
                 )
 
                 Text(
@@ -84,14 +84,14 @@ fun ConfirmationDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        .padding(top = MaterialTheme.dimensions.spacingSmall),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
                 ) {
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+                        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline)
                     ) {
                         Text(
                             text = dismissText,
@@ -102,7 +102,7 @@ fun ConfirmationDialog(
                     Button(
                         onClick = onConfirm,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = confirmButtonColor,
                             contentColor = Color.White

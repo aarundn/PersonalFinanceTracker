@@ -18,9 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,16 +43,16 @@ fun HeaderSection(
             if (showBackIcon)
                 Row(
                     modifier = Modifier
-                        .padding(start = 4.dp)
+                        .padding(start = MaterialTheme.dimensions.spacingExtraSmall)
                         .clickable(onClick = onBackClick),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.cd_back),
                         tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
                     )
                     Text(
                         text = stringResource(R.string.action_back),

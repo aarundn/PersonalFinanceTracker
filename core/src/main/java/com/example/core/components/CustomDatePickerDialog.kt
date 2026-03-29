@@ -11,7 +11,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +43,7 @@ fun CustomDatePickerDialog(
                 Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge),
         colors = DatePickerDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             titleContentColor = MaterialTheme.colorScheme.onSurface,
