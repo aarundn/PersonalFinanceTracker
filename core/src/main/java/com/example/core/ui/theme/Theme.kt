@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDark,
@@ -28,6 +29,7 @@ private val LightColorScheme = lightColorScheme(
     surfaceContainer = SurfaceContainerLight,
 )
 
+
 @Composable
 fun PersonalFinanceTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -38,11 +40,15 @@ fun PersonalFinanceTrackerTheme(
         else -> LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalDimensions provides Dimensions()
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = AppTypography,
+            content = content
+        )
+    }
 }
 
 
