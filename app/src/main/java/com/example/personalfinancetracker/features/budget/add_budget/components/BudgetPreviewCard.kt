@@ -23,10 +23,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun BudgetPreviewCard(
@@ -41,22 +41,22 @@ fun BudgetPreviewCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(MaterialTheme.dimensions.spacingMedium),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
             ) {
                 Box(
                     modifier = Modifier
-                        .size(44.dp)
+                        .size(MaterialTheme.dimensions.iconSizeExtraLarge)
                         .clip(CircleShape)
                         .background(category.color.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
@@ -65,12 +65,12 @@ fun BudgetPreviewCard(
                         imageVector = ImageVector.vectorResource(category.icon),
                         contentDescription = null,
                         tint = category.color,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
                     )
                 }
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
                 ) {
                     Text(
                         text = stringResource(category.nameResId),
@@ -87,7 +87,7 @@ fun BudgetPreviewCard(
 
             Column(
                 horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
             ) {
                 Text(
                     text = "$${amount.formatCurrency()}",

@@ -15,7 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.components.FormInput
 import com.example.core.components.TransactionDropdown
 import com.example.core.model.Currency
@@ -39,7 +39,7 @@ fun ConversionTestCard(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
     ) {
         Text(
             text = "Currency Conversion Test",
@@ -64,13 +64,13 @@ fun ConversionTestCard(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             border = BorderStroke(
-                width = 1.dp,
+                width = MaterialTheme.dimensions.borderThin,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
             )
         ) {
             Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
             ) {
                 // From
                 Text(
@@ -105,8 +105,8 @@ fun ConversionTestCard(
                 ) {
                     if (isConverting) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(18.dp),
-                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall),
+                            strokeWidth = MaterialTheme.dimensions.borderNormal,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     } else {
@@ -125,7 +125,7 @@ fun ConversionTestCard(
                             text = "$conversionAmount ${baseCurrency.id} = $result ${targetCurrency?.id ?: ""}",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.padding(12.dp)
+                            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMediumSmall)
                         )
                     }
                 }

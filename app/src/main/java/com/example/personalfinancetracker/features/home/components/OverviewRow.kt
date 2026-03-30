@@ -7,11 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
-import com.example.core.R
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PrimaryLight
+import androidx.compose.material3.MaterialTheme
+import com.example.core.R
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun OverviewRow(
@@ -22,7 +23,7 @@ fun OverviewRow(
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
     ) {
         MoneyCard(
             title = "Income",

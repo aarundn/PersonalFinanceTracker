@@ -20,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.statusContainer
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
+import com.example.core.ui.theme.dimensions
 
 @Composable
 fun MoneyCard(
@@ -36,20 +36,20 @@ fun MoneyCard(
     textColor: Color = baseColor
 ) {
     Card(
-        modifier = modifier.statusContainer(baseColor = baseColor, cornerRadius = 12.dp),
+        modifier = modifier.statusContainer(baseColor = baseColor, cornerRadius = MaterialTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         border = null
     ) {
-        Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.Start) {
+        Column(Modifier.padding(MaterialTheme.dimensions.spacingMedium), horizontalAlignment = Alignment.Start) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
             ) {
                 if (icon != null) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        modifier = Modifier.height(16.dp),
+                        modifier = Modifier.height(MaterialTheme.dimensions.iconSizeSmall),
                         tint = textColor
                     )
                 }
@@ -59,7 +59,7 @@ fun MoneyCard(
                     color = textColor
                 )
             }
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(MaterialTheme.dimensions.spacingExtraSmall))
             Text(
                 text = "${value.formatCurrency()} $currencySymbol",
                 style = MaterialTheme.typography.headlineSmall,

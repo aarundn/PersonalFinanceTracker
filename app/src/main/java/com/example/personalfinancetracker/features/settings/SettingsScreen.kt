@@ -9,8 +9,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import com.example.core.ui.theme.dimensions
 import com.example.personalfinancetracker.R
 import com.example.core.components.HeaderSection
 import com.example.core.components.TransactionDropdown
@@ -35,11 +35,11 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             Text(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
                 text = stringResource(R.string.settings_general_section),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
@@ -47,7 +47,7 @@ fun SettingsScreen(
             
             SyncStatusBanner(
                 syncStatus = state.syncStatus,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
             )
 
             TransactionDropdown(

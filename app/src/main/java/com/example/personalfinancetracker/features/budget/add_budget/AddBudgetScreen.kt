@@ -16,12 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
+import com.example.core.components.HeaderSection
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.components.HeaderSection
+import com.example.core.ui.theme.dimensions
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.budget.common.BudgetInputForm
 
@@ -36,7 +36,7 @@ fun AddBudgetScreen(
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
             }
         },
         modifier = modifier.fillMaxSize(),
@@ -52,12 +52,12 @@ fun AddBudgetScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             BudgetInputForm(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
                 categories = state.categories,
                 selectedCategory = state.selectedCategory,
                 selectedPeriod = state.period,

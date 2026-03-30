@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.Income
@@ -47,10 +48,10 @@ fun TransactionOverviewCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge)
         ) {
 
             CategoryAndAmountInfo(
@@ -75,7 +76,7 @@ private fun TimeAndDate(date: String, time: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp),
+            .padding(top = MaterialTheme.dimensions.spacingMedium),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -95,13 +96,13 @@ private fun TimeAndDate(date: String, time: String) {
 private fun TimeLabel(textLabel: String, icon: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(icon),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall)
         )
         Text(
             text = textLabel,
@@ -122,7 +123,7 @@ private fun CategoryAndAmountInfo(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -138,7 +139,7 @@ private fun CategoryAndAmountInfo(
                 imageVector = ImageVector.vectorResource(categoryIconId),
                 contentDescription = null,
                 tint = categoryColor,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeLarge)
             )
         }
 
@@ -188,14 +189,17 @@ private fun AmountWithBadge(
                 else
                     ProgressError
             ),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.padding(bottom = 8.dp)
+            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
         ) {
             Text(
                 text = if (isIncome) "Income" else "Expense",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                modifier = Modifier.padding(
+                    horizontal = MaterialTheme.dimensions.spacingSmall,
+                    vertical = MaterialTheme.dimensions.spacingExtraSmall
+                )
             )
         }
 

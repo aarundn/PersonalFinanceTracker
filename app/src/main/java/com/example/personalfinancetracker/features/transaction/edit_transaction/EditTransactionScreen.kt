@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.components.ConfirmationDialog
 import com.example.core.components.CustomSnackBar
@@ -57,7 +57,7 @@ fun EditTransactionScreen(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -82,17 +82,17 @@ fun EditTransactionScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             if (state.isLoading) {
-                LoadingIndicator(modifier = Modifier.padding(vertical = 32.dp))
+                LoadingIndicator(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingExtraLarge))
             } else {
                 state.transaction?.let {
                     TransactionOverviewCard(
                         transactionUi = it,
-                        modifier = Modifier.padding(top = 16.dp),
+                        modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
                     )
                 }
 
@@ -130,7 +130,7 @@ fun EditTransactionScreen(
                         onClick = { onEvent(EditTransactionEvent.OnDelete) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp),
+                            .padding(bottom = MaterialTheme.dimensions.spacingMedium),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = ProgressError,
                             contentColor = Color.White
@@ -139,7 +139,7 @@ fun EditTransactionScreen(
                         Icon(
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
                         )
                         Text("Delete Transaction")
                     }

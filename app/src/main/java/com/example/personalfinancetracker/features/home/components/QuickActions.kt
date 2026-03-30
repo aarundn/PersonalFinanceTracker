@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,16 +33,16 @@ fun QuickActions(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.padding(bottom = 16.dp),
+        modifier = modifier.padding(bottom = MaterialTheme.dimensions.spacingMedium),
         colors = androidx.compose.material3.CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.padding(MaterialTheme.dimensions.spacingMedium), verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)) {
             Text(stringResource(R.string.home_quick_actions), style = MaterialTheme.typography.titleMedium)
             
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)) {
                 ActionButton(
                     text = stringResource(R.string.home_add_expense),
                     icon = Icons.Outlined.Add,
@@ -80,16 +80,16 @@ private fun ActionButton(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                modifier = Modifier.height(16.dp)
+                modifier = Modifier.height(MaterialTheme.dimensions.iconSizeSmall)
             )
             Text(
                 text = text,

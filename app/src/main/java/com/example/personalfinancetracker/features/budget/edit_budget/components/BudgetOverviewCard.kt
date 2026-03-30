@@ -32,13 +32,11 @@ import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatAmount
 import com.example.core.utils.formatAmountLeft
 import com.example.core.utils.formatAmountOver
 import com.example.core.utils.formatPercentageUsed
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.Warning
 import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
@@ -68,11 +66,11 @@ fun BudgetOverviewCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             CategoryOverViewInfo(
                 containerColor = containerColor,
@@ -105,7 +103,7 @@ private fun CategoryOverViewInfo(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -118,13 +116,13 @@ private fun CategoryOverViewInfo(
                 imageVector = icon,
                 contentDescription = null,
                 tint = tint,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeLarge)
             )
         }
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
         ) {
             Text(
                 text = stringResource(category.nameResId),
@@ -159,7 +157,7 @@ private fun ProgressOverViewInfo(
     progressColor: Color
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
     ) {
         AmountRow(
             label = "Spent",

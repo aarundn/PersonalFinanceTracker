@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -45,35 +46,35 @@ fun CategorySelectionGrid(
             text = "Category",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingMediumSmall)
         )
 
         FlowRow(
             maxItemsInEachRow = 2,
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
         ) {
             categories.forEach { category ->
                 val isSelected = category.id == selectedCategoryId
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
                     color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surface,
                     tonalElevation = if (isSelected) 2.dp else 0.dp,
                     modifier = Modifier
                         .weight(1f, fill = true)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(MaterialTheme.dimensions.radiusMedium))
                         .border(
-                            width = 1.dp,
+                            width = MaterialTheme.dimensions.borderThin,
                             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium)
                         )
                         .clickable { onCategorySelected(category.id) }
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            .padding(horizontal = MaterialTheme.dimensions.spacingMedium, vertical = MaterialTheme.dimensions.spacingMediumSmall),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconWrapper(
@@ -84,7 +85,7 @@ fun CategorySelectionGrid(
                                 imageVector = ImageVector.vectorResource(category.icon),
                                 contentDescription = null,
                                 tint = category.color,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
                             )
                         }
 
@@ -116,7 +117,7 @@ private fun IconWrapper(
 ) {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(MaterialTheme.dimensions.iconSizeMediumLarge)
             .clip(CircleShape)
             .background(background),
         contentAlignment = Alignment.Center

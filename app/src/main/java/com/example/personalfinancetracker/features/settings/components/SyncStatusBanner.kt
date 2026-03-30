@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.conversion_rate.sync.SyncStatus
+import com.example.core.ui.theme.dimensions
 import com.example.core.ui.theme.Expense
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.MutedForeground
@@ -67,18 +67,18 @@ private fun SyncStatusBannerContent(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .statusContainer(baseColor = baseColor, cornerRadius = 8.dp)
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .statusContainer(baseColor = baseColor, cornerRadius = MaterialTheme.dimensions.radiusSmall)
+            .padding(horizontal = MaterialTheme.dimensions.spacingMediumSmall, vertical = MaterialTheme.dimensions.spacingSmall)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
         ) {
             if (isSyncing) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall),
                     color = baseColor,
-                    strokeWidth = 2.dp
+                    strokeWidth = MaterialTheme.dimensions.borderNormal
                 )
             }
 

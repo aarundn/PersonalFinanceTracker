@@ -18,7 +18,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.components.ConfirmationDialog
 import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
@@ -46,7 +46,7 @@ fun EditBudgetScreen(
         modifier = modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -71,17 +71,17 @@ fun EditBudgetScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             if (state.isLoading && !state.isEditing) {
-                LoadingIndicator(modifier = Modifier.padding(vertical = 32.dp))
+                LoadingIndicator(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingExtraLarge))
             } else {
                 state.budget?.let { budget ->
                     BudgetOverviewCard(
                         budget = budget,
-                        modifier = Modifier.padding(top = 16.dp)
+                        modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium)
                     )
                 }
 

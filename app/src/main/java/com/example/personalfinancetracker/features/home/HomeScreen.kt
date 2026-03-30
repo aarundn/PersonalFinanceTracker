@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
@@ -69,10 +69,10 @@ private fun HomeContent(
 ) {
     Column(
         modifier = modifier
-            .padding(PaddingValues(horizontal = 16.dp))
+            .padding(PaddingValues(horizontal = MaterialTheme.dimensions.spacingMedium))
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
     ) {
         // Greeting header with settings icon
         Row(

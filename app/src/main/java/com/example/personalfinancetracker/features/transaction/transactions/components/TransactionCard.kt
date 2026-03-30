@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.ui.theme.ProgressError
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -44,30 +44,30 @@ fun TransactionCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         border = BorderStroke(
-            1.dp,
+            MaterialTheme.dimensions.borderThin,
             MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
         ),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(MaterialTheme.dimensions.spacingMedium),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(MaterialTheme.dimensions.iconSizeMediumLarge)
                         .clip(CircleShape)
                         .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
@@ -76,7 +76,7 @@ fun TransactionCard(
                         imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
                         contentDescription = null,
                         tint = transaction.currentCategory.color,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
                     )
                 }
 

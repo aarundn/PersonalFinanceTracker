@@ -13,8 +13,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.components.CustomDatePickerDialog
+import com.example.core.ui.theme.dimensions
 import com.example.core.components.CustomSnackBar
 import com.example.core.components.HeaderSection
 import com.example.core.components.TransactionInputForm
@@ -35,7 +35,7 @@ fun AddTransactionScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-            CustomSnackBar(snackBarData, modifier = Modifier.padding(16.dp))
+            CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
         } },
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
@@ -44,10 +44,10 @@ fun AddTransactionScreen(
  
         TransactionInputForm(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = MaterialTheme.dimensions.spacingMedium)
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
             categories = state.categories,
             isIncome = state.isIncome,

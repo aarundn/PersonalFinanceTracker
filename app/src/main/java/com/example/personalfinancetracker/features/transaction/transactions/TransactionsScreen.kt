@@ -21,8 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import com.example.core.ui.theme.dimensions
 import com.example.personalfinancetracker.R
 import com.example.core.components.EmptyState
 import com.example.core.components.HeaderSection
@@ -75,12 +75,12 @@ fun TransactionsScreen(
                             onClick = { onEvent(TransactionsEvent.OnAddTransactionClick) },
                             modifier = modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(24.dp),
+                                .padding(MaterialTheme.dimensions.spacingLarge),
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             elevation = FloatingActionButtonDefaults.elevation(
-                                defaultElevation = 6.dp,
-                                pressedElevation = 8.dp
+                                defaultElevation = MaterialTheme.dimensions.spacingSmall,
+                                pressedElevation = MaterialTheme.dimensions.spacingSmall
                             )
                         ) {
                             Icon(
@@ -103,11 +103,11 @@ private fun Content(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 88.dp, top = 16.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimensions.buttonHeightNormal * 2, top = MaterialTheme.dimensions.spacingMedium)
         ) {
             items(
                 transactionsUiState.transactions,

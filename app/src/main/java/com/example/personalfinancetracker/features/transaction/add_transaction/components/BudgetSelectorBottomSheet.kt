@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.components.BudgetSelectorCard
 import com.example.personalfinancetracker.R
 import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
@@ -55,7 +55,7 @@ fun BudgetSelectorBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -77,10 +77,10 @@ fun BudgetSelectorBottomSheet(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.size(48.dp))
+                Spacer(modifier = Modifier.size(MaterialTheme.dimensions.buttonHeightNormal))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.spacingMedium))
 
             if (budgets.isEmpty()) {
                 Text(
@@ -89,12 +89,12 @@ fun BudgetSelectorBottomSheet(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 32.dp),
+                        .padding(vertical = MaterialTheme.dimensions.spacingExtraLarge),
                     textAlign = TextAlign.Center
                 )
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(budgets, key = { it.id }) { budget ->
@@ -110,17 +110,17 @@ fun BudgetSelectorBottomSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.spacingMedium))
             TextButton(
                 onClick = onAddBudgetClicked,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = MaterialTheme.dimensions.spacingMedium)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
                 )
                 Text("Create New Budget")
             }

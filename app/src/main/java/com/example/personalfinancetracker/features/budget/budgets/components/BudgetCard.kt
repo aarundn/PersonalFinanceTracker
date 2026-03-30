@@ -15,14 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.core.components.BudgetAmountStateInfo
 import com.example.core.components.BudgetInfo
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
+import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatAmountNoSpace
 import com.example.core.utils.formatPercentage
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
@@ -47,15 +46,15 @@ fun BudgetCard(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -83,7 +82,7 @@ fun BudgetCard(
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
             ) {
                 CustomProgressBar(
                     progress = budget.percentage,

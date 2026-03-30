@@ -25,13 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import com.example.core.R
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.ProgressPrimary
+import com.example.core.ui.theme.dimensions
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
@@ -51,11 +51,11 @@ fun BudgetSummaryCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(
-            Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            Modifier.padding(MaterialTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             Row(
                 Modifier.fillMaxWidth(),
@@ -64,7 +64,7 @@ fun BudgetSummaryCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
                 ) {
                     Icon(Icons.Outlined.CheckCircle, contentDescription = null)
                     Text(stringResource(R.string.home_budget_summary), style = MaterialTheme.typography.titleMedium)
@@ -107,11 +107,11 @@ private fun BudgetItem(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
             ) {
                 Box(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(MaterialTheme.dimensions.spacingSmall)
                         .background(category.color.copy(alpha = 0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -119,7 +119,7 @@ private fun BudgetItem(
                         imageVector = ImageVector.vectorResource(category.icon),
                         contentDescription = null,
                         tint = category.color,
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall)
                     )
                 }
                 Column {
@@ -138,7 +138,7 @@ private fun BudgetItem(
                 Icon(Icons.Outlined.Warning, contentDescription = null, tint = ProgressError)
             }
         }
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(MaterialTheme.dimensions.spacingSmall))
         CustomProgressBar(
             progress = budget.percentage,
             modifier = Modifier.fillMaxWidth(),

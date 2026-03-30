@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.ui.theme.ProgressError
 
@@ -32,11 +32,11 @@ fun DangerZoneCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(1.dp, ProgressError.copy(alpha = 0.4f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, ProgressError.copy(alpha = 0.4f))
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
         ) {
             Text(
                 text = stringResource(R.string.budget_danger_zone),
@@ -55,7 +55,7 @@ fun DangerZoneCard(
                 Icon(
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
                 )
                 Text(stringResource(R.string.budget_delete_button))
             }
