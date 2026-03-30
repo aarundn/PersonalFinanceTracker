@@ -9,6 +9,8 @@ import com.example.data.remote.exchangerate.ExchangeRateApiAdapter
 import com.example.data.remote.exchangerate.ExchangeRateApiService
 import com.example.data.remote.frankfurter.FrankfurterAdapter
 import com.example.data.remote.frankfurter.FrankfurterApiService
+import com.example.data.remote.transaction.RemoteTransactionRepo
+import com.example.data.remote.transaction.RemoteTransactionRepoImpl
 import com.example.data.repository.BudgetRepositoryImp
 import com.example.data.repository.TransactionRepositoryImp
 import com.example.data.repository.UserPreferencesRepositoryImpl
@@ -75,6 +77,7 @@ val dataModule = module {
     singleOf(::TransactionRepositoryImp) { bind<TransactionRepository>() }
     singleOf(::BudgetRepositoryImp) { bind<BudgetRepository>() }
     singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
+    singleOf(::RemoteTransactionRepoImpl) { bind<RemoteTransactionRepo>() }
 
     //  Exchange Rate Providers
 
