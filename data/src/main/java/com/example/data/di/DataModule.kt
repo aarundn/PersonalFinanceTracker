@@ -1,10 +1,10 @@
 package com.example.data.di
 
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.conversion_rate.domain.port.ExchangeRateProviderPort
 import com.example.data.local.TrackerDatabase
+import com.example.data.remote.budget.RemoteBudgetRepo
+import com.example.data.remote.budget.RemoteBudgetRepoImpl
 import com.example.data.remote.exchangerate.ExchangeRateApiAdapter
 import com.example.data.remote.exchangerate.ExchangeRateApiService
 import com.example.data.remote.frankfurter.FrankfurterAdapter
@@ -33,11 +33,11 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-private val MIGRATION_9_10 = object : Migration(9, 10) {
-    override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE transactions ADD COLUMN budgetId TEXT DEFAULT NULL")
-    }
-}
+//private val MIGRATION_9_10 = object : Migration(9, 10) {
+//    override fun migrate(db: SupportSQLiteDatabase) {
+//        db.execSQL("ALTER TABLE transactions ADD COLUMN budgetId TEXT DEFAULT NULL")
+//    }
+//}
 
 val dataModule = module {
 
@@ -78,6 +78,7 @@ val dataModule = module {
     singleOf(::BudgetRepositoryImp) { bind<BudgetRepository>() }
     singleOf(::UserPreferencesRepositoryImpl) { bind<UserPreferencesRepository>() }
     singleOf(::RemoteTransactionRepoImpl) { bind<RemoteTransactionRepo>() }
+    singleOf(::RemoteBudgetRepoImpl) { bind<RemoteBudgetRepo>() }
 
     //  Exchange Rate Providers
 
