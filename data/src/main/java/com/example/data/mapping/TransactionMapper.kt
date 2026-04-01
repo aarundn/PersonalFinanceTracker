@@ -2,6 +2,7 @@ package com.example.data.mapping
 
 import com.example.data.local.model.TransactionEntity
 import com.example.data.remote.model.TransactionsDto
+import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Transaction
 import com.example.domain.model.Type
 
@@ -33,7 +34,8 @@ fun TransactionsDto.toEntity(): TransactionEntity {
         createdAt = createdAt,
         updatedAt = updatedAt,
         type = Type.valueOf(type),
-        budgetId = budgetId
+        budgetId = budgetId,
+        syncStatus = SyncStatusEnum.SYNCED.name
     )
 }
 
@@ -52,7 +54,8 @@ fun TransactionEntity.toDomain(): Transaction {
         createdAt = createdAt,
         updatedAt = updatedAt,
         type = type,
-        budgetId = budgetId
+        budgetId = budgetId,
+        syncStatus = syncStatus
     )
 }
 fun Transaction.toEntity(): TransactionEntity{
@@ -67,7 +70,8 @@ fun Transaction.toEntity(): TransactionEntity{
         createdAt = createdAt,
         updatedAt = updatedAt,
         type = type,
-        budgetId = budgetId
+        budgetId = budgetId,
+        syncStatus = syncStatus
     )
 }
 fun List<TransactionEntity>.toDomain(): List<Transaction> = map { it.toDomain() }

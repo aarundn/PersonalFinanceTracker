@@ -3,6 +3,7 @@ package com.example.data.mapping
 import com.example.data.local.model.BudgetEntity
 import com.example.data.remote.model.BudgetDto
 import com.example.domain.model.Budget
+import com.example.data.sync.SyncStatusEnum
 
 fun BudgetEntity.toDto(): BudgetDto {
     return BudgetDto(
@@ -29,6 +30,7 @@ fun BudgetDto.toEntity(): BudgetEntity {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        syncStatus = SyncStatusEnum.SYNCED.name
     )
 }
 
@@ -46,6 +48,7 @@ fun BudgetEntity.toDomain(): Budget {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        syncStatus = syncStatus
     )
 }
 
@@ -60,6 +63,7 @@ fun Budget.toEntity(): BudgetEntity {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        syncStatus = syncStatus
     )
 }
 

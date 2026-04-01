@@ -15,4 +15,5 @@ data class BudgetEntity(
     val notes: String?,
     val createdAt: Long,
     val updatedAt: Long,
+    val syncStatus: String = "PENDING"
 )

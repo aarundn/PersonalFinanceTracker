@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.example.data.local.model.TransactionEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,15 +21,29 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity): Long
 
+    @Upsert
+    suspend fun upsertTransaction(transaction: List<TransactionEntity>)
+
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTransaction(transaction: TransactionEntity)
 
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun deleteTransactionById(id: String)
 
+    @Query("DELETE FROM transactions")
+    suspend fun deleteAllTransactions()
+
+
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransactionById(id: String): TransactionEntity?
 
     @Query("SELECT * FROM transactions WHERE budgetId = :budgetId ORDER BY date DESC")
     fun getTransactionsByBudgetId(budgetId: String): Flow<List<TransactionEntity>>
+
+    @Query("SELECT * FROM transactions WHERE syncStatus != 'SYNCED'")
+    suspend fun getUnsyncedTransactions(): List<TransactionEntity>
+
+    @Query("UPDATE transactions SET syncStatus = :status WHERE id = :id")
+    suspend fun updateSyncStatus(id: String, status: String)
 }

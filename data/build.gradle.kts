@@ -72,4 +72,7 @@ dependencies {
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+    // WorkManager
+    implementation(libs.work.runtime.ktx)
+    implementation(libs.koin.androidx.workmanager)
 }

@@ -28,4 +28,10 @@ interface BudgetDao {
 
     @Query("SELECT * FROM budgets WHERE category = :category ORDER BY createdAt DESC")
     fun getBudgetsByCategory(category: String): Flow<List<BudgetEntity>>
+
+    @Query("SELECT * FROM budgets WHERE syncStatus != 'SYNCED'")
+    suspend fun getUnsyncedBudgets(): List<BudgetEntity>
+
+    @Query("UPDATE budgets SET syncStatus = :status WHERE id = :id")
+    suspend fun updateSyncStatus(id: String, status: String)
 }

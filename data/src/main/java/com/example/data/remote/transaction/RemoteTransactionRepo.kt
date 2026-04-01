@@ -9,4 +9,6 @@ interface RemoteTransactionRepo {
     suspend fun updateTransaction(transaction: TransactionsDto)
     suspend fun deleteTransactionById(id: String)
     fun getTransactionsByBudgetId(budgetId: String): Flow<List<TransactionsDto>>
+    suspend fun updateTransactionsWithResolvedData(resolvedTransactions: List<TransactionsDto>)
+    suspend fun fetchAndSyncRemoteTransactions()
 }

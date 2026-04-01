@@ -11,11 +11,11 @@ class RemoteBudgetRepoImpl(
     private val firestore: FirebaseFirestore
 ) : RemoteBudgetRepo {
     override suspend fun addBudget(budget: BudgetDto) {
-        firestore.collection("budgets").document(budget.id).set(budget)
+        firestore.collection(COLLECTION_NAME).document(budget.id).set(budget)
     }
 
     override fun getAllBudgets(): Flow<List<BudgetDto>> =
-        firestore.collection("budgets")
+        firestore.collection(COLLECTION_NAME)
             .snapshots()
             .catch { throw it }
             .map { snapshot ->
@@ -23,10 +23,15 @@ class RemoteBudgetRepoImpl(
             }
 
     override suspend fun updateBudget(budget: BudgetDto) {
-        firestore.collection("budgets").document(budget.id).set(budget)
+        firestore.collection(COLLECTION_NAME).document(budget.id).set(budget)
     }
 
     override suspend fun deleteBudgetById(id: String) {
-        firestore.collection("budgets").document(id).delete()
+        firestore.collection(COLLECTION_NAME).document(id).delete()
+    }
+
+    companion object
+    {
+        const val COLLECTION_NAME = "budgets"
     }
 }

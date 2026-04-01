@@ -8,14 +8,14 @@ import com.example.data.di.dataModule
 import com.example.domain.di.domainModule
 import com.example.personalfinancetracker.features.budget.di.budgetModule
 import com.example.personalfinancetracker.features.transaction.di.transactionsModule
-import homeModule
-import org.koin.android.ext.koin.androidContext
+import com.example.personalfinancetracker.features.home.di.homeModule
 import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import settingsModule
 import com.example.core.di.coreModule
+import org.koin.android.ext.koin.androidContext
 
 class App : Application(), Configuration.Provider {
 

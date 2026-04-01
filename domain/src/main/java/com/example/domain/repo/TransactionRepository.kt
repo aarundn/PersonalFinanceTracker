@@ -10,6 +10,7 @@ interface TransactionRepository {
     suspend fun deleteTransactionById(id: String)
     suspend fun getTransactionById(id: String): Transaction?
     fun getTransactionsByBudgetId(budgetId: String): Flow<List<Transaction>>
+    suspend fun syncWithRemote(): Result<Unit>
 }
 
 

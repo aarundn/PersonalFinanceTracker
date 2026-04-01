@@ -13,4 +13,5 @@ data class Transaction(
     val updatedAt: Long,
     val type: Type,
     val budgetId: String? = null,
+    val syncStatus: String = "PENDING"
     )

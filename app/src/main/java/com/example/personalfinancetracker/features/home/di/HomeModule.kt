@@ -1,3 +1,5 @@
+package com.example.personalfinancetracker.features.home.di
+
 import com.example.core.navigation.Feature
 import com.example.core.navigation.features.HomeFeature
 import com.example.personalfinancetracker.features.home.HomeViewModel

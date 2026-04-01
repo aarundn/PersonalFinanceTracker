@@ -32,5 +32,6 @@ data class TransactionEntity(
     val notes: String?,
     val createdAt: Long,
     val updatedAt: Long,
-    val budgetId: String? = null
+    val budgetId: String? = null,
+    val syncStatus: String = "PENDING"
 )

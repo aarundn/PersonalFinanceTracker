@@ -12,7 +12,7 @@ import com.example.data.local.model.TransactionEntity
         CategoryEntity::class,
         BudgetEntity::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = true
 )
 
