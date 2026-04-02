@@ -11,6 +11,7 @@ interface TransactionRepository {
     suspend fun getTransactionById(id: String): Transaction?
     fun getTransactionsByBudgetId(budgetId: String): Flow<List<Transaction>>
     suspend fun syncWithRemote(): Result<Unit>
+    suspend fun resolveTransactionsConflict(): Result<Unit>
 }
 
 

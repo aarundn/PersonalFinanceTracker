@@ -7,7 +7,6 @@ import com.example.data.remote.model.TransactionsDto
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
@@ -22,12 +21,9 @@ class RemoteTransactionRepoImpl(
             .await()
     }
 
-    override fun getAllTransactions(): Flow<List<TransactionsDto>> =
+    override suspend fun getAllTransactions(): List<TransactionsDto> =
         firestore.collection(COLLECTION_NAME)
-            .snapshots()
-            .map { snapshot ->
-                snapshot.toObjects(TransactionsDto::class.java)
-            }
+            .get().await().map { it.toObject(TransactionsDto::class.java) }
 
     override suspend fun updateTransaction(transaction: TransactionsDto) {
         firestore.collection(COLLECTION_NAME)
@@ -68,7 +64,7 @@ class RemoteTransactionRepoImpl(
 
     override suspend fun fetchAndSyncRemoteTransactions() {
         try {
-            val remoteTransactions = getAllTransactions().first()
+            val remoteTransactions = getAllTransactions()
             val transactionEntity = remoteTransactions.toLocal()
             trackerDatabase.transactionDao().upsertTransaction(transactionEntity)
             println("Repository: Fetched and synced $remoteTransactions remote transactions")

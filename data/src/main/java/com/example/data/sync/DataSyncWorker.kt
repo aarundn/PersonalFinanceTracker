@@ -33,13 +33,15 @@ class DataSyncWorker(
             budgetRepository.syncWithRemote().getOrThrow()
             Log.d(TAG, "Budget sync complete")
 
-
+            transactionRepository.resolveTransactionsConflict().getOrThrow()
+            Log.d(TAG, "Transaction conflict resolution complete")
             Result.success()
         } catch (e: Exception) {
             Log.e(TAG, "Data sync failed", e)
             if (runAttemptCount < MAX_RETRIES) Result.retry()
             else failure(e.message)
         }
+
     }
 
     private fun failure(message: String?) = Result.failure(
