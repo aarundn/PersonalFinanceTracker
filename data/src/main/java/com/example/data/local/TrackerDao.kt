@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TransactionDao {
 
-    @Query("SELECT * FROM transactions ORDER BY date DESC")
-    fun getAllTransactions(): Flow<List<TransactionEntity>>
+    @Query("SELECT * FROM transactions WHERE syncStatus != :status ORDER BY date DESC ")
+    fun getAllTransactions(status: String): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions WHERE category = :category ORDER BY date DESC")
     fun getTransactionsByCategory(category: String): Flow<List<TransactionEntity>>
@@ -46,4 +46,7 @@ interface TransactionDao {
 
     @Query("UPDATE transactions SET syncStatus = :status WHERE id = :id")
     suspend fun updateSyncStatus(id: String, status: String)
+
+    @Query("SELECT * FROM transactions WHERE syncStatus = :status")
+    suspend fun getDeletedTransactions(status: String): List<TransactionEntity>
 }

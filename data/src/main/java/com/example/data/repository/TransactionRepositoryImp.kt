@@ -1,14 +1,15 @@
 package com.example.data.repository
 
 import com.example.data.local.TrackerDatabase
-import com.example.data.mapping.*
+import com.example.data.mapping.toDomain
+import com.example.data.mapping.toDto
+import com.example.data.mapping.toEntity
 import com.example.data.remote.transaction.RemoteTransactionRepo
 import com.example.data.sync.DataSyncManager
 import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Transaction
 import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class TransactionRepositoryImp(
@@ -24,7 +25,8 @@ class TransactionRepositoryImp(
     }
 
     override fun getAllTransactions(): Flow<List<Transaction>> =
-        transactionDB.transactionDao().getAllTransactions().map { it.toDomain() }
+        transactionDB.transactionDao().getAllTransactions(SyncStatusEnum.DELETED.name)
+            .map { it.toDomain() }
 
     override suspend fun updateTransaction(transaction: Transaction) {
         transactionDB.transactionDao().updateTransaction(transaction.toEntity())
@@ -32,7 +34,7 @@ class TransactionRepositoryImp(
     }
 
     override suspend fun deleteTransactionById(id: String) {
-        transactionDB.transactionDao().deleteTransactionById(id)
+        transactionDB.transactionDao().updateSyncStatus(id, SyncStatusEnum.DELETED.name)
         syncManager.triggerImmediateSync()
     }
 
@@ -45,17 +47,35 @@ class TransactionRepositoryImp(
 
 
     override suspend fun syncWithRemote(): Result<Unit> = runCatching {
-        pullTransactions()
+        syncDeleteTransactions()
         pushTransactions()
+        pullTransactions()
+
     }
 
+    private suspend fun syncDeleteTransactions() {
+        val localDeletedTransactions =
+            transactionDB.transactionDao().getDeletedTransactions(SyncStatusEnum.DELETED.name)
+        try {
+            localDeletedTransactions.forEach { localDeleted ->
+                remoteRepo.deleteTransactionById(localDeleted.id)
+                transactionDB.transactionDao().deleteTransactionById(localDeleted.id)
+            }
+        } catch (e: Exception) {
+            throw e
+        }
+    }
 
     private suspend fun pullTransactions() {
-        val remoteTransactions = remoteRepo.getAllTransactions().first()
-        remoteTransactions.forEach { remoteDto ->
-            val localEntity = transactionDB.transactionDao().getTransactionById(remoteDto.id)
-            if (localEntity == null || remoteDto.updatedAt > localEntity.updatedAt) {
-                transactionDB.transactionDao().insertTransaction(remoteDto.toEntity())
+
+        remoteRepo.getAllTransactions().collect { remoteTransactions ->
+            transactionDB.transactionDao().deleteAllTransactions()
+            remoteTransactions.forEach { remoteDto ->
+
+                val localEntity = transactionDB.transactionDao().getTransactionById(remoteDto.id)
+                if (localEntity == null || remoteDto.updatedAt > localEntity.updatedAt) {
+                    transactionDB.transactionDao().insertTransaction(remoteDto.toEntity())
+                }
             }
         }
     }
