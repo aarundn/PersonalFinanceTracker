@@ -1,8 +1,5 @@
 package com.example.data.remote.transaction
 
-import com.example.data.local.TrackerDatabase
-import com.example.data.mapping.toEntity
-import com.example.data.mapping.toLocal
 import com.example.data.remote.model.TransactionsDto
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
@@ -12,7 +9,6 @@ import kotlinx.coroutines.tasks.await
 
 class RemoteTransactionRepoImpl(
     private val firestore: FirebaseFirestore,
-    private val trackerDatabase: TrackerDatabase
 ) : RemoteTransactionRepo {
     override suspend fun addTransaction(transaction: TransactionsDto) {
         firestore.collection(COLLECTION_NAME)
@@ -46,32 +42,6 @@ class RemoteTransactionRepoImpl(
                 snapshot.toObjects(TransactionsDto::class.java)
             }
 
-    override suspend fun updateTransactionsWithResolvedData(resolvedTransactions: List<TransactionsDto>) {
-        runCatching {
-            try {
-                trackerDatabase.transactionDao().deleteAllTransactions()
-                println("Repository: Deleted all local transactions")
-                resolvedTransactions.forEach { transaction ->
-                    trackerDatabase.transactionDao().insertTransaction(transaction.toEntity())
-                }
-
-                println("Repository: Updated local database with ${resolvedTransactions.size} resolved Transactions")
-            } catch (e: Exception) {
-                println("Repository: Failed to update messages with resolved data: ${e.message}")
-            }
-        }
-    }
-
-    override suspend fun fetchAndSyncRemoteTransactions() {
-        try {
-            val remoteTransactions = getAllTransactions()
-            val transactionEntity = remoteTransactions.toLocal()
-            trackerDatabase.transactionDao().upsertTransaction(transactionEntity)
-            println("Repository: Fetched and synced $remoteTransactions remote transactions")
-        } catch (e: Exception) {
-            println("Repository: Failed to fetch remote transactions: ${e.message}")
-        }
-    }
 
     companion object
     {

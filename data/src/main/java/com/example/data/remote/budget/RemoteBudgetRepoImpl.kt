@@ -2,10 +2,6 @@ package com.example.data.remote.budget
 
 import com.example.data.remote.model.BudgetDto
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.snapshots
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 class RemoteBudgetRepoImpl(
@@ -14,15 +10,6 @@ class RemoteBudgetRepoImpl(
     override suspend fun addBudget(budget: BudgetDto) {
         firestore.collection(COLLECTION_NAME).document(budget.id).set(budget)
     }
-
-    override fun getAllBudgets(): Flow<List<BudgetDto>> =
-        firestore.collection(COLLECTION_NAME)
-            .snapshots()
-            .catch { throw it }
-            .map { snapshot ->
-                snapshot.toObjects(BudgetDto::class.java)
-            }
-
     override suspend fun updateBudget(budget: BudgetDto) {
         firestore.collection(COLLECTION_NAME).document(budget.id).set(budget)
     }

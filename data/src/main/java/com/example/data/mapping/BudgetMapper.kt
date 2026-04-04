@@ -34,8 +34,6 @@ fun BudgetDto.toEntity(): BudgetEntity {
     )
 }
 
-fun List<BudgetDto>.toLocal(): List<BudgetEntity> = map { it.toEntity() }
-fun List<BudgetEntity>.toDto(): List<BudgetDto> = map { it.toDto() }
 
 fun BudgetEntity.toDomain(): Budget {
     return Budget(
@@ -68,4 +66,3 @@ fun Budget.toEntity(): BudgetEntity {
 }
 
 fun List<BudgetEntity>.toDomain(): List<Budget> = map { it.toDomain() }
-fun List<Budget>.toEntity(): List<BudgetEntity> = map { it.toEntity() }

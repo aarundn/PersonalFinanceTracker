@@ -104,7 +104,6 @@ class TransactionRepositoryImp(
             }
             println("Repository: Successfully updated Transactions with resolved data")
         } catch (e: Exception) {
-            remoteRepo.fetchAndSyncRemoteTransactions()
             println("Repository: Failed to update messages with resolved data: ${e.message}")
         }
     }

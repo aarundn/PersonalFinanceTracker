@@ -39,8 +39,6 @@ fun TransactionsDto.toEntity(): TransactionEntity {
     )
 }
 
-fun List<TransactionsDto>.toLocal(): List<TransactionEntity> = map { it.toEntity() }
-fun List<TransactionEntity>.toDto(): List<TransactionsDto> = map { it.toDto() }
 
 fun TransactionEntity.toDomain(): Transaction {
     return Transaction(
@@ -75,6 +73,5 @@ fun Transaction.toEntity(): TransactionEntity{
     )
 }
 fun List<TransactionEntity>.toDomain(): List<Transaction> = map { it.toDomain() }
-fun List<Transaction>.toEntity(): List<TransactionEntity> = map { it.toEntity() }
 
 
