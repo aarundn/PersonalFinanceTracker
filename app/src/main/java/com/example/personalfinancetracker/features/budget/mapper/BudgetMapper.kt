@@ -16,7 +16,8 @@ fun Budget.toBudgetUi(spent: Double): BudgetUi {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        spent = spent
+        spent = spent,
+        syncStatusEnum = syncStatus
     )
 }
 
@@ -47,10 +48,9 @@ fun BudgetUi.toBudget(): Budget {
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        syncStatus = syncStatusEnum
     )
 }
-
-fun List<BudgetUi>.toBudget(): List<Budget> = map { it.toBudget() }
 
 
 

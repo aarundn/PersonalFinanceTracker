@@ -5,6 +5,7 @@ import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
+import com.example.data.sync.SyncStatusEnum
 
 @Immutable
 data class BudgetUi(
@@ -18,6 +19,7 @@ data class BudgetUi(
     val notes: String?,
     val createdAt: Long,
     val updatedAt: Long,
+    val syncStatusEnum: String = SyncStatusEnum.PENDING.name,
     val currentCategory: Category = DefaultCategories.fromId(category) ?: DefaultCategories.OTHER,
     val formattedCreatedDate: String = parseDateString(createdAt),
     val currencySymbol: String = DefaultCurrencies.fromId(currency)?.symbol ?: currency,

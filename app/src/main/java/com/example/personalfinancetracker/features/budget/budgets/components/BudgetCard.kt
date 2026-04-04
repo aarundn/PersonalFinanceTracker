@@ -17,13 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.components.BudgetAmountStateInfo
 import com.example.core.components.BudgetInfo
+import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
+import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
 import com.example.core.ui.theme.Warning
 import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatAmountNoSpace
 import com.example.core.utils.formatPercentage
+import com.example.data.sync.SyncStatusEnum
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 
@@ -108,6 +111,18 @@ fun BudgetCard(
                     )
                 }
             }
+
+            BudgetStatusBadge(
+                text = budget.syncStatusEnum,
+                color = when (budget.syncStatusEnum) {
+                    SyncStatusEnum.PENDING.name -> ProgressError
+                    SyncStatusEnum.SYNCED.name -> Income
+                    SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.outline
+                },
+                modifier = Modifier.align(Alignment.End),
+                icon = null
+            )
         }
     }
 }
@@ -127,7 +142,8 @@ private fun BudgetCardPreview() {
                 period = "monthly",
                 notes = "",
                 currency = "USD",
-                userId = ""
+                userId = "",
+                syncStatusEnum = SyncStatusEnum.PENDING.name
             ),
             onClick = {}
         )
