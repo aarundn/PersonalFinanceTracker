@@ -16,6 +16,7 @@ fun Transaction.toTransactionUi(): TransactionUi {
         updatedAt = updatedAt,
         type = type,
         budgetId = budgetId,
+        syncStatusEnum = syncStatus
     )
 }
 
@@ -32,6 +33,7 @@ fun TransactionUi.toTransaction(): Transaction {
         updatedAt = updatedAt,
         type = type,
         budgetId = budgetId,
+        syncStatus = syncStatusEnum
     )
 }
 

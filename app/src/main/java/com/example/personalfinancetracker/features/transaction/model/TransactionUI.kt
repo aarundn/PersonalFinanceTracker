@@ -5,6 +5,7 @@ import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.core.utils.parseDateString
+import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Type
 
 @Immutable
@@ -22,6 +23,7 @@ data class TransactionUi(
     val currentCategory: Category = DefaultCategories.fromId(categoryId) ?: DefaultCategories.OTHER,
     val type: Type,
     val budgetId: String? = null,
+    val syncStatusEnum: String = SyncStatusEnum.PENDING.name
 ) {
     val formattedDate: String get() = parseDateString(date)
     val formattedTime: String get() = parseDateString(date, isDate = false)

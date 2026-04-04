@@ -15,13 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.core.ui.theme.dimensions
 
 @Composable
 fun BudgetStatusBadge(
     text: String,
     color: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = Icons.Outlined.Warning
 ) {
     Surface(
         shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
@@ -29,16 +31,21 @@ fun BudgetStatusBadge(
         modifier = modifier.padding(bottom = MaterialTheme.dimensions.spacingExtraSmall)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.spacingSmall, vertical = MaterialTheme.dimensions.spacingExtraSmall),
+            modifier = Modifier.padding(
+                horizontal = MaterialTheme.dimensions.spacingSmall,
+                vertical = MaterialTheme.dimensions.spacingExtraSmall
+            ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(MaterialTheme.dimensions.spacingMediumSmall),
-                tint = color
-            )
+            icon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier.size(MaterialTheme.dimensions.spacingMediumSmall),
+                    tint = color
+                )
+            }
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelSmall,

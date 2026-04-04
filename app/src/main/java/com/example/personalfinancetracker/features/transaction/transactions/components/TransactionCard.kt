@@ -27,8 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.core.components.BudgetStatusBadge
+import com.example.core.ui.theme.Income
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.dimensions
 import com.example.core.ui.theme.ProgressError
+import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import kotlin.math.abs
@@ -60,53 +65,73 @@ fun TransactionCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(MaterialTheme.dimensions.iconSizeMediumLarge)
-                        .clip(CircleShape)
-                        .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
-                    contentAlignment = Alignment.Center
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
-                        contentDescription = null,
-                        tint = transaction.currentCategory.color,
-                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
-                    )
-                }
+                    Box(
+                        modifier = Modifier
+                            .size(MaterialTheme.dimensions.iconSizeMediumLarge)
+                            .clip(CircleShape)
+                            .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
+                            contentDescription = null,
+                            tint = transaction.currentCategory.color,
+                            modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
+                        )
+                    }
 
-                Column {
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = stringResource(transaction.currentCategory.nameResId),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "${stringResource(transaction.currentCategory.nameResId)} • ${transaction.formattedDate}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                    }
+
                     Text(
-                        text = stringResource(transaction.currentCategory.nameResId),
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "${stringResource(transaction.currentCategory.nameResId)} • ${transaction.formattedDate}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        text = formatAmount(
+                            transaction.type,
+                            transaction.amount,
+                            transaction.currencySymbol
+                        ),
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = if (transaction.type == Type.INCOME)
+                            transaction.currentCategory.color
+                        else
+                            ProgressError
                     )
                 }
+                BudgetStatusBadge(
+                    text = transaction.syncStatusEnum,
+                    color = when (transaction.syncStatusEnum) {
+                        SyncStatusEnum.PENDING.name ->  ProgressError
+                        SyncStatusEnum.SYNCED.name -> Income
+                        SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
+                        else -> {
+                            MaterialTheme.colorScheme.outline
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.End),
+                    icon = null
+                )
             }
-
-            Text(
-                text = formatAmount(transaction.type, transaction.amount, transaction.currencySymbol),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = if (transaction.type == Type.INCOME)
-                    transaction.currentCategory.color
-                else
-                    ProgressError
-            )
         }
     }
 }
@@ -117,4 +142,28 @@ private fun formatAmount(type: Type, amount: Double, currencySymbol: String): St
 
     return if (type == Type.EXPENSE) "-${currencySymbol} ${String.format("%.2f", amount)}"
     else "+${currencySymbol} ${String.format("%.2f", abs(amount))}"
+}
+
+@Preview
+@Composable
+private fun CardPreview() {
+    PersonalFinanceTrackerTheme {
+        TransactionCard(
+            transaction = TransactionUi(
+                id = "1",
+                userId = "1",
+                amount = 100.0,
+                currency = "USD",
+                categoryId = "1",
+                date = System.currentTimeMillis(),
+                notes = "Test",
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis(),
+                type = Type.EXPENSE,
+                syncStatusEnum = SyncStatusEnum.PENDING.name
+            ),
+            onClick = {},
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }

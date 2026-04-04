@@ -33,6 +33,7 @@ import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.Income
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressError
+import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -234,7 +235,8 @@ private fun TransactionOverviewCardPreview() {
                 notes = "Weekly grocery shopping at Whole Foods",
                 createdAt = System.currentTimeMillis(),
                 updatedAt = System.currentTimeMillis(),
-                type = Type.EXPENSE
+                type = Type.EXPENSE,
+                syncStatusEnum = SyncStatusEnum.PENDING.name
             )
         )
     }
