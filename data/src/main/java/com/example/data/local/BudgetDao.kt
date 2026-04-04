@@ -34,4 +34,13 @@ interface BudgetDao {
 
     @Query("UPDATE budgets SET syncStatus = :status WHERE id = :id")
     suspend fun updateSyncStatus(id: String, status: String)
+
+    @Query("SELECT * FROM budgets")
+    suspend fun getAllBudgetsOnce(): List<BudgetEntity>
+
+    @Query("SELECT * FROM budgets WHERE syncStatus = :status")
+    suspend fun getDeletedBudgets(status: String): List<BudgetEntity>
+
+    @Query("DELETE FROM budgets")
+    suspend fun deleteAllBudgets()
 }

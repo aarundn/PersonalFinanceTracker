@@ -8,4 +8,5 @@ interface RemoteBudgetRepo {
     fun getAllBudgets(): Flow<List<BudgetDto>>
     suspend fun updateBudget(budget: BudgetDto)
     suspend fun deleteBudgetById(id: String)
+    suspend fun getAllBudgetsOnce(): List<BudgetDto>
 }

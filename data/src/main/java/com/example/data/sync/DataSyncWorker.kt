@@ -35,6 +35,10 @@ class DataSyncWorker(
 
             transactionRepository.resolveTransactionsConflict().getOrThrow()
             Log.d(TAG, "Transaction conflict resolution complete")
+
+            budgetRepository.resolveBudgetsConflict().getOrThrow()
+            Log.d(TAG, "Budget conflict resolution complete")
+
             Result.success()
         } catch (e: Exception) {
             Log.e(TAG, "Data sync failed", e)

@@ -6,6 +6,7 @@ import com.google.firebase.firestore.snapshots
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 
 class RemoteBudgetRepoImpl(
     private val firestore: FirebaseFirestore
@@ -29,6 +30,12 @@ class RemoteBudgetRepoImpl(
     override suspend fun deleteBudgetById(id: String) {
         firestore.collection(COLLECTION_NAME).document(id).delete()
     }
+
+    override suspend fun getAllBudgetsOnce(): List<BudgetDto> =
+        firestore.collection(COLLECTION_NAME)
+            .get()
+            .await()
+            .toObjects(BudgetDto::class.java)
 
     companion object
     {

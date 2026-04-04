@@ -11,4 +11,5 @@ interface BudgetRepository {
     suspend fun getBudgetById(id: String): Budget?
     fun getBudgetsByCategory(category: String): Flow<List<Budget>>
     suspend fun syncWithRemote(): Result<Unit>
+    suspend fun resolveBudgetsConflict(): Result<Unit>
 }
