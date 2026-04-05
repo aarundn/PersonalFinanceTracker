@@ -1,6 +1,5 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.local.TrackerDatabase
 import com.example.data.mapping.toDomain
 import com.example.data.mapping.toDto
@@ -8,6 +7,7 @@ import com.example.data.mapping.toEntity
 import com.example.data.remote.transaction.RemoteTransactionRepo
 import com.example.data.sync.DataSyncManager
 import com.example.data.sync.SyncStatusEnum
+import com.example.data.util.resolveConflicts
 import com.example.domain.model.Transaction
 import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.Flow
@@ -57,51 +57,27 @@ class TransactionRepositoryImp(
 
     override suspend fun resolveTransactionsConflict(): Result<Unit> = runCatching {
 
-        val resolvedTransactions = mutableListOf<Transaction>()
         val localTransactions = transactionDB.transactionDao().getAllTransactions().first()
         val remoteTransactions = remoteRepo.getAllTransactions()
 
+        val resolvedTransactions = resolveConflicts(
+            localData = localTransactions,
+            remoteData = remoteTransactions,
+            remoteMapper = { it.toEntity() },
+            idMapper = { it.id },
+            idMapperRemote = { it.id },
+            timeMapper = { it.updatedAt },
+            timeMapperRemote = { it.updatedAt }
+        )
 
-        // Create maps for efficient lookup
-        val localMessageMap = localTransactions.associateBy { it.id }
-        val remoteMessageMap = remoteTransactions.associateBy { it.id }
-
-        // Process all unique Transactions IDs
-        val allMessageIds =
-            (localTransactions.map { it.id } + remoteTransactions.map { it.id }).distinct()
-
-        for (messageId in allMessageIds) {
-            val localTransaction = localMessageMap[messageId]
-            val remoteTransaction = remoteMessageMap[messageId]
-            when {
-                localTransaction == null && remoteTransaction != null -> {
-                    resolvedTransactions.add(remoteTransaction.toEntity().toDomain())
-                }
-
-                localTransaction != null && remoteTransaction == null -> {
-                    resolvedTransactions.add(localTransaction.toDomain())
-                }
-
-                localTransaction != null && remoteTransaction != null -> {
-                    if (localTransaction.updatedAt > remoteTransaction.updatedAt) {
-                        resolvedTransactions.add(localTransaction.toDomain())
-                    } else {
-                        resolvedTransactions.add(remoteTransaction.toEntity().toDomain())
-                    }
-                }
-            }
-            Log.d("TransactionRepository", "Resolved Transactions: ${resolvedTransactions.size}")
-        }
-        updateTransactionsWithResolvedData(resolvedTransactions)
+        updateTransactionsWithResolvedData(resolvedTransactions.toDomain())
     }
 
     private suspend fun updateTransactionsWithResolvedData(resolvedTransactions: List<Transaction>) {
         try {
 
             transactionDB.transactionDao().deleteAllTransactions()
-            resolvedTransactions.forEach { transaction ->
-                transactionDB.transactionDao().insertTransaction(transaction.toEntity())
-            }
+            transactionDB.transactionDao().insertTransactions(resolvedTransactions.toEntity())
             println("Repository: Successfully updated Transactions with resolved data")
         } catch (e: Exception) {
             println("Repository: Failed to update messages with resolved data: ${e.message}")

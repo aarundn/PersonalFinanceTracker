@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import com.example.core.R
 import com.example.core.common.UiText
+import com.example.data.sync.SyncStatusEnum
 
 class AddBudgetViewModel(
     private val addBudgetUseCase: AddBudgetUseCase,
@@ -95,7 +96,8 @@ class AddBudgetViewModel(
                     period = currentState.period.id,
                     notes = currentState.notes.ifBlank { null },
                     createdAt = currentState.startDate,
-                    updatedAt = System.currentTimeMillis()
+                    updatedAt = System.currentTimeMillis(),
+                    syncStatus = SyncStatusEnum.PENDING.name
                 )
 
                 addBudgetUseCase(budget).onSuccess {

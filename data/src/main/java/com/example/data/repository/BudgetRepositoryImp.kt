@@ -2,10 +2,13 @@ package com.example.data.repository
 
 import android.util.Log
 import com.example.data.local.TrackerDatabase
-import com.example.data.mapping.*
+import com.example.data.mapping.toDomain
+import com.example.data.mapping.toDto
+import com.example.data.mapping.toEntity
 import com.example.data.remote.budget.RemoteBudgetRepo
 import com.example.data.sync.DataSyncManager
 import com.example.data.sync.SyncStatusEnum
+import com.example.data.util.resolveConflicts
 import com.example.domain.model.Budget
 import com.example.domain.repo.BudgetRepository
 import kotlinx.coroutines.flow.Flow
@@ -49,38 +52,19 @@ class BudgetRepositoryImp(
     }
 
     override suspend fun resolveBudgetsConflict(): Result<Unit> = runCatching {
-        val resolvedBudgets = mutableListOf<Budget>()
         val localBudgets = trackerDB.budgetDao().getAllBudgetsOnce()
         val remoteBudgets = remoteRepo.getAllBudgetsOnce()
 
-        // Create maps for efficient lookup
-        val localMap = localBudgets.associateBy { it.id }
-        val remoteMap = remoteBudgets.associateBy { it.id }
-
-        // Process all unique Budget IDs
-        val allIds = (localBudgets.map { it.id } + remoteBudgets.map { it.id }).distinct()
-
-        for (id in allIds) {
-            val localBudget = localMap[id]
-            val remoteBudget = remoteMap[id]
-
-            when {
-                localBudget == null && remoteBudget != null -> {
-                    resolvedBudgets.add(remoteBudget.toEntity().toDomain())
-                }
-                localBudget != null && remoteBudget == null -> {
-                    resolvedBudgets.add(localBudget.toDomain())
-                }
-                localBudget != null && remoteBudget != null -> {
-                    if (localBudget.updatedAt > remoteBudget.updatedAt) {
-                        resolvedBudgets.add(localBudget.toDomain())
-                    } else {
-                        resolvedBudgets.add(remoteBudget.toEntity().toDomain())
-                    }
-                }
-            }
-        }
-        updateBudgetsWithResolvedData(resolvedBudgets)
+        val resolvedBudgets = resolveConflicts(
+            localData = localBudgets,
+            remoteData = remoteBudgets,
+            remoteMapper = { it.toEntity() },
+            idMapper = { it.id },
+            idMapperRemote = { it.id },
+            timeMapper = { it.updatedAt },
+            timeMapperRemote = { it.updatedAt }
+        )
+        updateBudgetsWithResolvedData(resolvedBudgets.toDomain())
     }
 
     private suspend fun syncDeleteBudgets() {
@@ -112,9 +96,7 @@ class BudgetRepositoryImp(
     private suspend fun updateBudgetsWithResolvedData(resolvedBudgets: List<Budget>) {
         try {
             trackerDB.budgetDao().deleteAllBudgets()
-            resolvedBudgets.forEach { budget ->
-                trackerDB.budgetDao().insertBudget(budget.toEntity())
-            }
+            trackerDB.budgetDao().insertBudgets(resolvedBudgets.toEntity())
             Log.d("BudgetRepository", "Successfully updated budgets with resolved data")
         } catch (e: Exception) {
             Log.e("BudgetRepository", "Failed to update budgets with resolved data: ${e.message}")

@@ -66,3 +66,5 @@ fun Budget.toEntity(): BudgetEntity {
 }
 
 fun List<BudgetEntity>.toDomain(): List<Budget> = map { it.toDomain() }
+fun List<Budget>.toEntity(): List<BudgetEntity> = map { it.toEntity() }
+
