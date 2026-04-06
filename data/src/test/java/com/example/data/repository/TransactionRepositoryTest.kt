@@ -55,7 +55,7 @@ class TransactionRepositoryTest {
             )
         )
         fakeRemoteRepo.addTransaction(
-            TransactionsDto(id = "1", amount = 500.0, updatedAt = 5000L)
+            TransactionsDto(id = "1", amount = 500.0, updatedAt = 5000L,type = Type.INCOME.name)
         )
         assertEquals(fakeTransactionDao.getAllTransactionsOnce().size, 1)
         assertEquals(fakeRemoteRepo.getAllTransactions().size, 1)
@@ -63,7 +63,7 @@ class TransactionRepositoryTest {
         transactionRepository.resolveTransactionsConflict()
 
         assertEquals(fakeTransactionDao.getAllTransactionsOnce().size, 1)
-        assertEquals(fakeRemoteRepo.getAllTransactions()[0].updatedAt, 5000L)
+        assertEquals(fakeTransactionDao.getAllTransactionsOnce()[0].updatedAt, 5000L)
     }
 
     @Test
