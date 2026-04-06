@@ -1,7 +1,7 @@
 package com.example.data.repository
 
 import android.util.Log
-import com.example.data.local.TrackerDatabase
+import com.example.data.local.BudgetDao
 import com.example.data.mapping.toDomain
 import com.example.data.mapping.toDto
 import com.example.data.mapping.toEntity
@@ -15,36 +15,36 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class BudgetRepositoryImp(
-    private val trackerDB: TrackerDatabase,
+    private val budgetDao: BudgetDao,
     private val remoteRepo: RemoteBudgetRepo,
     private val syncManager: DataSyncManager
 ) : BudgetRepository {
 
     override suspend fun addBudget(budget: Budget) {
-        trackerDB.budgetDao().insertBudget(budget.toEntity())
+        budgetDao.insertBudget(budget.toEntity())
         syncManager.triggerImmediateSync()
     }
 
     override fun getAllBudgets(): Flow<List<Budget>> =
-        trackerDB.budgetDao().getAllBudgets().map { it.toDomain() }
+        budgetDao.getAllBudgets().map { it.toDomain() }
 
     override suspend fun updateBudget(budget: Budget) {
-        trackerDB.budgetDao().updateBudget(budget.toEntity())
-        trackerDB.budgetDao().updateSyncStatus(budget.id, SyncStatusEnum.PENDING.name)
+        budgetDao.updateBudget(budget.toEntity())
+        budgetDao.updateSyncStatus(budget.id, SyncStatusEnum.PENDING.name)
         syncManager.triggerImmediateSync()
     }
 
     override suspend fun deleteBudgetById(id: String) {
-        trackerDB.budgetDao().updateSyncStatus(id, SyncStatusEnum.DELETED.name)
+        budgetDao.updateSyncStatus(id, SyncStatusEnum.DELETED.name)
         syncManager.triggerImmediateSync()
     }
 
     override suspend fun getBudgetById(id: String): Budget? {
-        return trackerDB.budgetDao().getBudgetById(id)?.toDomain()
+        return budgetDao.getBudgetById(id)?.toDomain()
     }
 
     override fun getBudgetsByCategory(category: String): Flow<List<Budget>> =
-        trackerDB.budgetDao().getBudgetsByCategory(category).map { it.toDomain() }
+        budgetDao.getBudgetsByCategory(category).map { it.toDomain() }
 
     override suspend fun syncWithRemote(): Result<Unit> = runCatching {
         syncDeleteBudgets()
@@ -52,7 +52,7 @@ class BudgetRepositoryImp(
     }
 
     override suspend fun resolveBudgetsConflict(): Result<Unit> = runCatching {
-        val localBudgets = trackerDB.budgetDao().getAllBudgetsOnce()
+        val localBudgets = budgetDao.getAllBudgetsOnce()
         val remoteBudgets = remoteRepo.getAllBudgetsOnce()
 
         val resolvedBudgets = resolveConflicts(
@@ -68,11 +68,11 @@ class BudgetRepositoryImp(
     }
 
     private suspend fun syncDeleteBudgets() {
-        val localDeletedBudgets = trackerDB.budgetDao().getDeletedBudgets(SyncStatusEnum.DELETED.name)
+        val localDeletedBudgets = budgetDao.getDeletedBudgets(SyncStatusEnum.DELETED.name)
         localDeletedBudgets.forEach { localDeleted ->
             try {
                 remoteRepo.deleteBudgetById(localDeleted.id)
-                trackerDB.budgetDao().deleteBudgetById(localDeleted.id)
+                budgetDao.deleteBudgetById(localDeleted.id)
             } catch (e: Exception) {
                 Log.e("BudgetRepository", "Failed to delete budget: ${e.message}")
             }
@@ -80,14 +80,14 @@ class BudgetRepositoryImp(
     }
 
     private suspend fun pushBudgets() {
-        val unsyncedList = trackerDB.budgetDao().getUnsyncedBudgets()
+        val unsyncedList = budgetDao.getUnsyncedBudgets()
         unsyncedList.forEach { local ->
-            trackerDB.budgetDao().updateSyncStatus(local.id, SyncStatusEnum.SYNCING.name)
+            budgetDao.updateSyncStatus(local.id, SyncStatusEnum.SYNCING.name)
             try {
                 remoteRepo.addBudget(local.toDto())
-                trackerDB.budgetDao().updateSyncStatus(local.id, SyncStatusEnum.SYNCED.name)
+                budgetDao.updateSyncStatus(local.id, SyncStatusEnum.SYNCED.name)
             } catch (e: Exception) {
-                trackerDB.budgetDao().updateSyncStatus(local.id, SyncStatusEnum.PENDING.name)
+                budgetDao.updateSyncStatus(local.id, SyncStatusEnum.PENDING.name)
                 Log.e("BudgetRepository", "Failed to push budget: ${e.message}")
             }
         }
@@ -95,8 +95,8 @@ class BudgetRepositoryImp(
 
     private suspend fun updateBudgetsWithResolvedData(resolvedBudgets: List<Budget>) {
         try {
-            trackerDB.budgetDao().deleteAllBudgets()
-            trackerDB.budgetDao().insertBudgets(resolvedBudgets.toEntity())
+            budgetDao.deleteAllBudgets()
+            budgetDao.insertBudgets(resolvedBudgets.toEntity())
             Log.d("BudgetRepository", "Successfully updated budgets with resolved data")
         } catch (e: Exception) {
             Log.e("BudgetRepository", "Failed to update budgets with resolved data: ${e.message}")

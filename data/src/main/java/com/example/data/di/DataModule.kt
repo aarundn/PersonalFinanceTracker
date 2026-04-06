@@ -81,6 +81,8 @@ val dataModule = module {
             .build()
     }
 
+    factory { get<TrackerDatabase>().transactionDao() }
+    factory { get<TrackerDatabase>().budgetDao() }
     // Repositories
 
     singleOf(::TransactionRepositoryImp) { bind<TransactionRepository>() }
