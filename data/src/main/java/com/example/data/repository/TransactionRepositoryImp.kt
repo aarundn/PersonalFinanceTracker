@@ -11,7 +11,6 @@ import com.example.data.util.resolveConflicts
 import com.example.domain.model.Transaction
 import com.example.domain.repo.TransactionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class TransactionRepositoryImp(
@@ -57,7 +56,7 @@ class TransactionRepositoryImp(
 
     override suspend fun resolveTransactionsConflict(): Result<Unit> = runCatching {
 
-        val localTransactions = transactionDao.getAllTransactions().first()
+        val localTransactions = transactionDao.getAllTransactionsOnce()
         val remoteTransactions = remoteRepo.getAllTransactions()
 
         val resolvedTransactions = resolveConflicts(
