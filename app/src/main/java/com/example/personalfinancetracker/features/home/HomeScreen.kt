@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
@@ -19,14 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
+import com.example.core.ui.theme.dimensions
 import com.example.personalfinancetracker.features.home.components.BudgetSummaryCard
 import com.example.personalfinancetracker.features.home.components.MonthCard
-import com.example.personalfinancetracker.features.home.components.OverviewRow
-import com.example.personalfinancetracker.features.home.components.QuickActions
+import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
 
 @Composable
 fun HomeScreen(
@@ -67,61 +66,65 @@ private fun HomeContent(
     onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
             .padding(PaddingValues(horizontal = MaterialTheme.dimensions.spacingMedium))
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
     ) {
-        // Greeting header with settings icon
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = data.greeting,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Text(
-                    text = data.subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        item (){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = data.greeting,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = data.subtitle,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                IconButton(onClick = { onEvent(HomeEvent.OnClickSettings) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = stringResource(R.string.cd_settings),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
-            IconButton(onClick = { onEvent(HomeEvent.OnClickSettings) }) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = stringResource(R.string.cd_settings),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
+            MonthCard(
+                totalTransactions = data.totalTransactions,
+                dailyAverage = data.dailyAverage,
+                daysPassed = data.daysPassed,
+                daysInMonth = data.daysInMonth,
+                currencySymbol = data.currencySymbol
+            )
+            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
+            BudgetSummaryCard(
+                budgets = data.budgets,
+                currencySymbol = data.currencySymbol,
+                onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) }
+            )
+            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingMediumSmall))
+            Text(
+                text = stringResource(R.string.recent_transactions),
+                style = MaterialTheme.typography.titleMedium
+            )
         }
 
-        OverviewRow(
-            totalIncome = data.totalIncome,
-            totalExpense = data.totalExpense,
-            balance = data.balance,
-            currencySymbol = data.currencySymbol
-        )
-        MonthCard(
-            totalTransactions = data.totalTransactions,
-            dailyAverage = data.dailyAverage,
-            daysPassed = data.daysPassed,
-            daysInMonth = data.daysInMonth,
-            currencySymbol = data.currencySymbol
-        )
-        BudgetSummaryCard(
-            budgets = data.budgets,
-            currencySymbol = data.currencySymbol,
-            onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) }
-        )
-        QuickActions(
-            onAddExpenseClick = { onEvent(HomeEvent.OnClickAddExpense) },
-            onAddIncomeClick = { onEvent(HomeEvent.OnClickAddIncome) },
-            onCurrencyClick = { onEvent(HomeEvent.OnClickCurrency) }
-        )
+        items(data.transactions.size) {
+            TransactionCard(
+                transaction = data.transactions[it],
+                modifier = Modifier,
+                onClick = {}
+            )
+        }
+        item { Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))}
     }
 }

@@ -46,6 +46,8 @@
     <string name="home_total_transactions">Total Transactions</string>
     <string name="home_daily_average">Daily Average</string>
     <string name="home_days_passed">Days passed</string>
+    <string name="recent_transactions">Recent Transactions</string>
+
 
     <!-- Home Greetings -->
     <string name="greeting_morning">Good morning!</string>

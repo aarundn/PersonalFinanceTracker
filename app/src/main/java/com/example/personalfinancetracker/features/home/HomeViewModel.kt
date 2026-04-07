@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.conversion_rate.domain.usecase.ConvertCurrencyUseCase
+import com.example.core.common.UiText
 import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.Budget
 import com.example.domain.model.Transaction
@@ -12,9 +13,9 @@ import com.example.domain.model.Type
 import com.example.domain.repo.UserPreferencesRepository
 import com.example.domain.usecase.budget_usecases.GetBudgetsUseCase
 import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
-import com.example.core.common.UiText
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
+import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -83,8 +84,9 @@ class HomeViewModel(
                         dailyAverage = if (daysPassed > 0) expense / daysPassed else 0.0,
                         daysPassed = daysPassed,
                         daysInMonth = daysInMonth,
-                        budgets = budgetUis,
-                        currencySymbol = currencySymbol
+                        budgets = budgetUis.take(3),
+                        currencySymbol = currencySymbol,
+                        transactions = transactions.toTransactionUi().take(3)
                     )
                 ) as HomeUiState
             } catch (e: Exception) {

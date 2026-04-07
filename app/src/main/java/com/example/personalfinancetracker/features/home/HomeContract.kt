@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.features.home
 import androidx.compose.runtime.Immutable
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.core.common.UiText
+import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 
 @Immutable
 data class HomeData(
@@ -16,7 +17,8 @@ data class HomeData(
     val daysPassed: Int,
     val daysInMonth: Int,
     val budgets: List<BudgetUi>,
-    val currencySymbol: String
+    val currencySymbol: String,
+    val transactions : List<TransactionUi>
 )
 
 @Immutable
