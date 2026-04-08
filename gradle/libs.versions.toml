@@ -6,6 +6,7 @@ googleGmsGoogleServices = "4.4.4"
 firebaseFirestore = "26.0.2"
 firebaseDatabase = "22.0.1"
 koinAndroid = "4.1.1"
+turbine = "1.2.1"
 workManager = "2.10.1"
 ktor = "3.1.1"
 kotlinxSerializationJson = "1.7.3"
@@ -44,6 +45,7 @@ truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-core = { module = "androidx.test:core", version.ref = "testCore" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
 
 
