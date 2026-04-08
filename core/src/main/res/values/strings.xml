@@ -47,6 +47,7 @@
     <string name="home_daily_average">Daily Average</string>
     <string name="home_days_passed">Days passed</string>
     <string name="recent_transactions">Recent Transactions</string>
+    <string name="recent_budgets">Recent Budgets</string>
 
 
     <!-- Home Greetings -->

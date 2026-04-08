@@ -23,7 +23,7 @@ import com.example.core.R
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
 import com.example.core.ui.theme.dimensions
-import com.example.personalfinancetracker.features.home.components.BudgetSummaryCard
+import com.example.personalfinancetracker.features.home.components.BudgetsRow
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
 
@@ -106,9 +106,8 @@ private fun HomeContent(
                 currencySymbol = data.currencySymbol
             )
             Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
-            BudgetSummaryCard(
+            BudgetsRow(
                 budgets = data.budgets,
-                currencySymbol = data.currencySymbol,
                 onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) }
             )
             Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingMediumSmall))
