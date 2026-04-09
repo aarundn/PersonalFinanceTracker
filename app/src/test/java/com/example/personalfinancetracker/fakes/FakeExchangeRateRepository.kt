@@ -8,14 +8,18 @@ import java.math.BigDecimal
 
 class FakeExchangeRateRepository : ExchangeRateRepository {
 
-    // Simulates static exchange rates. E.g. USD -> EUR is 0.9
-    // By default we can return a 1:1 ratio if no explicit rate is given, or map dummy rates
+
     private val fakeRates = mutableMapOf<Pair<String, String>, BigDecimal>()
-    
+    private val fakeProviders = mutableMapOf<String, String>()
+
     private val syncStatus = MutableStateFlow<SyncStatus>(SyncStatus.Idle)
 
     fun setFakeRate(fromCurrency: String, toCurrency: String, rate: BigDecimal) {
         fakeRates[Pair(fromCurrency, toCurrency)] = rate
+    }
+
+    fun setFakeProvider(providerId: String, providerName: String) {
+        fakeProviders[providerId] = providerName
     }
 
     override suspend fun convert(
@@ -25,13 +29,17 @@ class FakeExchangeRateRepository : ExchangeRateRepository {
         amount: BigDecimal
     ): Result<BigDecimal> {
         if (fromCurrencyCode == toCurrencyCode) return Result.success(amount)
-        
-        val rate = fakeRates[Pair(fromCurrencyCode, toCurrencyCode)] ?: BigDecimal("1.0") // default 1:1
-        return Result.success(amount * rate)
+        val rate =
+            fakeRates[Pair(fromCurrencyCode, toCurrencyCode)] ?: BigDecimal("1.0") // default 1:1
+        return if (fakeProviders[providerId] == "provider1") Result.success(amount * rate) else Result.failure(
+            Exception(PROVIDER_ERROR)
+        )
     }
 
     override suspend fun getProviders(): Result<List<Pair<String, String>>> {
-        return Result.success(listOf(Pair("provider1", "Fake Provider")))
+        return Result.success(
+            fakeProviders.map { (id, name) -> Pair(id, name) }
+        )
     }
 
     override suspend fun syncRate(
@@ -45,5 +53,9 @@ class FakeExchangeRateRepository : ExchangeRateRepository {
 
     override fun observeSyncStatus(): Flow<SyncStatus> {
         return syncStatus
+    }
+
+    companion object {
+        const val PROVIDER_ERROR = "this provider does not provide this currency"
     }
 }

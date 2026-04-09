@@ -12,7 +12,8 @@ import kotlinx.datetime.Instant
 class FakeClock(
     var frozenInstant: Instant = Instant.parse("2024-01-15T12:00:00Z")
 ) : Clock {
-    
+
+
     override fun now(): Instant {
         return frozenInstant
     }

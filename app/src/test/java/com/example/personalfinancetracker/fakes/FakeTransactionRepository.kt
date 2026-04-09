@@ -20,7 +20,7 @@ class FakeTransactionRepository : TransactionRepository {
                     id = "1",
                     userId = "user1",
                     amount = 5000.0,
-                    currency = "USD",
+                    currency = "DZD",
                     category = "Salary",
                     date = System.currentTimeMillis(),
                     notes = "Monthly salary",
@@ -34,7 +34,7 @@ class FakeTransactionRepository : TransactionRepository {
                     id = "2",
                     userId = "user1",
                     amount = 200.0,
-                    currency = "USD",
+                    currency = "DZD",
                     category = "Groceries",
                     date = System.currentTimeMillis(),
                     notes = "Weekly groceries",
@@ -56,8 +56,19 @@ class FakeTransactionRepository : TransactionRepository {
         transactionsFlow.value = currentList
     }
 
+    private var shouldThrowError = false
+
+    fun setShouldThrowError(shouldThrow: Boolean) {
+        shouldThrowError = shouldThrow
+    }
+
     override fun getAllTransactions(): Flow<List<Transaction>> {
-        return transactionsFlow
+        return transactionsFlow.map { list ->
+            if (shouldThrowError) {
+                throw Exception("Test Exception")
+            }
+            list
+        }
     }
 
     override suspend fun updateTransaction(transaction: Transaction) {

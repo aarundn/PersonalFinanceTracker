@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.conversion_rate.domain.usecase.ConvertCurrencyUseCase
 import com.example.core.common.UiText
+import com.example.core.di.CoroutineDispatchers
 import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.Budget
 import com.example.domain.model.Transaction
@@ -16,7 +17,6 @@ import com.example.domain.usecase.transaction_usecases.GetTransactionsUseCase
 import com.example.personalfinancetracker.features.budget.mapper.toBudgetUi
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.transaction.mapper.toTransactionUi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +39,7 @@ class HomeViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
     private val clock: Clock,
+    private val dispatcher: CoroutineDispatchers
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
@@ -93,7 +94,7 @@ class HomeViewModel(
                 HomeUiState.Error(UiText.DynamicString(e.message ?: "Failed to load data"))
             }
         }
-            .flowOn(Dispatchers.IO)
+            .flowOn(dispatcher.io)
             .onStart { emit(HomeUiState.Loading) }
             .catch { e -> emit(HomeUiState.Error(UiText.DynamicString(e.message ?: "Failed to load data"))) }
             .stateIn(
