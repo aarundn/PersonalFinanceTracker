@@ -51,8 +51,19 @@ class FakeBudgetRepository : BudgetRepository {
         budgetsFlow.value = currentList
     }
 
+    private var shouldThrowError = false
+
+    fun setShouldThrowError(shouldThrow: Boolean) {
+        shouldThrowError = shouldThrow
+    }
+
     override fun getAllBudgets(): Flow<List<Budget>> {
-        return budgetsFlow
+        return budgetsFlow.map { list ->
+            if (shouldThrowError) {
+                throw Exception("Test Exception")
+            }
+            list
+        }
     }
 
     override suspend fun updateBudget(budget: Budget) {
