@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import com.example.core.common.UiText
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.supervisorScope
 
 class SettingsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -25,7 +26,7 @@ class SettingsViewModel(
 
     override fun createInitialState(): SettingsState = SettingsState(
         selectedCurrency = DefaultCurrencies.USD,
-        availableCurrencies = DefaultCurrencies.all
+        availableCurrencies = DefaultCurrencies.all,
     )
 
     init {
@@ -34,34 +35,38 @@ class SettingsViewModel(
 
     private fun getInitialPreferences() {
         viewModelScope.launch {
-            launch {
-                userPreferencesRepository.baseCurrency.collect { currencyId ->
-                    setState {
-                        copy(
-                            selectedCurrency = DefaultCurrencies.fromId(currencyId)
-                                ?: DefaultCurrencies.USD
-                        )
+            supervisorScope {
+                launch {
+                    userPreferencesRepository.baseCurrency.collectLatest { currencyId ->
+                        setState {
+                            copy(
+                                selectedCurrency = DefaultCurrencies.fromId(currencyId)
+                                    ?: DefaultCurrencies.USD
+                            )
+                        }
                     }
                 }
-            }
-            
-            launch {
-                val savedProviderId = userPreferencesRepository.selectedProviderId.first()
-                getProviders().onSuccess { providers ->
-                    setState {
-                        copy(
-                            availableProviders = providers,
-                            selectedProviderId = providers
-                                .firstOrNull { (id, _) -> id == savedProviderId }?.first
-                                ?: providers.firstOrNull()?.first,
-                        )
-                    }
-                }
-            }
 
-            launch {
-                observeSyncStatus().collectLatest { status ->
-                    setState { copy(syncStatus = status) }
+                launch {
+                    val savedProviderId = userPreferencesRepository.selectedProviderId.first()
+                    getProviders().onSuccess { providers ->
+                        setState {
+                            copy(
+                                availableProviders = providers,
+                                selectedProviderId = providers
+                                    .firstOrNull { (id, _) -> id == savedProviderId }?.first
+                                    ?: providers.firstOrNull()?.first,
+                            )
+                        }
+                    }.onFailure {
+                        setState { copy(providerError = UiText.DynamicString("Failed to load providers")) }
+                    }
+                }
+
+                launch {
+                    observeSyncStatus().collectLatest { status ->
+                        setState { copy(syncStatus = status) }
+                    }
                 }
             }
         }

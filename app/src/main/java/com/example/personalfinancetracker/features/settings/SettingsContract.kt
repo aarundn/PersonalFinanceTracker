@@ -22,7 +22,8 @@ data class SettingsState(
     val availableProviders: List<Pair<String, String>> = emptyList(),
     val selectedProviderId: String? = null,
     // Background Sync state
-    val syncStatus: SyncStatus = SyncStatus.Idle
+    val syncStatus: SyncStatus = SyncStatus.Idle,
+    val providerError: UiText? = null
 ) : MVIState
 
 sealed interface SettingsEvent : MVIUiEvent {
