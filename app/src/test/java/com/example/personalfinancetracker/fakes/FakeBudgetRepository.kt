@@ -46,6 +46,9 @@ class FakeBudgetRepository : BudgetRepository {
     }
 
     override suspend fun addBudget(budget: Budget) {
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         val currentList = budgetsFlow.value.toMutableList()
         currentList.add(budget)
         budgetsFlow.value = currentList
