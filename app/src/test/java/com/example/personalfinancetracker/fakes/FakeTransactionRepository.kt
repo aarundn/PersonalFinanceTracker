@@ -49,14 +49,17 @@ class FakeTransactionRepository : TransactionRepository {
             transactionsFlow.value = emptyList()
         }
     }
-
+    private var shouldThrowError = false
     override suspend fun addTransaction(transaction: Transaction) {
         val currentList = transactionsFlow.value.toMutableList()
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         currentList.add(transaction)
         transactionsFlow.value = currentList
     }
 
-    private var shouldThrowError = false
+
 
     fun setShouldThrowError(shouldThrow: Boolean) {
         shouldThrowError = shouldThrow
