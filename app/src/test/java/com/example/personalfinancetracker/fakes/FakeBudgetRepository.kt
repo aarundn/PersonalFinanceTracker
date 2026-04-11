@@ -70,6 +70,9 @@ class FakeBudgetRepository : BudgetRepository {
     }
 
     override suspend fun updateBudget(budget: Budget) {
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         val currentList = budgetsFlow.value.toMutableList()
         val index = currentList.indexOfFirst { it.id == budget.id }
         if (index != -1) {
@@ -79,12 +82,18 @@ class FakeBudgetRepository : BudgetRepository {
     }
 
     override suspend fun deleteBudgetById(id: String) {
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         val currentList = budgetsFlow.value.toMutableList()
         currentList.removeAll { it.id == id }
         budgetsFlow.value = currentList
     }
 
     override suspend fun getBudgetById(id: String): Budget? {
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         return budgetsFlow.value.find { it.id == id }
     }
 
