@@ -4,8 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.example.core.R
 import com.example.core.common.UiText
-import com.example.core.model.DefaultCategories
-import com.example.core.model.DefaultCurrencies
 import com.example.domain.model.BudgetPeriod
 import com.example.domain.usecase.ValidateInputsUseCase
 import com.example.domain.usecase.budget_usecases.DeleteBudgetUseCase
