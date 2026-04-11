@@ -18,7 +18,7 @@ class FakeBudgetRepository : BudgetRepository {
                 Budget(
                     id = "1",
                     userId = "user1",
-                    category = "Groceries",
+                    category = "food",
                     amount = 500.0,
                     currency = "DZD",
                     period = "monthly",

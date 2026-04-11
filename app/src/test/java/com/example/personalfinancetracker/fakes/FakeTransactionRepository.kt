@@ -21,7 +21,7 @@ class FakeTransactionRepository : TransactionRepository {
                     userId = "user1",
                     amount = 5000.0,
                     currency = "DZD",
-                    category = "Salary",
+                    category = "salary",
                     date = System.currentTimeMillis(),
                     notes = "Monthly salary",
                     createdAt = System.currentTimeMillis(),
@@ -35,7 +35,7 @@ class FakeTransactionRepository : TransactionRepository {
                     userId = "user1",
                     amount = 200.0,
                     currency = "DZD",
-                    category = "Groceries",
+                    category = "food",
                     date = System.currentTimeMillis(),
                     notes = "Weekly groceries",
                     createdAt = System.currentTimeMillis(),
@@ -87,6 +87,9 @@ class FakeTransactionRepository : TransactionRepository {
     }
 
     override suspend fun getTransactionById(id: String): Transaction? {
+        if (shouldThrowError) {
+            throw Exception("Test Exception")
+        }
         return transactionsFlow.value.find { it.id == id }
     }
 
