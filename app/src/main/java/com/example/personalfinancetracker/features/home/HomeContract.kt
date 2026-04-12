@@ -33,6 +33,7 @@ sealed interface HomeEvent {
     data object OnClickAddIncome : HomeEvent
     data object OnClickCurrency : HomeEvent
     data class OnClickBudgetItem(val budgetId: String) : HomeEvent
+    data object OnClickAddBudget : HomeEvent
     data object OnClickSavings : HomeEvent
     data object OnClickSettings : HomeEvent
     data object OnRetry : HomeEvent
@@ -41,6 +42,7 @@ sealed interface HomeEvent {
 sealed interface HomeSideEffect {
     data object NavigateAddExpense : HomeSideEffect
     data object NavigateAddIncome : HomeSideEffect
+    data object NavigateAddBudget : HomeSideEffect
     data object NavigateCurrency : HomeSideEffect
     data object NavigateSettings : HomeSideEffect
     data class ShowMessage(val message: UiText) : HomeSideEffect

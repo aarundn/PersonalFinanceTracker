@@ -7,13 +7,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.example.conversion_rate.navigation.CurrencyConversionNavigator
 import com.example.core.navigation.AppRoutes
+import com.example.core.navigation.features.BudgetFeature
 import com.example.core.navigation.features.HomeFeature
 import com.example.core.navigation.features.SettingsFeature
 import com.example.core.navigation.features.TransactionFeature
 
 class HomeFeatureImpl(
     private val transactionsFeature: TransactionFeature,
-    private val settingsFeature: SettingsFeature
+    private val settingsFeature: SettingsFeature,
+    private val budgetFeature: BudgetFeature
 ) : HomeFeature {
     override fun homeRoute(): AppRoutes = HomeRoutes.HomeRoute
 
@@ -32,6 +34,7 @@ class HomeFeatureImpl(
             onNavigateToCurrency = {
                     CurrencyConversionNavigator.Default.navigateToCurrencyConverter(navController = navController)
             },
+            onNavigateToAddBudget = { navController.navigate(budgetFeature.addBudgetRoute()) }
         )
     }
 }

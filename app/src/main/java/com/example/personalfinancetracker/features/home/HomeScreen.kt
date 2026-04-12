@@ -108,7 +108,8 @@ private fun HomeContent(
             Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
             BudgetsRow(
                 budgets = data.budgets,
-                onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) }
+                onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) },
+                onAddBudgetClick = { onEvent(HomeEvent.OnClickAddBudget) }
             )
             Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingMediumSmall))
             Text(
@@ -117,12 +118,24 @@ private fun HomeContent(
             )
         }
 
-        items(data.transactions.size) {
-            TransactionCard(
-                transaction = data.transactions[it],
-                modifier = Modifier,
-                onClick = {}
-            )
+        if (data.transactions.isEmpty()) {
+            item {
+                EmptyState(
+                    title = stringResource(R.string.transaction_empty_title),
+                    description = stringResource(R.string.transaction_empty_description),
+                    buttonText = stringResource(R.string.transaction_add_button),
+                    onAddClick = { onEvent(HomeEvent.OnClickAddExpense) },
+                    modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingMedium)
+                )
+            }
+        } else {
+            items(data.transactions.size) {
+                TransactionCard(
+                    transaction = data.transactions[it],
+                    modifier = Modifier,
+                    onClick = {}
+                )
+            }
         }
         item { Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))}
     }

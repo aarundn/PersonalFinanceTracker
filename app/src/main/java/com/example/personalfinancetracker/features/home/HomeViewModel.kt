@@ -85,9 +85,9 @@ class HomeViewModel(
                         dailyAverage = if (daysPassed > 0) expense / daysPassed else 0.0,
                         daysPassed = daysPassed,
                         daysInMonth = daysInMonth,
-                        budgets = budgetUis.take(3),
+                        budgets = budgetUis.sortedByDescending { it.createdAt }.take(3),
                         currencySymbol = currencySymbol,
-                        transactions = transactions.toTransactionUi().take(3)
+                        transactions = transactions.sortedByDescending { it.date }.toTransactionUi().take(3)
                     )
                 ) as HomeUiState
             } catch (e: Exception) {
@@ -110,6 +110,7 @@ class HomeViewModel(
                 HomeEvent.OnClickAddIncome -> _sideEffect.emit(HomeSideEffect.NavigateAddIncome)
                 HomeEvent.OnClickCurrency -> _sideEffect.emit(HomeSideEffect.NavigateCurrency)
                 HomeEvent.OnClickSettings -> _sideEffect.emit(HomeSideEffect.NavigateSettings)
+                HomeEvent.OnClickAddBudget -> _sideEffect.emit(HomeSideEffect.NavigateAddBudget)
                 is HomeEvent.OnClickBudgetItem -> _sideEffect.emit(HomeSideEffect.ShowMessage(UiText.DynamicString("${event.budgetId} tapped")))
                 HomeEvent.OnClickSavings -> _sideEffect.emit(HomeSideEffect.ShowMessage(UiText.DynamicString("Savings tapped")))
                 HomeEvent.OnRetry -> { /* State is reactive — no manual retry needed */

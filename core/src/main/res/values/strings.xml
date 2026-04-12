@@ -68,6 +68,7 @@
     <string name="transaction_empty_description">Add your first transaction to start tracking</string>
     <string name="transaction_add_button">Add Transaction</string>
 
+
     <!-- Transaction Type Toggle -->
     <string name="transaction_type_label">Transaction Type</string>
     <string name="transaction_type_expense">Expense</string>
@@ -92,6 +93,10 @@
     <string name="budget_edit_title">Edit Budget</string>
     <string name="budget_details_title">Budget Details</string>
     <string name="budget_delete_confirm_title">Delete Budget</string>
+    <string name="budget_overview_title">Budget Overview</string>
+    <string name="budget_empty_title">No budgets yet</string>
+    <string name="budget_empty_description">Create your first budget to start tracking your spending</string>
+    <string name="action_add_budget">Add Budget</string>
 
     <!-- Budget Components -->
     <string name="budget_over_budget">Over Budget</string>

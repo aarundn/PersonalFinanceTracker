@@ -60,15 +60,7 @@ fun TransactionsScreen(
                 }
 
                 is TransactionsUiState.Success -> {
-                    if (transactionsUiState.transactions.isEmpty()) {
-                        EmptyState(
-                            title = stringResource(R.string.transactions_empty_title),
-                            description = stringResource(R.string.transactions_empty_description),
-                            buttonText = stringResource(R.string.action_add_transaction),
-                            onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
-                        )
-                    } else {
-
+                    if (!transactionsUiState.transactions.isEmpty()) {
                         Content(transactionsUiState, onEvent)
 
                         FloatingActionButton(
@@ -88,6 +80,14 @@ fun TransactionsScreen(
                                 contentDescription = stringResource(R.string.action_add_transaction)
                             )
                         }
+                    } else {
+                        EmptyState(
+                            title = stringResource(R.string.transactions_empty_title),
+                            description = stringResource(R.string.transactions_empty_description),
+                            buttonText = stringResource(R.string.action_add_transaction),
+                            onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
+                        )
+
                     }
                 }
             }

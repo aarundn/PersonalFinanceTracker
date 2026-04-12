@@ -14,6 +14,7 @@ fun NavGraphBuilder.homeRoute(
     onNavigateToAddTransaction: () -> Unit,
     onNavigateToSettings:  () -> Unit,
     onNavigateToCurrency: () -> Unit,
+    onNavigateToAddBudget:  () -> Unit,
     modifier: Modifier,
 
     ) {
@@ -22,6 +23,7 @@ fun NavGraphBuilder.homeRoute(
             onNavigateToCurrency = onNavigateToCurrency,
             onNavigateToAddTransaction = onNavigateToAddTransaction,
             onNavigateToSettings = onNavigateToSettings,
+            onNavigateToAddBudget = onNavigateToAddBudget,
             modifier = modifier
         )
     }

@@ -19,6 +19,7 @@ fun HomeRoute(
     onNavigateToCurrency: () -> Unit,
     onNavigateToAddTransaction: () -> Unit,
     onNavigateToSettings:  () -> Unit,
+    onNavigateToAddBudget:  () -> Unit,
     modifier: Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
@@ -33,6 +34,7 @@ fun HomeRoute(
                 HomeSideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
                 HomeSideEffect.NavigateCurrency -> onNavigateToCurrency()
                 HomeSideEffect.NavigateSettings -> onNavigateToSettings()
+                HomeSideEffect.NavigateAddBudget -> onNavigateToAddBudget()
                 is HomeSideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message.asString(context))
             }
         }

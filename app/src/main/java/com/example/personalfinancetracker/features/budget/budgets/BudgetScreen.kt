@@ -60,7 +60,10 @@ fun BudgetScreen(
         topBar = {
             val state = budgetsUiState as? BudgetsUiState.Success
             if (state?.budgets?.isEmpty() == false)
-                HeaderSection(title = stringResource(R.string.budget_overview_title), showBackIcon = false)
+                HeaderSection(
+                    title = stringResource(R.string.budget_overview_title),
+                    showBackIcon = false
+                )
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         modifier = Modifier.fillMaxSize()
@@ -81,14 +84,7 @@ fun BudgetScreen(
                 }
 
                 is BudgetsUiState.Success -> {
-                    if (budgetsUiState.budgets.isEmpty()) {
-                        EmptyState(
-                            title = stringResource(R.string.budget_empty_title),
-                            description = stringResource(R.string.budget_empty_description),
-                            buttonText = stringResource(R.string.action_add_budget),
-                            onAddClick = { onEvent(BudgetsEvent.OnAddBudgetClick) }
-                        )
-                    } else {
+                    if (!budgetsUiState.budgets.isEmpty()) {
                         Content(budgetsUiState, onEvent)
 
                         FloatingActionButton(
@@ -108,6 +104,13 @@ fun BudgetScreen(
                                 contentDescription = stringResource(R.string.action_add_budget)
                             )
                         }
+                    } else {
+                        EmptyState(
+                            title = stringResource(R.string.budget_empty_title),
+                            description = stringResource(R.string.budget_empty_description),
+                            buttonText = stringResource(R.string.action_add_budget),
+                            onAddClick = { onEvent(BudgetsEvent.OnAddBudgetClick) }
+                        )
                     }
                 }
             }
@@ -128,7 +131,10 @@ private fun Content(
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
-            contentPadding = PaddingValues(bottom = 88.dp, top = MaterialTheme.dimensions.spacingMedium)
+            contentPadding = PaddingValues(
+                bottom = 88.dp,
+                top = MaterialTheme.dimensions.spacingMedium
+            )
         ) {
             itemsIndexed(
                 budgetsUiState.budgets,
