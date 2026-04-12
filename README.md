@@ -1,3 +1,6 @@
+
+
+
 # Personal Finance Tracker
 
 A modern Android personal finance application built with **Clean/Hexagonal Architecture**, **Jetpack Compose**, and an **Offline-First** data strategy. Track transactions, manage budgets, and convert currencies — all with seamless background synchronization.
