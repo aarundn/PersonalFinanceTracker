@@ -2,6 +2,11 @@
 
 A modern Android personal finance application built with **Clean/Hexagonal Architecture**, **Jetpack Compose**, and an **Offline-First** data strategy. Track transactions, manage budgets, and convert currencies — all with seamless background synchronization.
 
+## Demo
+
+<video src="docs/demo/video_26_04_12_15_19_19.mp4" controls width="100%"></video>
+
+
 ## Tech Stack
 
 | Category | Technology |
