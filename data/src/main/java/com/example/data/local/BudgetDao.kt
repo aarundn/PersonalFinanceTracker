@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BudgetDao {
 
-    @Query("SELECT * FROM budgets ORDER BY createdAt DESC")
+    @Query("SELECT * FROM budgets WHERE syncStatus != 'DELETED' ORDER BY createdAt DESC")
     fun getAllBudgets(): Flow<List<BudgetEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
