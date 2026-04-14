@@ -5,8 +5,7 @@
 
 A modern Android personal finance application built with **Clean/Hexagonal Architecture**, **Jetpack Compose**, and an **Offline-First** data strategy. Track transactions, manage budgets, and convert currencies — all with seamless background synchronization.
 
-<video src="./[docs/demo/video_26_04_12_15_19_19.mp4](https://github.com/aarundn/PersonalFinanceTracker/blob/master/docs/video_26_04_12_15_19_19.mp4)" controls width="100%"></video>
-
+<video src="https://github.com/aarundn/PersonalFinanceTracker/raw/main/docs/demo/video_26_04_12_15_19_19.mp4" controls width="100%"></video>
 
 ## Tech Stack
 
