@@ -13,10 +13,10 @@ val OnTertiaryLight = Color(0xFF006AF6)
 val SurfaceContainerLight = Color(0xFFFFFFFF)
 
 // Dark theme colors
-val PrimaryDark = Color(0xFF006AF6)
-val OnPrimaryDark= Color(0xFFFFFFFF)
-val SecondaryDark = Color(0xFFC4C4C9)
-val BackgroundDark = Color(0xFF0C1B3A)
+val PrimaryDark = Color(0xFFFFFFFF)
+val OnPrimaryDark= Color(0xFF000000)
+val SecondaryDark = Color(0xFF9CA3AF)
+val BackgroundDark = Color(0xFF000000)
 val OnBackgroundDark = Color(0xFFFFFFFF)
 val TertiaryDark = Color(0x23006AF6)
 val OnTertiaryDark = Color(0xFF006AF6)
@@ -52,6 +52,25 @@ val CategoryBills = Color(0xFF10B981)
 
 
 
+// Base & Surface Primitives
+internal val Gray50 = Color(0xFFFAFAFA) // Primary Text
+internal val Gray400 = Color(0xFFA1A1AA) // Secondary Text
+internal val Gray800 = Color(0xFF27272A) // Surface Variant (progress tracks, chips)
+internal val Gray900 = Color(0xFF18181B) // Surfaces (Cards)
+internal val Gray950 = Color(0xFF000000) // App Background
+
+// Semantic Financial Primitives
+internal val Green500 = Color(0xFF10B981) // Income
+internal val Red500 = Color(0xFFE11D48)   // Expense
+
+// Category Primitives
+internal val Orange500 = Color(0xFFF97316) // Groceries
+internal val Blue500 = Color(0xFF3B82F6)   // Transport
+internal val Pink500 = Color(0xFFEC4899)   // Restaurants
+internal val Teal500 = Color(0xFF10B981)   // Home
+internal val Purple500 = Color(0xFFA855F7) // Entertainment
+internal val Cyan700 = Color(0xFF2DD4BF)   // Freelance
+internal val Yellow500 = Color(0xFFF59E0B) // Coffee
 
 
 
