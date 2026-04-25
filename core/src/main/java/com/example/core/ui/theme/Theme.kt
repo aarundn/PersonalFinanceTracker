@@ -10,7 +10,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 private val DarkColorScheme = darkColorScheme(
     primary = Gray50,
     secondary = Gray400,
+    onSecondary = Gray50,
     surfaceVariant = Gray800,
+    onSurfaceVariant = Gray50,
     surface = Gray900,
     onSurface = Gray950,
     tertiary = Gray50,
@@ -32,7 +34,6 @@ private val LightColorScheme = lightColorScheme(
     background = Gray950,
     onBackground = Gray50,
 )
-
 
 @Composable
 fun PersonalFinanceTrackerTheme(
