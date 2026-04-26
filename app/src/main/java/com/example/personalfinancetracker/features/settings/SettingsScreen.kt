@@ -42,7 +42,7 @@ fun SettingsScreen(
                 modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
                 text = stringResource(R.string.settings_general_section),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             SyncStatusBanner(

@@ -132,8 +132,8 @@ fun EditTransactionScreen(
                             .fillMaxWidth()
                             .padding(bottom = MaterialTheme.dimensions.spacingMedium),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ProgressError,
-                            contentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
                         )
                     ) {
                         Icon(

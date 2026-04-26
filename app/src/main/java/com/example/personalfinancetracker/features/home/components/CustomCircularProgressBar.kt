@@ -18,13 +18,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.ProgressBackground
+import com.example.core.ui.theme.ProgressPrimary
 
 @Composable
 fun CustomCircularProgressBar(
     modifier: Modifier = Modifier,
     progress: Float,
     animDuration: Int = 1000,
-    progressColor: Color = Color.Red,
+    progressColor: Color = ProgressPrimary,
     trackColor: Color = ProgressBackground,
     strokeWidth: Dp = 8.dp
 

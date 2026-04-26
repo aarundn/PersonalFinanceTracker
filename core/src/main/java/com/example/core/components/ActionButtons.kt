@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.R
+import com.example.core.ui.theme.Gray950
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.dimensions
 
@@ -39,9 +40,6 @@ fun ActionButtons(
         OutlinedButton(
             onClick = onCancel,
             modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.onSurface
-            )
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
@@ -54,16 +52,12 @@ fun ActionButtons(
         Button(
             onClick = onSave,
             modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2563EB), // Blue-600
-                contentColor = Color.White
-            )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall),
                     strokeWidth = MaterialTheme.dimensions.borderNormal,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Icon(
@@ -77,7 +71,7 @@ fun ActionButtons(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun ActionButtonsPreview() {
     PersonalFinanceTrackerTheme {

@@ -44,7 +44,7 @@ fun ConversionTestCard(
         Text(
             text = "Currency Conversion Test",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         // Provider picker

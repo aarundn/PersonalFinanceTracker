@@ -32,7 +32,7 @@ fun DangerZoneCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, ProgressError.copy(alpha = 0.4f))
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.error.copy(alpha = 0.4f))
     ) {
         Column(
             modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge),
@@ -41,14 +41,14 @@ fun DangerZoneCard(
             Text(
                 text = stringResource(R.string.budget_danger_zone),
                 style = MaterialTheme.typography.titleMedium,
-                color = ProgressError,
+                color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.SemiBold
             )
             Button(
                 onClick = onDelete,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ProgressError,
+                    containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {

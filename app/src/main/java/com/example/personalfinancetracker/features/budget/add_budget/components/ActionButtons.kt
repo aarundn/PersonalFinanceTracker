@@ -57,14 +57,14 @@ fun ActionButtons(
             modifier = Modifier.weight(1f),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             if (isSaving) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall),
                     strokeWidth = MaterialTheme.dimensions.borderNormal,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Icon(

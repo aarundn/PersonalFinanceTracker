@@ -33,7 +33,7 @@ fun CustomSnackBar(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, ProgressError)
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.error)
     ) {
         Row(
             Modifier.padding(horizontal = MaterialTheme.dimensions.spacingMedium, vertical = MaterialTheme.dimensions.spacingSmall)
@@ -45,12 +45,12 @@ fun CustomSnackBar(
             Icon(
                 imageVector = Icons.Outlined.Warning,
                 contentDescription = null,
-                tint = ProgressError
+                tint = MaterialTheme.colorScheme.error
             )
             Text(
                 text = snackBarData.visuals.message,
                 style = MaterialTheme.typography.bodyMedium,
-                color = ProgressError,
+                color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center
             )
         }

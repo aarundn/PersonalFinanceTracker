@@ -105,7 +105,7 @@ fun ConfirmationDialog(
                         shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = confirmButtonColor,
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onError
                         )
                     ) {
                         Text(text = confirmText)
