@@ -23,26 +23,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.core.ui.theme.dimensions
 import com.example.core.R
 import com.example.core.components.ConfirmationDialog
+import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
 import com.example.core.components.TransactionInputForm
 import com.example.core.model.DefaultCategories
-import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.model.DefaultCurrencies
-import com.example.core.ui.theme.ProgressError
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.dimensions
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
 import com.example.personalfinancetracker.features.transaction.edit_transaction.components.TransactionOverviewCard
-import com.example.core.components.CustomDatePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
