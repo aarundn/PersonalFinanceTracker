@@ -4,33 +4,39 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.core.ui.theme.dimensions
 import kotlin.math.abs
 
@@ -42,120 +48,125 @@ fun CustomDatePickerDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = if (initialSelectedDateMillis != null && initialSelectedDateMillis > 0) initialSelectedDateMillis else System.currentTimeMillis()
-    )
-
-    DatePickerDialog(
-        modifier = modifier,
+    ModalBottomSheet(
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    datePickerState.selectedDateMillis?.let { onDateSelected(it) }
-                    onDismiss()
-                }
-            ) {
-                Text("Confirm", color = MaterialTheme.colorScheme.primary)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        },
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge),
-        colors = DatePickerDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
-            headlineContentColor = MaterialTheme.colorScheme.onSurface,
-            weekdayContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            subheadContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            navigationContentColor = MaterialTheme.colorScheme.onSurface,
-            yearContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            currentYearContentColor = MaterialTheme.colorScheme.primary,
-            selectedYearContentColor = MaterialTheme.colorScheme.onPrimary,
-            selectedYearContainerColor = MaterialTheme.colorScheme.primary,
-            dayContentColor = MaterialTheme.colorScheme.onSurface,
-            selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
-            selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-            todayContentColor = MaterialTheme.colorScheme.primary,
-            todayDateBorderColor = MaterialTheme.colorScheme.primary
-        )
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = modifier
     ) {
-//        DatePicker(
-//            state = datePickerState,
-//            colors = DatePickerDefaults.colors(
-//                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-//                titleContentColor = MaterialTheme.colorScheme.onSurface,
-//                headlineContentColor = MaterialTheme.colorScheme.onSurface,
-//                weekdayContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                subheadContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                navigationContentColor = MaterialTheme.colorScheme.onSurface,
-//                yearContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                currentYearContentColor = MaterialTheme.colorScheme.primary,
-//                selectedYearContentColor = MaterialTheme.colorScheme.onPrimary,
-//                selectedYearContainerColor = MaterialTheme.colorScheme.primary,
-//                dayContentColor = MaterialTheme.colorScheme.onSurface,
-//                selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
-//                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-//                todayContentColor = MaterialTheme.colorScheme.primary,
-//                todayDateBorderColor = MaterialTheme.colorScheme.primary
-//            )
-//        )
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = MaterialTheme.dimensions.spacingLarge),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Row(
-                modifier = modifier
-                    .zIndex(1f)
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                    .padding(
+                        horizontal = MaterialTheme.dimensions.spacingLarge,
+                        vertical = MaterialTheme.dimensions.spacingMedium
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CustomDatePicker(
-                    modifier = modifier
-                        .zIndex(1f)
-                        .weight(1f)
-                        .align(Alignment.CenterVertically),
-                    list = yearsList.map { it.toString() }
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "اختر التاريخ",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
-                CustomDatePicker(
-                    modifier = modifier
-                        .zIndex(1f)
-                        .weight(1f)
-                        .align(Alignment.CenterVertically),
-                    list = monthsListInArabic
-                )
-                CustomDatePicker(
-                    modifier = modifier
-                        .zIndex(1f)
-                        .weight(1f)
-                        .align(Alignment.CenterVertically),
-                    list = daysList.map { it.toString() }
-                )
+                IconButton(
+                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall).border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        shape = CircleShape
+                    ),
+                    onClick = onDismiss
+                ) {
+                    Icon(
+                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall),
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
 
             }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth().padding(bottom = MaterialTheme.dimensions.spacingLarge),
+                text = "١٥ أكتوبر ٢٠٢٣",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 56.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                    .padding(horizontal = 16.dp),
+            ) {
+                Row(
+                    modifier = modifier
+                        .zIndex(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomDatePicker(
+                        modifier = modifier
+                            .zIndex(1f)
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
+                        list = yearsList.map { it.toString() }
                     )
-                    .align(Alignment.Center)
-                    .border(
-                        width = 0.5.dp,
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                    CustomDatePicker(
+                        modifier = modifier
+                            .zIndex(1f)
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
+                        list = monthsListInArabic
                     )
+                    CustomDatePicker(
+                        modifier = modifier
+                            .zIndex(1f)
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
+                        list = daysList.map { it.toString() }
+                    )
+
+                }
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 56.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                        )
+                        .align(Alignment.Center)
+                        .border(
+                            width = 0.5.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                        )
+                )
+            }
+
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = MaterialTheme.dimensions.spacingExtraLarge
+                    ),
+                onClick = {}
             )
         }
     }
+
 }
 
 @Composable
@@ -249,3 +260,15 @@ val testDatesList = listOf(
     SelectedArabicDate(day = 31, month = "ديسمبر", year = 2025), // End of year test
     SelectedArabicDate(day = 15, month = "مايو", year = 2026)    // Future date test
 )
+
+@Preview
+@Composable
+private fun DatePickerDialogPreview() {
+    PersonalFinanceTrackerTheme {
+        CustomDatePickerDialog(
+            initialSelectedDateMillis = null,
+            onDateSelected = {},
+            onDismiss = {}
+        )
+    }
+}

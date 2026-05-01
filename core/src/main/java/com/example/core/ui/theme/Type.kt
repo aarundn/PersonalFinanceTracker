@@ -70,7 +70,7 @@ val AppTypography = Typography(
     headlineSmall = TextStyle(
         fontFamily = ibmPlexSansArabic,
         fontWeight = FontWeight.Medium,
-        fontSize = 24.sp,
+        fontSize = 20.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
