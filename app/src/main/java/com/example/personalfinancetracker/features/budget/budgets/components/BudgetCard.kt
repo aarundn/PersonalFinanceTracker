@@ -50,10 +50,7 @@ fun BudgetCard(
         modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
+        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline),
     ) {
         Column(
             modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),

@@ -50,12 +50,9 @@ fun TransactionCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        ),
         border = BorderStroke(
             MaterialTheme.dimensions.borderThin,
-            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+            MaterialTheme.colorScheme.outline
         ),
     ) {
         Row(

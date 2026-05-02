@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -78,11 +79,13 @@ fun CustomDatePickerDialog(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 IconButton(
-                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall).border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        shape = CircleShape
-                    ),
+                    modifier = Modifier
+                        .size(MaterialTheme.dimensions.iconSizeSmall)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline,
+                            shape = CircleShape
+                        ),
                     onClick = onDismiss
                 ) {
                     Icon(
@@ -96,7 +99,8 @@ fun CustomDatePickerDialog(
             }
             Text(
                 modifier = Modifier
-                    .fillMaxWidth().padding(bottom = MaterialTheme.dimensions.spacingLarge),
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimensions.spacingLarge),
                 text = "١٥ أكتوبر ٢٠٢٣",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
@@ -144,13 +148,13 @@ fun CustomDatePickerDialog(
                         .fillMaxWidth()
                         .heightIn(min = 56.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
                             shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
                         )
                         .align(Alignment.Center)
                         .border(
                             width = 0.5.dp,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            color = MaterialTheme.colorScheme.outline,
                             shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
                         )
                 )
@@ -271,4 +275,9 @@ private fun DatePickerDialogPreview() {
             onDismiss = {}
         )
     }
+}
+
+@Composable
+fun exmapel(modifier: Modifier = Modifier) {
+    Card() { }
 }

@@ -35,9 +35,6 @@ fun MonthCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
         border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(Modifier.padding(MaterialTheme.dimensions.spacingMedium)) {

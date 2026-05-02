@@ -3,7 +3,6 @@ package com.example.core.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
@@ -24,12 +23,12 @@ private val AppColorScheme = darkColorScheme(
     onSurfaceVariant = Gray400,
     surfaceContainer = Gray900,
     surfaceContainerHigh = Gray800,
-    surfaceContainerHighest = Gray800,
+    surfaceContainerHighest = Gray850,
     error = ProgressError,
     onError = Gray50,
     errorContainer = ProgressError.copy(alpha = 0.12f),
     onErrorContainer = ProgressError,
-    outline = Gray400.copy(alpha = 0.3f),
+    outline = Gray500,
     outlineVariant = Gray800,
 )
 

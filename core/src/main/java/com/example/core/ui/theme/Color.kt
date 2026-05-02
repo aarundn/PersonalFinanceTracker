@@ -55,7 +55,9 @@ val CategoryBills = Color(0xFF10B981)
 // Base & Surface Primitives
 internal val Gray50 = Color(0xFFFAFAFA) // Primary Text
 internal val Gray400 = Color(0xFFA1A1AA) // Secondary Text
+internal val Gray500 = Color(0xFF252525) // outlines
 internal val Gray800 = Color(0xFF27272A) // Surface Variant (progress tracks, chips)
+internal val Gray850 = Color(0xFF121212) // (Cards)
 internal val Gray900 = Color(0xFF18181B) // Surfaces (Cards)
 internal val Gray950 = Color(0xFF000000) // App Background
 
