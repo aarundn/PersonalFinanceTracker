@@ -54,7 +54,8 @@ val CategoryBills = Color(0xFF10B981)
 
 // Base & Surface Primitives
 internal val Gray50 = Color(0xFFFAFAFA) // Primary Text
-internal val Gray400 = Color(0xFFA1A1AA) // Secondary Text
+internal val Gray400 = Color(0xFF9CA3AF) // Secondary Text
+internal val Miscellaneous = Color(0xFF1F2937) // Secondary Container
 internal val Gray500 = Color(0xFF252525) // outlines
 internal val Gray800 = Color(0xFF27272A) // Surface Variant (progress tracks, chips)
 internal val Gray850 = Color(0xFF121212) // (Cards)
@@ -63,16 +64,16 @@ internal val Gray950 = Color(0xFF000000) // App Background
 
 // Semantic Financial Primitives
 internal val Green500 = Color(0xFF10B981) // Income
-// internal val Red500 = Color(0xFFE11D48)   // Expense
+internal val Red500 = Color(0xFFE11D48)   // Expense
 
 // Category Primitives
-// internal val Orange500 = Color(0xFFF97316) // Groceries
-// internal val Blue500 = Color(0xFF3B82F6)   // Transport
-// internal val Pink500 = Color(0xFFEC4899)   // Restaurants
-// internal val Teal500 = Color(0xFF10B981)   // Home
-// internal val Purple500 = Color(0xFFA855F7) // Entertainment
-// internal val Cyan700 = Color(0xFF2DD4BF)   // Freelance
-// internal val Yellow500 = Color(0xFFF59E0B) // Coffee
+ internal val Orange500 = Color(0xFFF97316) // Groceries
+ internal val Blue500 = Color(0xFF3B82F6)   // Transport
+ internal val Pink500 = Color(0xFFEC4899)   // Restaurants
+ internal val Teal500 = Color(0xFF10B981)   // Home
+ internal val Purple500 = Color(0xFFA855F7) // Entertainment
+ internal val Cyan700 = Color(0xFF2DD4BF)   // Freelance
+ internal val Yellow500 = Color(0xFFF59E0B) // Coffee
 
 
 

@@ -63,7 +63,7 @@ fun FormInput(
                 )
                 .border(
                     width = MaterialTheme.dimensions.borderThin,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    color = MaterialTheme.colorScheme.outline,
                     shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
                 )
                 .then(
