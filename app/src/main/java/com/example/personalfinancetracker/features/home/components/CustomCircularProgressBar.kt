@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,18 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressBackground
-import com.example.core.ui.theme.ProgressPrimary
 
 @Composable
 fun CustomCircularProgressBar(
     modifier: Modifier = Modifier,
     progress: Float,
     animDuration: Int = 1000,
-    progressColor: Color = ProgressPrimary,
-    trackColor: Color = ProgressBackground,
+    progressColor: Color = MaterialTheme.colorScheme.primary,
+    trackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     strokeWidth: Dp = 8.dp
-
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,

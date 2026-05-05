@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun PrimaryButton(
@@ -21,8 +21,8 @@ fun PrimaryButton(
     onClick: () -> Unit = {}
 ) {
     Button(
-        modifier = modifier.height(MaterialTheme.dimensions.buttonHeightLarge),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge),
+        modifier = modifier.height(AppTheme.dimensions.buttonHeightLarge),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge),
         onClick = onClick,
 
         ) {

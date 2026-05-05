@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,13 +15,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.R
-import com.example.core.ui.theme.Gray950
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
 
 @Composable
 fun ActionButtons(
@@ -34,8 +31,8 @@ fun ActionButtons(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = MaterialTheme.dimensions.spacingMedium),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            .padding(bottom = AppTheme.dimensions.spacingMedium),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
     ) {
         OutlinedButton(
             onClick = onCancel,
@@ -44,7 +41,7 @@ fun ActionButtons(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = stringResource(R.string.action_cancel),
-                modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
+                modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall)
             )
             Text(stringResource(R.string.action_cancel))
         }
@@ -55,15 +52,15 @@ fun ActionButtons(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall),
-                    strokeWidth = MaterialTheme.dimensions.borderNormal,
+                    modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall),
+                    strokeWidth = AppTheme.dimensions.borderNormal,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = stringResource(R.string.action_save),
-                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
+                    modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall)
                 )
             }
             Text(stringResource(R.string.action_save))

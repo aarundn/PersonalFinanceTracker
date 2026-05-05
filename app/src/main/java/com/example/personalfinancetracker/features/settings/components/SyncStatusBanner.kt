@@ -15,10 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.conversion_rate.sync.SyncStatus
-import com.example.core.ui.theme.dimensions
-import com.example.core.ui.theme.Expense
-import com.example.core.ui.theme.Income
-import com.example.core.ui.theme.MutedForeground
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.statusContainer
 import com.example.core.utils.parseDateString
 
@@ -30,10 +27,10 @@ fun SyncStatusBanner(
     val isSyncing = syncStatus is SyncStatus.Syncing
 
     val baseColor = when (syncStatus) {
-        is SyncStatus.Syncing -> MutedForeground
-        is SyncStatus.Success -> Income
-        is SyncStatus.Failed -> Expense
-        is SyncStatus.Idle -> Expense
+        is SyncStatus.Syncing -> MaterialTheme.colorScheme.onSurfaceVariant
+        is SyncStatus.Success -> AppTheme.colors.income
+        is SyncStatus.Failed -> AppTheme.colors.expense
+        is SyncStatus.Idle -> AppTheme.colors.expense
     }
 
     val displayString = when (syncStatus) {
@@ -67,18 +64,18 @@ private fun SyncStatusBannerContent(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .statusContainer(baseColor = baseColor, cornerRadius = MaterialTheme.dimensions.radiusSmall)
-            .padding(horizontal = MaterialTheme.dimensions.spacingMediumSmall, vertical = MaterialTheme.dimensions.spacingSmall)
+            .statusContainer(baseColor = baseColor, cornerRadius = AppTheme.dimensions.radiusSmall)
+            .padding(horizontal = AppTheme.dimensions.spacingMediumSmall, vertical = AppTheme.dimensions.spacingSmall)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingSmall)
         ) {
             if (isSyncing) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall),
+                    modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall),
                     color = baseColor,
-                    strokeWidth = MaterialTheme.dimensions.borderNormal
+                    strokeWidth = AppTheme.dimensions.borderNormal
                 )
             }
 

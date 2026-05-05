@@ -28,7 +28,7 @@ import com.example.core.model.Currency
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.domain.model.BudgetPeriod
 
 @Composable
@@ -54,16 +54,16 @@ fun BudgetInputForm(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-            border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline) ,
         ) {
             Column(
-                modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+                modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
             ) {
                 BudgetHeaderForm()
 
@@ -139,7 +139,7 @@ private fun BudgetHeaderForm() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingSmall)
     ) {
         Icon(
             Icons.Outlined.Add,

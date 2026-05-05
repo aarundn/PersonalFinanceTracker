@@ -18,10 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.core.ui.theme.dimensions
-import com.example.core.R
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressError
+import com.example.core.R
 import com.example.domain.model.BudgetPeriod
 import com.example.personalfinancetracker.features.budget.model.BudgetInsightsUi
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
@@ -36,22 +35,22 @@ fun BudgetInsightsCard(
 
     
     val projectedColor = if (insights?.isProjectedOverBudget == true) {
-        ProgressError
+        AppTheme.colors.expense
     } else {
         MaterialTheme.colorScheme.primary
     }
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(
-            modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            modifier = Modifier.padding(AppTheme.dimensions.spacingLarge),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
         ) {
             Text(
                 text = "Spending Insights",
@@ -91,7 +90,7 @@ private fun InsightRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.dimensions.spacingExtraSmall, vertical = MaterialTheme.dimensions.spacingSmall),
+            .padding(horizontal = AppTheme.dimensions.spacingExtraSmall, vertical = AppTheme.dimensions.spacingSmall),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

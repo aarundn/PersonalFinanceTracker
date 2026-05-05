@@ -18,9 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.core.R
-import com.example.core.ui.theme.Expense
-import com.example.core.ui.theme.Income
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun TransactionTypeToggle(
@@ -33,18 +31,18 @@ fun TransactionTypeToggle(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
             )
             .border(
-                width = MaterialTheme.dimensions.borderThin,
+                width = AppTheme.dimensions.borderThin,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
             )
-            .padding(MaterialTheme.dimensions.spacingMedium)
+            .padding(AppTheme.dimensions.spacingMedium)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -58,14 +56,14 @@ fun TransactionTypeToggle(
             )
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(R.string.transaction_type_expense),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (!isIncome) {
-                        Expense
+                        AppTheme.colors.expense
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     },
@@ -81,7 +79,7 @@ fun TransactionTypeToggle(
                     text = stringResource(R.string.transaction_type_income),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (isIncome) {
-                        Income // Green for income
+                        AppTheme.colors.income
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     },
@@ -90,4 +88,4 @@ fun TransactionTypeToggle(
             }
         }
     }
-}
+}

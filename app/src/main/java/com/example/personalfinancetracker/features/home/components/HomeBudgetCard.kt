@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,8 +18,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatPercentage
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
@@ -32,18 +31,18 @@ fun HomeBudgetCard(
 
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         border = BorderStroke(
-            MaterialTheme.dimensions.borderThin,
+            AppTheme.dimensions.borderThin,
             MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
         ),
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
-                .padding(vertical = MaterialTheme.dimensions.spacingSmall),
+                .padding(horizontal = AppTheme.dimensions.spacingMedium)
+                .padding(vertical = AppTheme.dimensions.spacingSmall),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
         ) {
             Box(
                 contentAlignment = Alignment.Center
@@ -60,7 +59,7 @@ fun HomeBudgetCard(
                 )
             }
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
             ) {
                 Text(
                     text = stringResource(budget.currentCategory.nameResId),

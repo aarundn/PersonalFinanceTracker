@@ -21,7 +21,7 @@ import com.example.core.components.CustomSnackBar
 import com.example.core.components.HeaderSection
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.budget.common.BudgetInputForm
 
@@ -36,7 +36,7 @@ fun AddBudgetScreen(
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(AppTheme.dimensions.spacingMedium))
             }
         },
         modifier = modifier.fillMaxSize(),
@@ -52,12 +52,12 @@ fun AddBudgetScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
+                .padding(horizontal = AppTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
         ) {
             BudgetInputForm(
-                modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
+                modifier = Modifier.padding(top = AppTheme.dimensions.spacingMedium),
                 categories = state.categories,
                 selectedCategory = state.selectedCategory,
                 selectedPeriod = state.period,

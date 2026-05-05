@@ -18,20 +18,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressBackground
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.Dp
-import com.example.core.ui.theme.ProgressPrimary
 
 @Composable
 fun CustomProgressBar(
-
     progress: Float,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = ProgressBackground,
-    progressColor: Color = ProgressPrimary,
-    height: Dp = MaterialTheme.dimensions.spacingSmall
+    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    progressColor: Color = MaterialTheme.colorScheme.primary,
+    height: Dp = AppTheme.dimensions.spacingSmall
 ) {
     val hasAnimated = rememberSaveable { mutableStateOf(false) }
     val animatedProgress = remember { Animatable(if (!hasAnimated.value) 0f else progress.coerceIn(0f, 1f)) }
@@ -43,22 +40,20 @@ fun CustomProgressBar(
                 animationSpec = tween(durationMillis = 800, easing = FastOutLinearInEasing))
             hasAnimated.value = true
         }
-
-
     }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .clip(RoundedCornerShape(MaterialTheme.dimensions.spacingExtraSmall))
+            .clip(RoundedCornerShape(AppTheme.dimensions.spacingExtraSmall))
             .background(backgroundColor)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(animatedProgress.value)
                 .height(height)
-                .clip(RoundedCornerShape(MaterialTheme.dimensions.spacingExtraSmall))
+                .clip(RoundedCornerShape(AppTheme.dimensions.spacingExtraSmall))
                 .background(progressColor)
         )
     }
@@ -74,4 +69,3 @@ private fun CustomProgressBarPreview() {
         )
     }
 }
-

@@ -30,7 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.core.components.EmptyState
 import com.example.core.components.HeaderSection
 import com.example.core.components.LoadingIndicator
@@ -91,7 +91,7 @@ fun BudgetScreen(
                             onClick = { onEvent(BudgetsEvent.OnAddBudgetClick) },
                             modifier = modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(MaterialTheme.dimensions.spacingLarge),
+                                .padding(AppTheme.dimensions.spacingLarge),
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             elevation = FloatingActionButtonDefaults.elevation(
@@ -126,14 +126,14 @@ private fun Content(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
+            .padding(horizontal = AppTheme.dimensions.spacingMedium)
 
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
             contentPadding = PaddingValues(
                 bottom = 88.dp,
-                top = MaterialTheme.dimensions.spacingMedium
+                top = AppTheme.dimensions.spacingMedium
             )
         ) {
             itemsIndexed(

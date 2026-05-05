@@ -28,8 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun ConfirmationDialog(
@@ -38,32 +37,32 @@ fun ConfirmationDialog(
     confirmText: String = "Confirm",
     dismissText: String = "Cancel",
     icon: ImageVector = Icons.Outlined.Warning,
-    iconTint: Color = ProgressError,
-    confirmButtonColor: Color = ProgressError,
+    iconTint: Color = AppTheme.colors.expense,
+    confirmButtonColor: Color = AppTheme.colors.expense,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusExtraLarge),
+            shape = RoundedCornerShape(AppTheme.dimensions.radiusExtraLarge),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
-            border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(MaterialTheme.dimensions.spacingLarge),
+                    .padding(AppTheme.dimensions.spacingLarge),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier.size(MaterialTheme.dimensions.iconSizeExtraLarge)
+                    modifier = Modifier.size(AppTheme.dimensions.iconSizeExtraLarge)
                 )
 
                 Text(
@@ -84,14 +83,14 @@ fun ConfirmationDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = MaterialTheme.dimensions.spacingSmall),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+                        .padding(top = AppTheme.dimensions.spacingSmall),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
                 ) {
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
-                        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline)
+                        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
+                        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline)
                     ) {
                         Text(
                             text = dismissText,
@@ -102,7 +101,7 @@ fun ConfirmationDialog(
                     Button(
                         onClick = onConfirm,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+                        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = confirmButtonColor,
                             contentColor = MaterialTheme.colorScheme.onError

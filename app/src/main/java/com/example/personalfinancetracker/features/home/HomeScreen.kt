@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.core.R
 import com.example.core.components.EmptyState
 import com.example.core.components.LoadingIndicator
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.home.components.BudgetsRow
 import com.example.personalfinancetracker.features.home.components.MonthCard
 import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
@@ -68,9 +68,9 @@ private fun HomeContent(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(PaddingValues(horizontal = MaterialTheme.dimensions.spacingMedium))
+            .padding(PaddingValues(horizontal = AppTheme.dimensions.spacingMedium))
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
     ) {
         item (){
             Row(
@@ -97,7 +97,7 @@ private fun HomeContent(
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
+            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))
             MonthCard(
                 totalTransactions = data.totalTransactions,
                 dailyAverage = data.dailyAverage,
@@ -105,13 +105,13 @@ private fun HomeContent(
                 daysInMonth = data.daysInMonth,
                 currencySymbol = data.currencySymbol
             )
-            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
+            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))
             BudgetsRow(
                 budgets = data.budgets,
                 onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) },
                 onAddBudgetClick = { onEvent(HomeEvent.OnClickAddBudget) }
             )
-            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingMediumSmall))
+            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingMediumSmall))
             Text(
                 text = stringResource(R.string.recent_transactions),
                 style = MaterialTheme.typography.titleMedium
@@ -125,7 +125,7 @@ private fun HomeContent(
                     description = stringResource(R.string.transaction_empty_description),
                     buttonText = stringResource(R.string.transaction_add_button),
                     onAddClick = { onEvent(HomeEvent.OnClickAddExpense) },
-                    modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingMedium)
+                    modifier = Modifier.padding(vertical = AppTheme.dimensions.spacingMedium)
                 )
             }
         } else {
@@ -137,6 +137,6 @@ private fun HomeContent(
                 )
             }
         }
-        item { Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))}
+        item { Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))}
     }
 }

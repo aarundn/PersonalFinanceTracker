@@ -13,9 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.core.model.BudgetDisplayData
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.Warning
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun BudgetSelectorCard(
@@ -26,13 +24,13 @@ fun BudgetSelectorCard(
 ) {
 
     val progressColor = when {
-        budget.isOverBudget -> ProgressError
-        budget.isWarning -> Warning
+        budget.isOverBudget -> AppTheme.colors.expense
+        budget.isWarning -> AppTheme.colors.warning
         else -> budget.iconTint
     }
 
     val borderColor = if (isSelected) budget.iconTint else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
-    val borderWidth = if (isSelected) MaterialTheme.dimensions.borderNormal else MaterialTheme.dimensions.borderThin
+    val borderWidth = if (isSelected) AppTheme.dimensions.borderNormal else AppTheme.dimensions.borderThin
 
     Card(
         onClick = onClick,
@@ -46,7 +44,7 @@ fun BudgetSelectorCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.dimensions.spacingMedium, vertical = MaterialTheme.dimensions.spacingMediumSmall),
+                .padding(horizontal = AppTheme.dimensions.spacingMedium, vertical = AppTheme.dimensions.spacingMediumSmall),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

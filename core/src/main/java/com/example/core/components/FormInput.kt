@@ -20,7 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun FormInput(
@@ -40,7 +40,7 @@ fun FormInput(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
+            modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingSmall)
         )
 
         val interactionSource = remember { MutableInteractionSource() }
@@ -59,12 +59,12 @@ fun FormInput(
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surfaceContainer,
-                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                    shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
                 )
                 .border(
-                    width = MaterialTheme.dimensions.borderThin,
+                    width = AppTheme.dimensions.borderThin,
                     color = MaterialTheme.colorScheme.outline,
-                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                    shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
                 )
                 .then(
                     if (onClick != null) {
@@ -75,7 +75,7 @@ fun FormInput(
                        )
                     } else Modifier
                 )
-                .padding(MaterialTheme.dimensions.spacingMedium),
+                .padding(AppTheme.dimensions.spacingMedium),
             singleLine = keyboardType != KeyboardType.Text,
             maxLines = maxLine,
             minLines = minLine,
@@ -101,8 +101,8 @@ fun FormInput(
 private fun FormFormComponentsPreview() {
     PersonalFinanceTrackerTheme {
         Column(
-            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
         ) {
             FormInput(
                 label = "Title",

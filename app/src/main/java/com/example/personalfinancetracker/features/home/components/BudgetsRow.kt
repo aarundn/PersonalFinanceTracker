@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.core.R
 import com.example.core.components.EmptyState
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 import com.example.personalfinancetracker.features.budget.model.BudgetUi
 
@@ -40,10 +40,10 @@ fun BudgetsRow(
                 onAddClick = onAddBudgetClick
             )
         } else {
-            Spacer(modifier = Modifier.padding(MaterialTheme.dimensions.spacingSmall))
+            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))
             LazyRow(
                 modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
             ) {
                 items(budgets.size) {
                     HomeBudgetCard(

@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.core.components.CustomProgressBar
 import com.example.core.utils.formatAmountRemaining
 import com.example.core.utils.formatCurrencyAmount
@@ -28,15 +28,15 @@ fun OverallSummaryCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.padding(bottom = MaterialTheme.dimensions.spacingMedium).fillMaxWidth(),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        modifier = modifier.padding(bottom = AppTheme.dimensions.spacingMedium).fillMaxWidth(),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
     ) {
         Column(
-            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

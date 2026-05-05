@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,10 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.components.BudgetStatusBadge
-import com.example.core.ui.theme.Income
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
-import com.example.core.ui.theme.ProgressError
 import com.example.data.sync.SyncStatusEnum
 import com.example.domain.model.Type
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
@@ -49,27 +46,27 @@ fun TransactionCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         border = BorderStroke(
-            MaterialTheme.dimensions.borderThin,
+            AppTheme.dimensions.borderThin,
             MaterialTheme.colorScheme.outline
         ),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.dimensions.spacingMedium),
+                .padding(AppTheme.dimensions.spacingMedium),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(MaterialTheme.dimensions.iconSizeMediumLarge)
+                            .size(AppTheme.dimensions.iconSizeMediumLarge)
                             .clip(CircleShape)
                             .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
                         contentAlignment = Alignment.Center
@@ -78,7 +75,7 @@ fun TransactionCard(
                             imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
                             contentDescription = null,
                             tint = transaction.currentCategory.color,
-                            modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
+                            modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
                         )
                     }
 
@@ -112,14 +109,14 @@ fun TransactionCard(
                         color = if (transaction.type == Type.INCOME)
                             transaction.currentCategory.color
                         else
-                            ProgressError
+                            AppTheme.colors.expense
                     )
                 }
                 BudgetStatusBadge(
                     text = transaction.syncStatusEnum,
                     color = when (transaction.syncStatusEnum) {
-                        SyncStatusEnum.PENDING.name ->  ProgressError
-                        SyncStatusEnum.SYNCED.name -> Income
+                        SyncStatusEnum.PENDING.name ->  AppTheme.colors.expense
+                        SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
                         SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
                         else -> {
                             MaterialTheme.colorScheme.outline

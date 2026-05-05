@@ -19,8 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun CustomSnackBar(
@@ -29,18 +28,18 @@ fun CustomSnackBar(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.error)
+        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.error)
     ) {
         Row(
-            Modifier.padding(horizontal = MaterialTheme.dimensions.spacingMedium, vertical = MaterialTheme.dimensions.spacingSmall)
+            Modifier.padding(horizontal = AppTheme.dimensions.spacingMedium, vertical = AppTheme.dimensions.spacingSmall)
                 .fillMaxWidth()
-                .height(MaterialTheme.dimensions.buttonHeightNormal),
+                .height(AppTheme.dimensions.buttonHeightNormal),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingSmall)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Warning,

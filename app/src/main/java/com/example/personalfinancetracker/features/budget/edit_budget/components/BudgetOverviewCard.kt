@@ -29,10 +29,8 @@ import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
 import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.Warning
-import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatAmount
 import com.example.core.utils.formatAmountLeft
 import com.example.core.utils.formatAmountOver
@@ -56,8 +54,8 @@ fun BudgetOverviewCard(
     val isWarning = budget.isWarning
 
     val progressColor = when {
-        isOverBudget -> ProgressError
-        isWarning -> Warning
+        isOverBudget -> AppTheme.colors.expense
+        isWarning -> AppTheme.colors.warning
         else -> MaterialTheme.colorScheme.primary
     }
 
@@ -66,11 +64,11 @@ fun BudgetOverviewCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
         Column(
-            modifier = Modifier.padding(MaterialTheme.dimensions.spacingLarge),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            modifier = Modifier.padding(AppTheme.dimensions.spacingLarge),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
         ) {
             CategoryOverViewInfo(
                 containerColor = containerColor,
@@ -103,7 +101,7 @@ private fun CategoryOverViewInfo(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -116,13 +114,13 @@ private fun CategoryOverViewInfo(
                 imageVector = icon,
                 contentDescription = null,
                 tint = tint,
-                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeLarge)
+                modifier = Modifier.size(AppTheme.dimensions.iconSizeLarge)
             )
         }
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
         ) {
             Text(
                 text = stringResource(category.nameResId),
@@ -139,12 +137,12 @@ private fun CategoryOverViewInfo(
         when {
             isOverBudget -> BudgetStatusBadge(
                 text = "Over Budget",
-                color = ProgressError
+                color = AppTheme.colors.expense
             )
 
             isWarning -> BudgetStatusBadge(
                 text = "Almost Full",
-                color = Warning
+                color = AppTheme.colors.warning
             )
         }
     }
@@ -157,7 +155,7 @@ private fun ProgressOverViewInfo(
     progressColor: Color
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
     ) {
         AmountRow(
             label = "Spent",
@@ -195,7 +193,7 @@ private fun ProgressOverViewInfo(
                     formatAmountOver(budget.currencySymbol, budget.overBudget.formatCurrency())
                 },
                 style = MaterialTheme.typography.bodySmall,
-                color = if (remaining >= 0) progressColor else ProgressError,
+                color = if (remaining >= 0) progressColor else AppTheme.colors.expense,
                 fontWeight = FontWeight.Medium
             )
         }

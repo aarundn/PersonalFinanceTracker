@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 @Composable
 fun LoadingIndicator(
     modifier: Modifier = Modifier
@@ -20,7 +20,7 @@ fun LoadingIndicator(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal),
+            modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal),
             color = MaterialTheme.colorScheme.primary
         )
     }

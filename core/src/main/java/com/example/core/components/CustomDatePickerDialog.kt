@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +58,7 @@ fun CustomDatePickerDialog(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.dimensions.spacingLarge),
+                .padding(horizontal = AppTheme.dimensions.spacingLarge),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -66,8 +66,8 @@ fun CustomDatePickerDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = MaterialTheme.dimensions.spacingLarge,
-                        vertical = MaterialTheme.dimensions.spacingMedium
+                        horizontal = AppTheme.dimensions.spacingLarge,
+                        vertical = AppTheme.dimensions.spacingMedium
                     ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -80,7 +80,7 @@ fun CustomDatePickerDialog(
                 )
                 IconButton(
                     modifier = Modifier
-                        .size(MaterialTheme.dimensions.iconSizeSmall)
+                        .size(AppTheme.dimensions.iconSizeSmall)
                         .border(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.outline,
@@ -89,7 +89,7 @@ fun CustomDatePickerDialog(
                     onClick = onDismiss
                 ) {
                     Icon(
-                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeSmall),
+                        modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall),
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -100,7 +100,7 @@ fun CustomDatePickerDialog(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = MaterialTheme.dimensions.spacingLarge),
+                    .padding(bottom = AppTheme.dimensions.spacingLarge),
                 text = "١٥ أكتوبر ٢٠٢٣",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
@@ -149,13 +149,13 @@ fun CustomDatePickerDialog(
                         .heightIn(min = 56.dp)
                         .background(
                             color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                            shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
                         )
                         .align(Alignment.Center)
                         .border(
                             width = 0.5.dp,
                             color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusLarge)
+                            shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
                         )
                 )
             }
@@ -164,7 +164,7 @@ fun CustomDatePickerDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        vertical = MaterialTheme.dimensions.spacingExtraLarge
+                        vertical = AppTheme.dimensions.spacingExtraLarge
                     ),
                 onClick = {}
             )

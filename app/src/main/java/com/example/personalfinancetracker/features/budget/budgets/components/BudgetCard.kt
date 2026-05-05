@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +18,8 @@ import com.example.core.components.BudgetAmountStateInfo
 import com.example.core.components.BudgetInfo
 import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
-import com.example.core.ui.theme.Income
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.ProgressError
-import com.example.core.ui.theme.Warning
-import com.example.core.ui.theme.dimensions
 import com.example.core.utils.formatAmountNoSpace
 import com.example.core.utils.formatPercentage
 import com.example.data.sync.SyncStatusEnum
@@ -40,8 +36,8 @@ fun BudgetCard(
     val iconBackground = iconTint.copy(alpha = 0.12f)
 
     val progressColor = when {
-        budget.isOverBudget -> ProgressError
-        budget.isWarning -> Warning
+        budget.isOverBudget -> AppTheme.colors.expense
+        budget.isWarning -> AppTheme.colors.warning
         else -> iconTint
     }
 
@@ -49,12 +45,12 @@ fun BudgetCard(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
+        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline),
     ) {
         Column(
-            modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -82,7 +78,7 @@ fun BudgetCard(
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
             ) {
                 CustomProgressBar(
                     progress = budget.percentage,
@@ -112,8 +108,8 @@ fun BudgetCard(
             BudgetStatusBadge(
                 text = budget.syncStatusEnum,
                 color = when (budget.syncStatusEnum) {
-                    SyncStatusEnum.PENDING.name -> ProgressError
-                    SyncStatusEnum.SYNCED.name -> Income
+                    SyncStatusEnum.PENDING.name -> AppTheme.colors.expense
+                    SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
                     SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.outline
                 },

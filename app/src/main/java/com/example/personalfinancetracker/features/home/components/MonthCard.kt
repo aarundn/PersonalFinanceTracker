@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import com.example.core.R
 import com.example.core.components.CustomProgressBar
+import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.budget.utils.formatCurrency
-import com.example.core.ui.theme.dimensions
 
 @Composable
 fun MonthCard(
@@ -35,17 +34,17 @@ fun MonthCard(
 ) {
     Card(
         modifier = modifier,
-        border = BorderStroke(MaterialTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
     ) {
-        Column(Modifier.padding(MaterialTheme.dimensions.spacingMedium)) {
+        Column(Modifier.padding(AppTheme.dimensions.spacingMedium)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingSmall)
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingSmall)
             ) {
                 Icon(ImageVector.vectorResource(R.drawable.calendar), contentDescription = null)
                 Text(stringResource(R.string.home_this_month), style = MaterialTheme.typography.titleMedium)
             }
-            Spacer(Modifier.height(MaterialTheme.dimensions.spacingMedium))
+            Spacer(Modifier.height(AppTheme.dimensions.spacingMedium))
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -56,7 +55,7 @@ fun MonthCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(Modifier.height(MaterialTheme.dimensions.spacingExtraSmall))
+                    Spacer(Modifier.height(AppTheme.dimensions.spacingExtraSmall))
                     Text(
                         totalTransactions.toString(),
                         style = MaterialTheme.typography.headlineMedium
@@ -68,14 +67,14 @@ fun MonthCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(Modifier.height(MaterialTheme.dimensions.spacingExtraSmall))
+                    Spacer(Modifier.height(AppTheme.dimensions.spacingExtraSmall))
                     Text(
                         "${dailyAverage.formatCurrency()} $currencySymbol",
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
             }
-            Spacer(Modifier.height(MaterialTheme.dimensions.spacingMedium))
+            Spacer(Modifier.height(AppTheme.dimensions.spacingMedium))
             Column {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -92,7 +91,7 @@ fun MonthCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                Spacer(Modifier.height(MaterialTheme.dimensions.spacingSmall))
+                Spacer(Modifier.height(AppTheme.dimensions.spacingSmall))
                 CustomProgressBar(
                     progress = daysPassed / daysInMonth.toFloat(),
                     modifier = Modifier.fillMaxWidth()

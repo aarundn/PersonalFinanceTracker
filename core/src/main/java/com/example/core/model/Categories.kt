@@ -4,10 +4,13 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.example.core.R
-import com.example.core.ui.theme.CategoryBills
-import com.example.core.ui.theme.CategoryFood
-import com.example.core.ui.theme.CategoryShopping
-import com.example.core.ui.theme.CategoryTransport
+import com.example.core.ui.theme.EntertainmentPurple500
+import com.example.core.ui.theme.FreelanceCyan700
+import com.example.core.ui.theme.Green500
+import com.example.core.ui.theme.HomeTeal500
+import com.example.core.ui.theme.Red500
+import com.example.core.ui.theme.RestaurantsPink500
+import com.example.core.ui.theme.TransportBlue500
 import com.example.domain.model.Type
 
 /**
@@ -27,19 +30,19 @@ data class Category(
 object DefaultCategories {
     
     // Expense Categories
-    val SHOPPING = Category("shopping", R.string.category_shopping, R.drawable.shopping_bag, CategoryShopping, Type.EXPENSE)
-    val FOOD = Category("food", R.string.category_food, R.drawable.shopping_basket, CategoryFood, Type.EXPENSE)
-    val TRANSPORT = Category("transport", R.string.category_transport, R.drawable.truck, CategoryTransport, Type.EXPENSE)
-    val BILLS = Category("bills", R.string.category_bills, R.drawable.home, CategoryBills, Type.EXPENSE)
-    val ENTERTAINMENT = Category("entertainment", R.string.category_entertainment, R.drawable.heart, CategoryFood, Type.EXPENSE)
-    val HEALTH = Category("health", R.string.category_health, R.drawable.heart, CategoryBills, Type.EXPENSE)
+    val SHOPPING = Category("shopping", R.string.category_shopping, R.drawable.shopping_bag, EntertainmentPurple500, Type.EXPENSE)
+    val FOOD = Category("food", R.string.category_food, R.drawable.shopping_basket, RestaurantsPink500, Type.EXPENSE)
+    val TRANSPORT = Category("transport", R.string.category_transport, R.drawable.truck, TransportBlue500, Type.EXPENSE)
+    val BILLS = Category("bills", R.string.category_bills, R.drawable.home, HomeTeal500, Type.EXPENSE)
+    val ENTERTAINMENT = Category("entertainment", R.string.category_entertainment, R.drawable.heart, EntertainmentPurple500, Type.EXPENSE)
+    val HEALTH = Category("health", R.string.category_health, R.drawable.heart, Red500, Type.EXPENSE)
     val OTHER = Category("other", R.string.category_other, R.drawable.box, Color.Gray, Type.EXPENSE)
 
     // Income Categories
-    val SALARY = Category("salary", R.string.category_salary, R.drawable.wallet, CategoryBills, Type.INCOME)
-    val FREELANCE = Category("freelance", R.string.category_freelance, R.drawable.briefcase, CategoryBills, Type.INCOME)
-    val INVESTMENT = Category("investment", R.string.category_investment, R.drawable.trending_up, CategoryTransport, Type.INCOME)
-    val GIFT = Category("gift", R.string.category_gift, R.drawable.heart, CategoryFood, Type.INCOME)
+    val SALARY = Category("salary", R.string.category_salary, R.drawable.wallet, Green500, Type.INCOME)
+    val FREELANCE = Category("freelance", R.string.category_freelance, R.drawable.briefcase, FreelanceCyan700, Type.INCOME)
+    val INVESTMENT = Category("investment", R.string.category_investment, R.drawable.trending_up, TransportBlue500, Type.INCOME)
+    val GIFT = Category("gift", R.string.category_gift, R.drawable.heart, RestaurantsPink500, Type.INCOME)
     val OTHER_INCOME = Category("other_income", R.string.category_other_income, R.drawable.box, Color.Gray, Type.INCOME)
 
     val all = listOf(

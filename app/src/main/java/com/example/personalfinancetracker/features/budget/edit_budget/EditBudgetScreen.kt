@@ -18,7 +18,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.core.components.ConfirmationDialog
 import com.example.core.components.CustomDatePickerDialog
 import com.example.core.components.CustomSnackBar
@@ -46,7 +46,7 @@ fun EditBudgetScreen(
         modifier = modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(AppTheme.dimensions.spacingMedium))
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -71,17 +71,17 @@ fun EditBudgetScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
+                .padding(horizontal = AppTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
         ) {
             if (state.isLoading && !state.isEditing) {
-                LoadingIndicator(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingExtraLarge))
+                LoadingIndicator(modifier = Modifier.padding(vertical = AppTheme.dimensions.spacingExtraLarge))
             } else {
                 state.budget?.let { budget ->
                     BudgetOverviewCard(
                         budget = budget,
-                        modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium)
+                        modifier = Modifier.padding(top = AppTheme.dimensions.spacingMedium)
                     )
                 }
 

@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.model.Category
 import com.example.core.model.DefaultCategories
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -46,35 +46,35 @@ fun CategorySelectionGrid(
             text = "Category",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingMediumSmall)
+            modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingMediumSmall)
         )
 
         FlowRow(
             maxItemsInEachRow = 2,
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
         ) {
             categories.forEach { category ->
                 val isSelected = category.id == selectedCategoryId
                 Surface(
-                    shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+                    shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
                     color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surface,
                     tonalElevation = if (isSelected) 2.dp else 0.dp,
                     modifier = Modifier
                         .weight(1f, fill = true)
-                        .clip(RoundedCornerShape(MaterialTheme.dimensions.radiusMedium))
+                        .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
                         .border(
-                            width = MaterialTheme.dimensions.borderThin,
+                            width = AppTheme.dimensions.borderThin,
                             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                            shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium)
+                            shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium)
                         )
                         .clickable { onCategorySelected(category.id) }
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(horizontal = MaterialTheme.dimensions.spacingMedium, vertical = MaterialTheme.dimensions.spacingMediumSmall),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall),
+                            .padding(horizontal = AppTheme.dimensions.spacingMedium, vertical = AppTheme.dimensions.spacingMediumSmall),
+                        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconWrapper(
@@ -85,7 +85,7 @@ fun CategorySelectionGrid(
                                 imageVector = ImageVector.vectorResource(category.icon),
                                 contentDescription = null,
                                 tint = category.color,
-                                modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
+                                modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
                             )
                         }
 
@@ -117,7 +117,7 @@ private fun IconWrapper(
 ) {
     Box(
         modifier = Modifier
-            .size(MaterialTheme.dimensions.iconSizeMediumLarge)
+            .size(AppTheme.dimensions.iconSizeMediumLarge)
             .clip(CircleShape)
             .background(background),
         contentAlignment = Alignment.Center

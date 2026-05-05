@@ -36,7 +36,7 @@ import com.example.core.components.TransactionInputForm
 import com.example.core.model.DefaultCategories
 import com.example.core.model.DefaultCurrencies
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 import com.example.core.utils.parseDateString
 import com.example.personalfinancetracker.features.budget.mapper.toDisplayData
 import com.example.personalfinancetracker.features.transaction.add_transaction.components.BudgetSelectorBottomSheet
@@ -55,7 +55,7 @@ fun EditTransactionScreen(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = {
             SnackbarHost(snackBarHostState, Modifier) { snackBarData ->
-                CustomSnackBar(snackBarData, modifier = Modifier.padding(MaterialTheme.dimensions.spacingMedium))
+                CustomSnackBar(snackBarData, modifier = Modifier.padding(AppTheme.dimensions.spacingMedium))
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -80,17 +80,17 @@ fun EditTransactionScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = MaterialTheme.dimensions.spacingMedium)
+                .padding(horizontal = AppTheme.dimensions.spacingMedium)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMedium)
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium)
         ) {
             if (state.isLoading) {
-                LoadingIndicator(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.spacingExtraLarge))
+                LoadingIndicator(modifier = Modifier.padding(vertical = AppTheme.dimensions.spacingExtraLarge))
             } else {
                 state.transaction?.let {
                     TransactionOverviewCard(
                         transactionUi = it,
-                        modifier = Modifier.padding(top = MaterialTheme.dimensions.spacingMedium),
+                        modifier = Modifier.padding(top = AppTheme.dimensions.spacingMedium),
                     )
                 }
 
@@ -128,7 +128,7 @@ fun EditTransactionScreen(
                         onClick = { onEvent(EditTransactionEvent.OnDelete) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = MaterialTheme.dimensions.spacingMedium),
+                            .padding(bottom = AppTheme.dimensions.spacingMedium),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError
@@ -137,7 +137,7 @@ fun EditTransactionScreen(
                         Icon(
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = null,
-                            modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
+                            modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall)
                         )
                         Text("Delete Transaction")
                     }

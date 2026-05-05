@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun BudgetStatusBadge(
@@ -26,23 +26,23 @@ fun BudgetStatusBadge(
     icon: ImageVector? = Icons.Outlined.Warning
 ) {
     Surface(
-        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusMedium),
+        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
         color = color.copy(alpha = 0.1f),
-        modifier = modifier.padding(bottom = MaterialTheme.dimensions.spacingExtraSmall)
+        modifier = modifier.padding(bottom = AppTheme.dimensions.spacingExtraSmall)
     ) {
         Row(
             modifier = Modifier.padding(
-                horizontal = MaterialTheme.dimensions.spacingSmall,
-                vertical = MaterialTheme.dimensions.spacingExtraSmall
+                horizontal = AppTheme.dimensions.spacingSmall,
+                vertical = AppTheme.dimensions.spacingExtraSmall
             ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingExtraSmall)
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
         ) {
             icon?.let {
                 Icon(
                     imageVector = it,
                     contentDescription = null,
-                    modifier = Modifier.size(MaterialTheme.dimensions.spacingMediumSmall),
+                    modifier = Modifier.size(AppTheme.dimensions.spacingMediumSmall),
                     tint = color
                 )
             }

@@ -16,11 +16,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-
+import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
-import com.example.core.ui.theme.dimensions
 
 @Composable
 fun ActionButtons(
@@ -33,8 +31,8 @@ fun ActionButtons(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = MaterialTheme.dimensions.spacingMedium),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.spacingMediumSmall)
+            .padding(bottom = AppTheme.dimensions.spacingMedium),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
     ) {
         OutlinedButton(
             onClick = onCancel,
@@ -46,7 +44,7 @@ fun ActionButtons(
             Icon(
                 imageVector = Icons.Outlined.Close,
                 contentDescription = "Cancel",
-                modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
+                modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall)
             )
             Text(text = "Cancel")
         }
@@ -62,15 +60,15 @@ fun ActionButtons(
         ) {
             if (isSaving) {
                 CircularProgressIndicator(
-                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall),
-                    strokeWidth = MaterialTheme.dimensions.borderNormal,
+                    modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall),
+                    strokeWidth = AppTheme.dimensions.borderNormal,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Icon(
                     imageVector = Icons.Outlined.Check,
                     contentDescription = "Save",
-                    modifier = Modifier.padding(end = MaterialTheme.dimensions.spacingSmall)
+                    modifier = Modifier.padding(end = AppTheme.dimensions.spacingSmall)
                 )
             }
             Text(text = "Save Budget")

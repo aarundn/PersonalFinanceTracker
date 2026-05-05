@@ -1,10 +1,10 @@
 package com.example.core.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 
 private val AppColorScheme = darkColorScheme(
     primary = Gray50,
@@ -26,23 +26,37 @@ private val AppColorScheme = darkColorScheme(
     surfaceContainer = Gray900,
     surfaceContainerHigh = Gray800,
     surfaceContainerHighest = Gray850,
-    error = ProgressError,
+    error = Red500,
     onError = Gray50,
-    errorContainer = ProgressError.copy(alpha = 0.12f),
-    onErrorContainer = ProgressError,
+    errorContainer = Red500.copy(alpha = 0.12f),
+    onErrorContainer = Red500,
     outline = Gray500,
     outlineVariant = Gray800,
 )
 
+object AppTheme {
+    val colors: AppExtendedColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAppExtendedColors.current
+
+    val dimensions: Dimensions
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalDimensions.current
+}
+
 @Composable
 fun PersonalFinanceTrackerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    // Forced Dark Mode for now
     val colorScheme = AppColorScheme
+    val extendedColors = darkExtendedColors()
 
     CompositionLocalProvider(
-        LocalDimensions provides Dimensions()
+        LocalDimensions provides Dimensions(),
+        LocalAppExtendedColors provides extendedColors
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
@@ -51,9 +65,3 @@ fun PersonalFinanceTrackerTheme(
         )
     }
 }
-
-
-
-
-
-

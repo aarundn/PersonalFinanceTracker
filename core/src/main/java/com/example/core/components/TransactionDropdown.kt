@@ -26,7 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.core.ui.theme.dimensions
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun <T> TransactionDropdown(
@@ -43,7 +43,7 @@ fun <T> TransactionDropdown(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(bottom = MaterialTheme.dimensions.spacingSmall)
+            modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingSmall)
         )
 
         Box {
@@ -52,15 +52,15 @@ fun <T> TransactionDropdown(
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                        shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
                     )
                     .border(
-                        width = MaterialTheme.dimensions.borderThin,
+                        width = AppTheme.dimensions.borderThin,
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.radiusSmall)
+                        shape = RoundedCornerShape(AppTheme.dimensions.radiusSmall)
                     )
                     .clickable(enabled = enabled) { expanded = true }
-                    .padding(MaterialTheme.dimensions.spacingMediumSmall),
+                    .padding(AppTheme.dimensions.spacingMediumSmall),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -100,7 +100,7 @@ fun <T> TransactionDropdown(
                                         Icons.Default.Check,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(MaterialTheme.dimensions.iconSizeNormal)
+                                        modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
                                     )
                                 }
                             }
