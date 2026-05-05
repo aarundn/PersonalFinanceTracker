@@ -54,7 +54,7 @@ fun BudgetOverviewCard(
     val isWarning = budget.isWarning
 
     val progressColor = when {
-        isOverBudget -> AppTheme.colors.expense
+        isOverBudget -> MaterialTheme.colorScheme.error
         isWarning -> AppTheme.colors.warning
         else -> MaterialTheme.colorScheme.primary
     }
@@ -137,7 +137,7 @@ private fun CategoryOverViewInfo(
         when {
             isOverBudget -> BudgetStatusBadge(
                 text = "Over Budget",
-                color = AppTheme.colors.expense
+                color = MaterialTheme.colorScheme.error
             )
 
             isWarning -> BudgetStatusBadge(
@@ -193,7 +193,7 @@ private fun ProgressOverViewInfo(
                     formatAmountOver(budget.currencySymbol, budget.overBudget.formatCurrency())
                 },
                 style = MaterialTheme.typography.bodySmall,
-                color = if (remaining >= 0) progressColor else AppTheme.colors.expense,
+                color = if (remaining >= 0) progressColor else MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Medium
             )
         }

@@ -29,8 +29,8 @@ fun SyncStatusBanner(
     val baseColor = when (syncStatus) {
         is SyncStatus.Syncing -> MaterialTheme.colorScheme.onSurfaceVariant
         is SyncStatus.Success -> AppTheme.colors.income
-        is SyncStatus.Failed -> AppTheme.colors.expense
-        is SyncStatus.Idle -> AppTheme.colors.expense
+        is SyncStatus.Failed -> MaterialTheme.colorScheme.error
+        is SyncStatus.Idle -> MaterialTheme.colorScheme.error
     }
 
     val displayString = when (syncStatus) {

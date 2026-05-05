@@ -35,7 +35,7 @@ fun BudgetInsightsCard(
 
     
     val projectedColor = if (insights?.isProjectedOverBudget == true) {
-        AppTheme.colors.expense
+        MaterialTheme.colorScheme.error
     } else {
         MaterialTheme.colorScheme.primary
     }

@@ -37,8 +37,8 @@ fun ConfirmationDialog(
     confirmText: String = "Confirm",
     dismissText: String = "Cancel",
     icon: ImageVector = Icons.Outlined.Warning,
-    iconTint: Color = AppTheme.colors.expense,
-    confirmButtonColor: Color = AppTheme.colors.expense,
+    iconTint: Color = MaterialTheme.colorScheme.error,
+    confirmButtonColor: Color = MaterialTheme.colorScheme.error,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {

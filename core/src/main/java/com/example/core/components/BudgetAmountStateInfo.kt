@@ -28,7 +28,7 @@ fun BudgetAmountStateInfo(
         if (isOverBudget) {
             BudgetStatusBadge(
                 text = stringResource(R.string.budget_over_budget),
-                color = AppTheme.colors.expense
+                color = MaterialTheme.colorScheme.error
             )
         } else if (isWarning) {
             BudgetStatusBadge(

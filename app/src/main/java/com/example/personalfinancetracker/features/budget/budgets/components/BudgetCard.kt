@@ -36,7 +36,7 @@ fun BudgetCard(
     val iconBackground = iconTint.copy(alpha = 0.12f)
 
     val progressColor = when {
-        budget.isOverBudget -> AppTheme.colors.expense
+        budget.isOverBudget -> MaterialTheme.colorScheme.error
         budget.isWarning -> AppTheme.colors.warning
         else -> iconTint
     }
@@ -108,7 +108,7 @@ fun BudgetCard(
             BudgetStatusBadge(
                 text = budget.syncStatusEnum,
                 color = when (budget.syncStatusEnum) {
-                    SyncStatusEnum.PENDING.name -> AppTheme.colors.expense
+                    SyncStatusEnum.PENDING.name -> MaterialTheme.colorScheme.error
                     SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
                     SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.outline

@@ -115,7 +115,7 @@ fun TransactionCard(
                 BudgetStatusBadge(
                     text = transaction.syncStatusEnum,
                     color = when (transaction.syncStatusEnum) {
-                        SyncStatusEnum.PENDING.name ->  AppTheme.colors.expense
+                        SyncStatusEnum.PENDING.name ->  MaterialTheme.colorScheme.error
                         SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
                         SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
                         else -> {

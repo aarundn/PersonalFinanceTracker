@@ -24,7 +24,7 @@ fun BudgetSelectorCard(
 ) {
 
     val progressColor = when {
-        budget.isOverBudget -> AppTheme.colors.expense
+        budget.isOverBudget -> MaterialTheme.colorScheme.error
         budget.isWarning -> AppTheme.colors.warning
         else -> budget.iconTint
     }
