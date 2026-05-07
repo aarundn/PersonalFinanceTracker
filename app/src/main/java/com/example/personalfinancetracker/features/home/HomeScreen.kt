@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -97,7 +98,7 @@ private fun HomeContent(
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingSmall))
             MonthCard(
                 totalTransactions = data.totalTransactions,
                 dailyAverage = data.dailyAverage,
@@ -105,13 +106,13 @@ private fun HomeContent(
                 daysInMonth = data.daysInMonth,
                 currencySymbol = data.currencySymbol
             )
-            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingSmall))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingSmall))
             BudgetsRow(
                 budgets = data.budgets,
                 onBudgetClick = { budgetId -> onEvent(HomeEvent.OnClickBudgetItem(budgetId)) },
                 onAddBudgetClick = { onEvent(HomeEvent.OnClickAddBudget) }
             )
-            Spacer(modifier = Modifier.padding(AppTheme.dimensions.spacingMediumSmall))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingMediumSmall))
             Text(
                 text = stringResource(R.string.recent_transactions),
                 style = MaterialTheme.typography.titleMedium

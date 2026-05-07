@@ -28,16 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.AppTheme
-import com.example.core.components.EmptyState
-import com.example.core.components.HeaderSection
-import com.example.core.components.LoadingIndicator
-import com.example.personalfinancetracker.features.budget.model.BudgetUi
-import com.example.personalfinancetracker.R
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.example.core.components.EmptyState
+import com.example.core.components.Header
+import com.example.core.components.LoadingIndicator
+import com.example.core.ui.theme.AppTheme
+import com.example.personalfinancetracker.R
 import com.example.personalfinancetracker.features.budget.budgets.components.BudgetCard
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_INITIAL_VALUE
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ALPHA_TARGET_VALUE
 import com.example.personalfinancetracker.features.budget.utils.AnimationConstants.ANIMATION_DELAY
@@ -57,16 +58,8 @@ fun BudgetScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = {
-            val state = budgetsUiState as? BudgetsUiState.Success
-            if (state?.budgets?.isEmpty() == false)
-                HeaderSection(
-                    title = stringResource(R.string.budget_overview_title),
-                    showBackIcon = false
-                )
-        },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        modifier = Modifier.fillMaxSize()
+        containerColor = Color.Transparent,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -136,6 +129,13 @@ private fun Content(
                 top = AppTheme.dimensions.spacingMedium
             )
         ) {
+            item {
+                Header(
+                    modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingMedium),
+                    title = stringResource(R.string.budget_overview_title),
+                    description = stringResource(R.string.transactions_desc)
+                )
+            }
             itemsIndexed(
                 budgetsUiState.budgets,
                 key = { _, budget -> budget.id }) { index, budget ->

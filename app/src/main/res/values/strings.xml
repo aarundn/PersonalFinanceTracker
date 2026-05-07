@@ -7,7 +7,8 @@
     <string name="action_add_budget">Add Budget</string>
 
     <!-- Transactions Feature -->
-    <string name="transactions_recent_title">Recent Transactions</string>
+    <string name="transactions_recent_title">Transactions</string>
+    <string name="transactions_desc">Track your financial plans intelligently</string>
     <string name="transactions_empty_title">No transactions yet</string>
     <string name="transactions_empty_description">Add your first transaction to start tracking</string>
     <string name="action_add_transaction">Add Transaction</string>

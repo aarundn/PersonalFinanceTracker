@@ -11,15 +11,21 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.conversion_rate.navigation.currencyConverterScreen
+import com.example.core.components.CircleOverlay
 import com.example.core.navigation.Feature
 import com.example.core.navigation.register
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
@@ -50,12 +56,23 @@ class MainActivity : ComponentActivity() {
                         AppBottomBar(navController = navController, destination)
                     }
                 }) { paddingValues ->
-
-                    AppNavGraph(
-                        navController = navController,
-                        modifier = Modifier.padding(paddingValues),
-                        features = allFeatures
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        CircleOverlay(
+                            modifier = Modifier
+                                .offset(
+                                    x = (-40).dp,
+                                    y = (-40).dp
+                                )
+                                .align(Alignment.TopStart)
+                        )
+                        AppNavGraph(
+                            navController = navController,
+                            modifier = Modifier.padding(paddingValues),
+                            features = allFeatures
+                        )
+                    }
                 }
             }
         }

@@ -21,12 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import com.example.core.components.EmptyState
+import com.example.core.components.Header
+import com.example.core.components.LoadingIndicator
 import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.R
-import com.example.core.components.EmptyState
-import com.example.core.components.HeaderSection
-import com.example.core.components.LoadingIndicator
 import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
 
 @Composable
@@ -37,13 +38,10 @@ fun TransactionsScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = {
-            val state = transactionsUiState as? TransactionsUiState.Success
-            if (state?.transactions?.isEmpty() == false)
-                HeaderSection(title = stringResource(R.string.transactions_recent_title), showBackIcon = false)
-        },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        containerColor = Color.Transparent,
     ) { paddingValues ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,7 +85,6 @@ fun TransactionsScreen(
                             buttonText = stringResource(R.string.action_add_transaction),
                             onAddClick = { onEvent(TransactionsEvent.OnAddTransactionClick) }
                         )
-
                     }
                 }
             }
@@ -103,12 +100,22 @@ private fun Content(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = AppTheme.dimensions.spacingMedium)
+            .padding(horizontal = AppTheme.dimensions.spacingLarge)
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
-            contentPadding = PaddingValues(bottom = AppTheme.dimensions.buttonHeightNormal * 2, top = AppTheme.dimensions.spacingMedium)
+            contentPadding = PaddingValues(
+                bottom = AppTheme.dimensions.buttonHeightNormal * 2,
+                top = AppTheme.dimensions.spacingMedium
+            )
         ) {
+            item {
+                Header(
+                    modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingMedium),
+                    title = stringResource(R.string.transactions_recent_title),
+                    description = stringResource(R.string.transactions_desc)
+                )
+            }
             items(
                 transactionsUiState.transactions,
                 key = { it.id }) { transaction ->
