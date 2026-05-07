@@ -1,6 +1,7 @@
 package com.example.personalfinancetracker
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -9,6 +10,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -16,6 +20,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import com.example.core.R
+import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.budget.navigation.BudgetRoutes
 import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
 import com.example.personalfinancetracker.features.transaction.navigation.TransactionRoutes
@@ -30,17 +35,17 @@ data class BottomItem(
 val mainBottomItems = listOf(
     BottomItem(
         label = "Home",
-        icon = R.drawable.home,
+        icon = R.drawable.home_ic,
         route = HomeRoutes.HomeRoute
     ),
     BottomItem(
         label = "Transactions",
-        icon = R.drawable.dollar,
+        icon = R.drawable.transactions_ic,
         route = TransactionRoutes.TransactionsRoute
     ),
     BottomItem(
         label = "Budgets",
-        icon = R.drawable.folder,
+        icon = R.drawable.budgets_ic,
         route = BudgetRoutes.BudgetsRoute
     )
 )
@@ -65,9 +70,18 @@ fun shouldShowBottomBar(
 
 @Composable
 fun AppBottomBar(navController: NavHostController, destination: NavDestination?) {
-
+    val outlineColor = MaterialTheme.colorScheme.outline
+    val borderWidth = AppTheme.dimensions.borderThin
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = Modifier.drawBehind {
+            drawLine(
+                color = outlineColor,
+                start = Offset(0f, 0f),
+                end = Offset(size.width, 0f),
+                strokeWidth = borderWidth.toPx()
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         mainBottomItems.forEach { item ->
@@ -96,6 +110,7 @@ fun AppBottomBar(navController: NavHostController, destination: NavDestination?)
                 },
                 icon = {
                     Icon(
+                        modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall),
                         imageVector = ImageVector.vectorResource(id = icon),
                         contentDescription = label
                     )
@@ -103,7 +118,7 @@ fun AppBottomBar(navController: NavHostController, destination: NavDestination?)
                 label = {
                     Text(
                         label,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.labelSmall
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
