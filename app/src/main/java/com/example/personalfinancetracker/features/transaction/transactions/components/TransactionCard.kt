@@ -14,19 +14,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.core.components.BudgetStatusBadge
 import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
@@ -41,90 +48,116 @@ fun TransactionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    Card(
-        modifier = modifier
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
-        border = BorderStroke(
-            AppTheme.dimensions.borderThin,
-            MaterialTheme.colorScheme.outline
-        ),
     ) {
-        Row(
+        Box(
             modifier = Modifier
+                .matchParentSize()
+                .background(
+                    brush = Brush.linearGradient(
+                        start = Offset.Infinite,
+                        end = Offset.Zero,
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.1f),
+                            MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.5f)
+                        )
+                    ),
+                    shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium)
+                )
+                .blur(
+                    radius = 10.dp,
+                    edgeTreatment = BlurredEdgeTreatment.Rectangle  // no bleeding outside bounds
+                )
+        )
+        Card(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(AppTheme.dimensions.spacingMedium),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .clickable(onClick = onClick),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
+            border = BorderStroke(
+                AppTheme.dimensions.borderThin,
+                MaterialTheme.colorScheme.outline
+            ),
         ) {
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(AppTheme.dimensions.iconSizeMediumLarge)
-                            .clip(CircleShape)
-                            .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
-                        contentAlignment = Alignment.Center
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(AppTheme.dimensions.spacingMedium),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
-                            contentDescription = null,
-                            tint = transaction.currentCategory.color,
-                            modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
+                        Box(
+                            modifier = Modifier
+                                .size(AppTheme.dimensions.iconSizeMediumLarge)
+                                .clip(CircleShape)
+                                .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
+                                contentDescription = null,
+                                tint = transaction.currentCategory.color,
+                                modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(transaction.currentCategory.nameResId),
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "${stringResource(transaction.currentCategory.nameResId)} • ${transaction.formattedDate}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1
+                            )
+                        }
+
+                        Text(
+                            text = formatAmount(
+                                transaction.type,
+                                transaction.amount,
+                                transaction.currencySymbol
+                            ),
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = if (transaction.type == Type.INCOME)
+                                transaction.currentCategory.color
+                            else
+                                AppTheme.colors.expense
                         )
                     }
-
-                    Column(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = stringResource(transaction.currentCategory.nameResId),
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "${stringResource(transaction.currentCategory.nameResId)} • ${transaction.formattedDate}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
-                        )
-                    }
-
-                    Text(
-                        text = formatAmount(
-                            transaction.type,
-                            transaction.amount,
-                            transaction.currencySymbol
-                        ),
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = if (transaction.type == Type.INCOME)
-                            transaction.currentCategory.color
-                        else
-                            AppTheme.colors.expense
+                    BudgetStatusBadge(
+                        text = transaction.syncStatusEnum,
+                        color = when (transaction.syncStatusEnum) {
+                            SyncStatusEnum.PENDING.name -> MaterialTheme.colorScheme.error
+                            SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
+                            SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
+                            else -> {
+                                MaterialTheme.colorScheme.outline
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.End),
+                        icon = null
                     )
                 }
-                BudgetStatusBadge(
-                    text = transaction.syncStatusEnum,
-                    color = when (transaction.syncStatusEnum) {
-                        SyncStatusEnum.PENDING.name ->  MaterialTheme.colorScheme.error
-                        SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
-                        SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
-                        else -> {
-                            MaterialTheme.colorScheme.outline
-                        }
-                    },
-                    modifier = Modifier.align(Alignment.End),
-                    icon = null
-                )
             }
         }
     }
