@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.components.BudgetStatusBadge
+import com.example.core.components.IconWrapper
 import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
 import com.example.data.sync.SyncStatusEnum
@@ -96,20 +98,11 @@ fun TransactionCard(
                         horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(AppTheme.dimensions.iconSizeMediumLarge)
-                                .clip(CircleShape)
-                                .background(transaction.currentCategory.color.copy(alpha = 0.1f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(transaction.currentCategory.icon),
-                                contentDescription = null,
-                                tint = transaction.currentCategory.color,
-                                modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
-                            )
-                        }
+                        IconWrapper(
+                            modifier = Modifier.size(AppTheme.dimensions.iconSizeExtraLarge),
+                            icon = ImageVector.vectorResource(transaction.currentCategory.icon),
+                            iconColor = transaction.currentCategory.color,
+                        )
 
                         Column(
                             modifier = Modifier.weight(1f)

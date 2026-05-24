@@ -43,7 +43,7 @@ fun darkExtendedColors() = AppExtendedColors(
     categoryHealth = Color(0xFF10B981), // Defaulting to Teal for now
     categoryEducation = Color(0xFF3B82F6), // Defaulting to Blue for now
     categoryPersonal = Color(0xFFF97316), // Defaulting to Orange for now
-    categoryGroceries = Color(0xFF6B7280), // Gray
+    categoryGroceries = GroceriesOrange500, // Gray
     
     surfaceOverlay = DeepNavy,
     successContainer = Green500.copy(alpha = 0.12f),
