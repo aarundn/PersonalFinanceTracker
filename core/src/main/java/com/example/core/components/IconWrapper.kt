@@ -3,7 +3,6 @@ package com.example.core.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -23,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.example.core.R
 import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.withDisabledAlpha
+import com.example.core.ui.theme.withHoverAlpha
 
 @Composable
 fun IconWrapper(modifier: Modifier = Modifier, icon: ImageVector, iconColor: Color) {
@@ -32,7 +33,7 @@ fun IconWrapper(modifier: Modifier = Modifier, icon: ImageVector, iconColor: Col
             shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
         ).border(
             width = AppTheme.dimensions.borderThin,
-            color = iconColor.copy(alpha = 0.2f),
+            color = iconColor.withDisabledAlpha(),
             shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
         ),
         contentAlignment = Alignment.Center
@@ -45,8 +46,8 @@ fun IconWrapper(modifier: Modifier = Modifier, icon: ImageVector, iconColor: Col
                         start = Offset.Infinite,
                         end = Offset.Zero,
                         colors = listOf(
-                            MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.1f),
-                            iconColor.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.surfaceContainerLow.withHoverAlpha(),
+                            iconColor.withDisabledAlpha(),
                         )
                     ),
                     shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
