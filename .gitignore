@@ -14,3 +14,11 @@
 .cxx
 local.properties
 app/google-services.json
+ 
+*.class
+*.jar
+*.log
+.env*
+/specs/001-refactor-color-system/fetch_figma.ps1
+/specs/001-refactor-color-system/figma_data.json
+/specs/001-refactor-color-system/figma_data_utf8.json

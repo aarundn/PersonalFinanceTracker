@@ -17,12 +17,10 @@ fun Modifier.statusContainer(
     baseColor: Color,
     cornerRadius: Dp = 12.dp,
     borderWidth: Dp = 1.dp,
-    bgAlpha: Float = 0.1f,
-    borderAlpha: Float = 0.2f
 ): Modifier {
     val shape = RoundedCornerShape(cornerRadius)
     return this
         .clip(shape)
-        .background(baseColor.copy(alpha = bgAlpha))
-        .border(borderWidth, baseColor.copy(alpha = borderAlpha), shape)
+        .background(baseColor.withHoverAlpha())
+        .border(borderWidth, baseColor.withDisabledAlpha(), shape)
 }

@@ -10,7 +10,7 @@ data class AppExtendedColors(
     val income: Color,
     val expense: Color,
     val warning: Color,
-    
+
     // Category Colors
     val categoryFood: Color,
     val categoryTransport: Color,
@@ -21,34 +21,42 @@ data class AppExtendedColors(
     val categoryEducation: Color,
     val categoryPersonal: Color,
     val categoryGroceries: Color,
-    
+
     // Overlays & Containers
     val surfaceOverlay: Color,
     val successContainer: Color,
     val errorContainer: Color,
     val warningContainer: Color,
 
+    // Semantic UI Chrome (derived from audit)
+    val outlineDimmed: Color,
+    val onSurfaceDimmed: Color,
 )
 
 fun darkExtendedColors() = AppExtendedColors(
-    income = Green500,
-    expense = Red500,
-    warning = CoffeeYellow500,
-    
-    categoryFood = RestaurantsPink500,
-    categoryTransport = TransportBlue500,
-    categoryShopping = EntertainmentPurple500,
-    categoryBills = HomeTeal500,
-    categoryEntertainment = EntertainmentPurple500,
-    categoryHealth = Color(0xFF10B981), // Defaulting to Teal for now
-    categoryEducation = Color(0xFF3B82F6), // Defaulting to Blue for now
-    categoryPersonal = Color(0xFFF97316), // Defaulting to Orange for now
-    categoryGroceries = GroceriesOrange500, // Gray
-    
-    surfaceOverlay = DeepNavy,
-    successContainer = Green500.copy(alpha = 0.12f),
-    errorContainer = Red500.copy(alpha = 0.12f),
-    warningContainer = CoffeeYellow500.copy(alpha = 0.12f),
+    income  = AppColorTokens.Income,
+    expense = AppColorTokens.Expense,
+    warning = AppColorTokens.CoffeeYellow,
+
+    categoryFood          = AppColorTokens.RestaurantsPink,
+    categoryTransport     = AppColorTokens.TransportBlue,
+    categoryShopping      = AppColorTokens.EntertainmentPurple,
+    categoryBills         = AppColorTokens.HomeTeal,
+    categoryEntertainment = AppColorTokens.EntertainmentPurple,
+    categoryHealth        = AppColorTokens.Emerald500,
+    categoryEducation     = AppColorTokens.Blue500,
+    categoryPersonal      = AppColorTokens.GroceriesOrange,
+    categoryGroceries     = AppColorTokens.GroceriesOrange,
+
+    surfaceOverlay   = AppColorTokens.DarkSlate,
+    successContainer = AppColorTokens.Income.withSubtleAlpha(),
+    errorContainer   = AppColorTokens.Expense.withSubtleAlpha(),
+    warningContainer = AppColorTokens.CoffeeYellow.withSubtleAlpha(),
+
+    // outline.copy(alpha = 0.3f) → centralised here
+    outlineDimmed   = Color(0xFF252525).copy(alpha = AppAlphaTokens.Disabled),
+    // onSurface.copy(alpha = 0.6f) → centralised here
+    onSurfaceDimmed = AppColorTokens.Gray50.copy(alpha = AppAlphaTokens.Scrim),
 )
 
 val LocalAppExtendedColors = staticCompositionLocalOf<AppExtendedColors> {
