@@ -2,9 +2,21 @@ package com.example.personalfinancetracker.features.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -17,9 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.AppColorTokens
 import com.example.core.ui.theme.AppTheme
+import com.example.core.ui.theme.withHoverAlpha
 import com.example.personalfinancetracker.features.home.BudgetUiModel
 
 @Composable
@@ -38,12 +49,12 @@ fun BudgetsSection(
             Text(
                 text = "Budgets",
                 style = MaterialTheme.typography.titleLarge,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = "View All",
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColorTokens.Gray400,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.clickable(onClick = onViewAllClick)
             )
         }
@@ -52,13 +63,13 @@ fun BudgetsSection(
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium),
-            contentPadding = PaddingValues(end = AppTheme.dimensions.spacingMedium) // Extra padding for edge
+            contentPadding = PaddingValues(end = AppTheme.dimensions.spacingMedium)
         ) {
             items(budgets) { budget ->
                 BudgetCard(
                     budget = budget,
                     onClick = { onBudgetClick(budget.id) },
-                    modifier = Modifier.width(160.dp) // Fixed width to match Figma
+                    modifier = Modifier.width(AppTheme.dimensions.iconSizeHuge * 2 + AppTheme.dimensions.spacingExtraLarge)
                 )
             }
         }
@@ -85,28 +96,27 @@ private fun BudgetCard(
         // Left side Icon with circular progress
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(AppTheme.dimensions.iconSizeExtraLarge)
         ) {
             CircularProgressIndicator(
                 progress = budget.percentage,
                 modifier = Modifier.fillMaxSize(),
                 color = budgetColor,
-                trackColor = budgetColor.copy(alpha = 0.2f),
-                strokeWidth = 4.dp
+                trackColor = budgetColor.withHoverAlpha(),
+                strokeWidth = AppTheme.dimensions.borderThick
             )
             Box(
                 modifier = Modifier
-                    .size(36.dp)
-                    .clip(androidx.compose.foundation.shape.CircleShape)
-                    .background(budgetColor.copy(alpha = 0.1f)),
+                    .size(AppTheme.dimensions.buttonHeightSmall)
+                    .clip(CircleShape)
+                    .background(budgetColor.withHoverAlpha()),
                 contentAlignment = Alignment.Center
             ) {
-                // Mock icon
                 Icon(
-                    imageVector = Icons.Default.ShoppingCart, // Placeholder, would use real category icon
+                    imageVector = Icons.Default.ShoppingCart,
                     contentDescription = null,
                     tint = budgetColor,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
                 )
             }
         }
@@ -118,12 +128,12 @@ private fun BudgetCard(
             Text(
                 text = budget.categoryName,
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "${(budget.percentage * 100).toInt()}%", // Simple formatting for mock
+                text = "${(budget.percentage * 100).toInt()}%",
                 style = MaterialTheme.typography.titleMedium,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }

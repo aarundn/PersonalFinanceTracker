@@ -26,9 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.AppColorTokens
 import com.example.core.ui.theme.AppTheme
+import com.example.core.ui.theme.withLightAlpha
 
 @Composable
 fun BalanceCard(
@@ -57,32 +56,35 @@ fun BalanceCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            // Title (Left side in LTR)
+            // Title
             Text(
                 text = "Total Balance",
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColorTokens.Gray400
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            // Percentage Chip (Right side in LTR)
+            // Percentage Chip
             Row(
                 modifier = Modifier
                     .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
-                    .background(AppColorTokens.Income.copy(alpha = 0.15f))
-                    .padding(horizontal = AppTheme.dimensions.spacingSmall, vertical = 4.dp),
+                    .background(AppTheme.colors.income.withLightAlpha())
+                    .padding(
+                        horizontal = AppTheme.dimensions.spacingSmall,
+                        vertical = AppTheme.dimensions.spacingExtraSmall
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowUpward,
                     contentDescription = null,
-                    tint = AppColorTokens.Income,
-                    modifier = Modifier.size(12.dp)
+                    tint = AppTheme.colors.income,
+                    modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall)
                 )
-                Spacer(modifier = Modifier.width(2.dp))
+                Spacer(modifier = Modifier.width(AppTheme.dimensions.spacingExtraSmall))
                 Text(
                     text = percentageChange,
                     style = MaterialTheme.typography.labelSmall,
-                    color = AppColorTokens.Income,
+                    color = AppTheme.colors.income,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -99,14 +101,14 @@ fun BalanceCard(
             Text(
                 text = "SAR",
                 style = MaterialTheme.typography.titleMedium,
-                color = AppColorTokens.Gray400,
-                modifier = Modifier.padding(bottom = 6.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingSmall)
             )
             Spacer(modifier = Modifier.width(AppTheme.dimensions.spacingSmall))
             Text(
                 text = totalBalance,
                 style = MaterialTheme.typography.displayLarge,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -125,7 +127,7 @@ fun BalanceCard(
                 isPrimary = false,
                 modifier = Modifier.weight(1f)
             )
-            
+
             // Add Button (Light)
             QuickActionButton(
                 text = "Add",
@@ -146,8 +148,16 @@ private fun QuickActionButton(
     modifier: Modifier = Modifier,
     isPrimary: Boolean = false
 ) {
-    val backgroundColor = if (isPrimary) AppColorTokens.White else MaterialTheme.colorScheme.surfaceContainerHigh
-    val contentColor = if (isPrimary) AppColorTokens.Black else AppColorTokens.White
+    val backgroundColor = if (isPrimary) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surfaceContainerHigh
+    }
+    val contentColor = if (isPrimary) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurface
+    }
 
     Row(
         modifier = modifier
@@ -162,7 +172,7 @@ private fun QuickActionButton(
             imageVector = icon,
             contentDescription = null,
             tint = contentColor,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(AppTheme.dimensions.iconSizeNormal)
         )
         Spacer(modifier = Modifier.width(AppTheme.dimensions.spacingSmall))
         Text(

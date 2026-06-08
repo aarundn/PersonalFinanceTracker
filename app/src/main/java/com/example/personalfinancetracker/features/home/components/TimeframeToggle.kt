@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import com.example.core.ui.theme.AppColorTokens
 import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.home.Timeframe
 
@@ -28,7 +27,7 @@ fun TimeframeToggle(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(AppTheme.dimensions.radiusExtraLarge))
-            .background(AppColorTokens.DarkSurface)
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .padding(AppTheme.dimensions.spacingExtraSmall),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -36,6 +35,12 @@ fun TimeframeToggle(
             text = stringResource(com.example.personalfinancetracker.R.string.home_timeframe_weekly),
             isSelected = selectedTimeframe == Timeframe.WEEKLY,
             onClick = { onTimeframeSelected(Timeframe.WEEKLY) },
+            modifier = Modifier.weight(1f)
+        )
+        TimeframeTab(
+            text = stringResource(com.example.personalfinancetracker.R.string.home_timeframe_monthly),
+            isSelected = selectedTimeframe == Timeframe.MONTHLY,
+            onClick = { onTimeframeSelected(Timeframe.MONTHLY) },
             modifier = Modifier.weight(1f)
         )
     }
@@ -48,8 +53,16 @@ private fun TimeframeTab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (isSelected) AppColorTokens.Gray800 else Color.Transparent
-    val textColor = if (isSelected) AppColorTokens.White else AppColorTokens.Gray400
+    val backgroundColor = if (isSelected) {
+        MaterialTheme.colorScheme.surfaceContainerHigh
+    } else {
+        Color.Transparent
+    }
+    val textColor = if (isSelected) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     Box(
         modifier = modifier

@@ -10,9 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.AppColorTokens
+import androidx.compose.ui.text.style.TextAlign
 import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.home.BarChartItem
 import com.example.personalfinancetracker.features.home.Timeframe
@@ -34,13 +32,13 @@ fun SpendingAnalysisSection(
             Text(
                 text = "Spending Analysis",
                 style = MaterialTheme.typography.titleLarge,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             
             TimeframeToggle(
                 selectedTimeframe = timeframe,
                 onTimeframeSelected = onTimeframeChanged,
-                modifier = Modifier.width(160.dp)
+                modifier = Modifier.width(AppTheme.dimensions.iconSizeHuge * 2 + AppTheme.dimensions.spacingLarge)
             )
         }
         
@@ -58,44 +56,51 @@ fun SpendingAnalysisSection(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp),
+                    .height(AppTheme.dimensions.spacingLarge + AppTheme.dimensions.spacingSmall),
                 contentAlignment = Alignment.Center
             ) {
                 if (selectedItem != null) {
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(AppColorTokens.White)
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .padding(
+                                horizontal = AppTheme.dimensions.spacingMediumSmall,
+                                vertical = AppTheme.dimensions.spacingExtraSmall
+                            )
                     ) {
                         Text(
                             text = selectedItem.amountString,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AppColorTokens.Black
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingSmall))
 
             // Bars
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
+                    .height(AppTheme.dimensions.iconSizeHuge + AppTheme.dimensions.buttonHeightSmall),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
                 barChartData.forEach { item ->
-                    val barColor = if (item.isSelected) AppColorTokens.White else MaterialTheme.colorScheme.surfaceContainerHigh
+                    val barColor = if (item.isSelected) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.surfaceContainerHigh
+                    }
                     val barBgColor = MaterialTheme.colorScheme.surfaceContainer
 
                     ChartBar(barBgColor, item, barColor)
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingMediumSmall))
 
             // X-Axis Labels
             Row(
@@ -106,16 +111,23 @@ fun SpendingAnalysisSection(
                     Text(
                         text = item.label,
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (item.isSelected) AppColorTokens.White else AppColorTokens.Gray400,
+                        color = if (item.isSelected) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                         modifier = Modifier.weight(1f),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        textAlign = TextAlign.Center
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingMedium))
+            Divider(
+                color = MaterialTheme.colorScheme.outlineVariant,
+                thickness = AppTheme.dimensions.borderThin
+            )
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingMedium))
 
             // Daily Average
             Row(
@@ -126,12 +138,12 @@ fun SpendingAnalysisSection(
                 Text(
                     text = "Daily Average",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AppColorTokens.Gray400
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = dailyAverage,
                     style = MaterialTheme.typography.titleMedium,
-                    color = AppColorTokens.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -140,9 +152,9 @@ fun SpendingAnalysisSection(
 
 @Composable
 private fun RowScope.ChartBar(
-    barBgColor: Color,
+    barBgColor: androidx.compose.ui.graphics.Color,
     item: BarChartItem,
-    barColor: Color
+    barColor: androidx.compose.ui.graphics.Color
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -150,9 +162,9 @@ private fun RowScope.ChartBar(
     ) {
         Box(
             modifier = Modifier
-                .width(24.dp)
-                .height(100.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .width(AppTheme.dimensions.spacingLarge)
+                .height(AppTheme.dimensions.iconSizeHuge + AppTheme.dimensions.buttonHeightSmall)
+                .clip(RoundedCornerShape(AppTheme.dimensions.spacingSmall))
                 .background(barBgColor),
             contentAlignment = Alignment.BottomCenter
         ) {
@@ -160,7 +172,7 @@ private fun RowScope.ChartBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(item.value)
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(RoundedCornerShape(AppTheme.dimensions.spacingSmall))
                     .background(barColor)
             )
         }

@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.core.ui.theme.AppColorTokens
 import com.example.core.ui.theme.AppTheme
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 import com.example.personalfinancetracker.features.transaction.transactions.components.TransactionCard
@@ -28,12 +27,12 @@ fun TransactionsList(
             Text(
                 text = "Recent Transactions",
                 style = MaterialTheme.typography.titleLarge,
-                color = AppColorTokens.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = "View All",
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColorTokens.Gray400,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.clickable(onClick = onViewAllClick)
             )
         }

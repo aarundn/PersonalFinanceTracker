@@ -15,8 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.AppColorTokens
+import com.example.core.ui.theme.AppTheme
 
 @Composable
 fun HomeHeader(
@@ -32,13 +31,13 @@ fun HomeHeader(
             Text(
                 text = "Welcome back,",
                 style = MaterialTheme.typography.bodyMedium,
-                color = AppColorTokens.Gray400,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Start
             )
             Text(
                 text = userName,
                 style = MaterialTheme.typography.titleLarge,
-                color = AppColorTokens.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start
             )
         }
@@ -46,16 +45,15 @@ fun HomeHeader(
         // Placeholder Avatar
         Box(
             modifier = Modifier
-                .size(48.dp)
+                .size(AppTheme.dimensions.iconSizeExtraLarge)
                 .clip(CircleShape)
-                .background(AppColorTokens.Gray50),
+                .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center
         ) {
-            // We can put an icon or first letter here
             Text(
                 text = userName.firstOrNull()?.toString() ?: "",
                 style = MaterialTheme.typography.titleMedium,
-                color = AppColorTokens.Black
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

@@ -2,21 +2,6 @@ package com.example.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// =============================================================================
-// Color System — Extracted from Figma Design
-// https://www.figma.com/design/kTEXhRZpaJ7OELu0jTa5WW/Personal-tracker-app-ui
-//
-// Architecture:
-//   1. AppColorTokens  – Base, fully-opaque palette (single source of truth)
-//   2. AppAlphaTokens   – Standardised opacity levels
-//   3. Semantic aliases  – Convenience extensions that compose 1 + 2
-//
-// Usage:
-//   ✅  AppColorTokens.Blue500.copy(alpha = AppAlphaTokens.Hover)
-//   ❌  Color(0x263B82F6)            // hardcoded alpha in hex
-//   ❌  someColor.copy(alpha = 0.15f) // raw float literal
-// =============================================================================
-
 /**
  * Base color palette tokens derived directly from the Figma design.
  * Every color is fully opaque (alpha = 1.0). Apply transparency exclusively
