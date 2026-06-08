@@ -30,12 +30,12 @@ fun HomeRoute(
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                HomeSideEffect.NavigateAddExpense -> onNavigateToAddTransaction()
-                HomeSideEffect.NavigateAddIncome -> onNavigateToAddTransaction()
-                HomeSideEffect.NavigateCurrency -> onNavigateToCurrency()
-                HomeSideEffect.NavigateSettings -> onNavigateToSettings()
-                HomeSideEffect.NavigateAddBudget -> onNavigateToAddBudget()
+                is HomeSideEffect.NavigateAddTransaction -> onNavigateToAddTransaction()
+                is HomeSideEffect.NavigateTransfer -> { /* No-op per spec */ }
+                is HomeSideEffect.NavigateSettings -> onNavigateToSettings()
+                is HomeSideEffect.NavigateTransactionDetails -> { /* Navigate to details */ }
                 is HomeSideEffect.ShowMessage -> snackBarHostState.showSnackbar(effect.message.asString(context))
+                else -> {}
             }
         }
     }

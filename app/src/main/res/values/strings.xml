@@ -18,4 +18,12 @@
     <string name="settings_general_section">General</string>
     <string name="settings_base_currency">Base Currency</string>
     <string name="no_budgets_found">No budgets found for this category.</string>
+    <!-- Home Feature -->
+    <string name="home_total_balance">Total Balance</string>
+    <string name="home_action_add">Add</string>
+    <string name="home_action_transfer">Transfer</string>
+    <string name="home_spending_analysis">Spending Analysis</string>
+    <string name="home_timeframe_weekly">Weekly</string>
+    <string name="home_timeframe_monthly">Monthly</string>
+    <string name="home_recent_transactions">Recent Transactions</string>
 </resources>

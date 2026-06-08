@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home Feature -->
+    <string name="home_total_balance">إجمالي الرصيد</string>
+    <string name="home_action_add">إضافة</string>
+    <string name="home_action_transfer">تحويل</string>
+    <string name="home_spending_analysis">تحليل الإنفاق</string>
+    <string name="home_timeframe_weekly">أسبوعي</string>
+    <string name="home_timeframe_monthly">شهري</string>
+    <string name="home_recent_transactions">المعاملات</string>
+</resources>
