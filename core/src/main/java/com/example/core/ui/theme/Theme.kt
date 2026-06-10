@@ -73,7 +73,7 @@ private val LightColorScheme = lightColorScheme(
     errorContainer   = AppColorTokens.Expense.withSubtleAlpha(),
     onErrorContainer = AppColorTokens.Expense,
 
-    outline        = AppColorTokens.Gray400,
+    outline        = AppColorTokens.White.withHoverAlpha(),
     outlineVariant = AppColorTokens.Gray50,
 )
 

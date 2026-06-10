@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.IconWrapper
 import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.cardsContainer
 import com.example.core.ui.theme.withHoverAlpha
 import com.example.core.ui.theme.withScrimAlpha
 import com.example.data.sync.SyncStatusEnum
@@ -55,21 +55,7 @@ fun TransactionCard(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        start = Offset.Infinite,
-                        end = Offset.Zero,
-                        colors = listOf(
-                            MaterialTheme.colorScheme.surfaceContainerHighest.withHoverAlpha(),
-                            MaterialTheme.colorScheme.surfaceContainerLow.withScrimAlpha()
-                        )
-                    ),
-                    shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium)
-                )
-                .blur(
-                    radius = 10.dp,
-                    edgeTreatment = BlurredEdgeTreatment.Rectangle  // no bleeding outside bounds
-                )
+                .cardsContainer()
         )
         Card(
             modifier = modifier
@@ -135,19 +121,6 @@ fun TransactionCard(
                                 AppTheme.colors.expense
                         )
                     }
-                    BudgetStatusBadge(
-                        text = transaction.syncStatusEnum,
-                        color = when (transaction.syncStatusEnum) {
-                            SyncStatusEnum.PENDING.name -> MaterialTheme.colorScheme.error
-                            SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
-                            SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
-                            else -> {
-                                MaterialTheme.colorScheme.outline
-                            }
-                        },
-                        modifier = Modifier.align(Alignment.End),
-                        icon = null
-                    )
                 }
             }
         }

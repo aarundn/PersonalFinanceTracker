@@ -3,8 +3,14 @@ package com.example.core.ui.theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,4 +29,24 @@ fun Modifier.statusContainer(
         .clip(shape)
         .background(baseColor.withHoverAlpha())
         .border(borderWidth, baseColor.withDisabledAlpha(), shape)
+}
+
+@Composable
+fun Modifier.cardsContainer(): Modifier {
+    return this
+        .background(
+            brush = Brush.linearGradient(
+                start = Offset.Infinite,
+                end = Offset.Zero,
+                colors = listOf(
+                    MaterialTheme.colorScheme.surfaceContainerHighest.withHoverAlpha(),
+                    MaterialTheme.colorScheme.surfaceContainerLow.withScrimAlpha()
+                )
+            ),
+            shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium)
+        )
+        .blur(
+            radius = 10.dp,
+            edgeTreatment = BlurredEdgeTreatment.Rectangle
+        )
 }
