@@ -52,31 +52,7 @@ fun SpendingAnalysisSection(
                 .padding(AppTheme.dimensions.spacingMedium)
         ) {
             // Tooltip space
-            val selectedItem = barChartData.find { it.isSelected }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(AppTheme.dimensions.spacingLarge + AppTheme.dimensions.spacingSmall),
-                contentAlignment = Alignment.Center
-            ) {
-                if (selectedItem != null) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(
-                                horizontal = AppTheme.dimensions.spacingMediumSmall,
-                                vertical = AppTheme.dimensions.spacingExtraSmall
-                            )
-                    ) {
-                        Text(
-                            text = selectedItem.amountString,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
-            }
+
 
             Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingSmall))
 
@@ -123,6 +99,31 @@ fun SpendingAnalysisSection(
             }
 
             Spacer(modifier = Modifier.height(AppTheme.dimensions.spacingMedium))
+            val selectedItem = barChartData.find { it.isSelected }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(AppTheme.dimensions.spacingLarge + AppTheme.dimensions.spacingSmall),
+                contentAlignment = Alignment.Center
+            ) {
+                if (selectedItem != null) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .padding(
+                                horizontal = AppTheme.dimensions.spacingMediumSmall,
+                                vertical = AppTheme.dimensions.spacingExtraSmall
+                            )
+                    ) {
+                        Text(
+                            text = selectedItem.amountString,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
+            }
             Divider(
                 color = MaterialTheme.colorScheme.outlineVariant,
                 thickness = AppTheme.dimensions.borderThin

@@ -51,7 +51,6 @@ fun BudgetSelectorCard(
             BudgetInfo(
                 modifier = Modifier.weight(1f),
                 iconTint = budget.iconTint,
-                iconBackground = budget.iconBackground,
                 icon = budget.icon,
                 categoryName = budget.categoryName,
                 currencySymbol = budget.currencySymbol,

@@ -65,7 +65,7 @@ fun BudgetsSection(
             horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMedium),
             contentPadding = PaddingValues(end = AppTheme.dimensions.spacingMedium)
         ) {
-            items(budgets) { budget ->
+            items(budgets, key = { it.id }) { budget ->
                 BudgetCard(
                     budget = budget,
                     onClick = { onBudgetClick(budget.id) },
@@ -82,7 +82,7 @@ private fun BudgetCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val budgetColor = Color(budget.colorHex)
+    val budgetColor = Color(budget.color)
 
     Row(
         modifier = modifier

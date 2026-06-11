@@ -32,6 +32,7 @@ import com.example.core.ui.theme.withLightAlpha
 @Composable
 fun BalanceCard(
     totalBalance: String,
+    currency : String,
     percentageChange: String,
     onAddClick: () -> Unit,
     onTransferClick: () -> Unit,
@@ -64,29 +65,31 @@ fun BalanceCard(
             )
 
             // Percentage Chip
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
-                    .background(AppTheme.colors.income.withLightAlpha())
-                    .padding(
-                        horizontal = AppTheme.dimensions.spacingSmall,
-                        vertical = AppTheme.dimensions.spacingExtraSmall
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowUpward,
-                    contentDescription = null,
-                    tint = AppTheme.colors.income,
-                    modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall)
-                )
-                Spacer(modifier = Modifier.width(AppTheme.dimensions.spacingExtraSmall))
-                Text(
-                    text = percentageChange,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = AppTheme.colors.income,
-                    fontWeight = FontWeight.Bold
-                )
+            if (percentageChange.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(AppTheme.dimensions.radiusMedium))
+                        .background(AppTheme.colors.income.withLightAlpha())
+                        .padding(
+                            horizontal = AppTheme.dimensions.spacingSmall,
+                            vertical = AppTheme.dimensions.spacingExtraSmall
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowUpward,
+                        contentDescription = null,
+                        tint = AppTheme.colors.income,
+                        modifier = Modifier.size(AppTheme.dimensions.iconSizeSmall)
+                    )
+                    Spacer(modifier = Modifier.width(AppTheme.dimensions.spacingExtraSmall))
+                    Text(
+                        text = percentageChange,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = AppTheme.colors.income,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
 
@@ -99,7 +102,7 @@ fun BalanceCard(
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = "SAR",
+                text = currency,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = AppTheme.dimensions.spacingSmall)

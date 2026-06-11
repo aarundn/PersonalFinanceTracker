@@ -21,19 +21,9 @@ data class BudgetUiModel(
     val id: String,
     val categoryName: String,
     val percentage: Float, // 0.0 to 1.0
-    val colorHex: Long // e.g., 0xFFA855F7
+    val color: Long // e.g., 0xFFA855F7
 )
 
-@Immutable
-data class HomeTransactionUiModel(
-    val id: String,
-    val title: String,
-    val subtitle: String,
-    val amount: String,
-    val time: String,
-    val isIncome: Boolean,
-    val colorHex: Long
-)
 
 @Immutable
 data class HomeData(
@@ -44,7 +34,8 @@ data class HomeData(
     val barChartData: List<BarChartItem>,
     val dailyAverage: String,
     val budgets: List<BudgetUiModel>,
-    val recentTransactions: List<TransactionUi>
+    val recentTransactions: List<TransactionUi>,
+    val currentSymbol: String = ""
 )
 
 @Immutable

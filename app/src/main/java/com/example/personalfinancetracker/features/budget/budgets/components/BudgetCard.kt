@@ -2,24 +2,27 @@ package com.example.personalfinancetracker.features.budget.budgets.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.components.BudgetAmountStateInfo
 import com.example.core.components.BudgetInfo
-import com.example.core.components.BudgetStatusBadge
 import com.example.core.components.CustomProgressBar
 import com.example.core.ui.theme.AppTheme
 import com.example.core.ui.theme.PersonalFinanceTrackerTheme
+import com.example.core.ui.theme.cardsContainer
 import com.example.core.utils.formatAmountNoSpace
 import com.example.core.utils.formatPercentage
 import com.example.data.sync.SyncStatusEnum
@@ -33,90 +36,95 @@ fun BudgetCard(
     modifier: Modifier = Modifier
 ) {
     val iconTint = budget.currentCategory.color
-    val iconBackground = iconTint.copy(alpha = 0.12f)
 
     val progressColor = when {
         budget.isOverBudget -> MaterialTheme.colorScheme.error
         budget.isWarning -> AppTheme.colors.warning
         else -> iconTint
     }
-
-    Card(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
-        border = BorderStroke(AppTheme.dimensions.borderThin, MaterialTheme.colorScheme.outline),
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
-            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .cardsContainer()
+        )
+        Card(
+            onClick = onClick,
+            modifier = modifier
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium),
+            border = BorderStroke(
+                AppTheme.dimensions.borderThin,
+                MaterialTheme.colorScheme.outline
+            ),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BudgetInfo(
-                    modifier = Modifier.weight(1f),
-                    iconTint = iconTint,
-                    iconBackground = iconBackground,
-                    icon = budget.currentCategory.icon,
-                    categoryName = budget.currentCategory.nameResId,
-                    currencySymbol = budget.currencySymbol,
-                    spent = budget.spent.formatCurrency(),
-                    amount = budget.amount.formatCurrency()
-                )
-                BudgetAmountStateInfo(
-                    isOverBudget = budget.isOverBudget,
-                    isWarning = budget.isWarning,
-                    progressColor = progressColor,
-                    overBudget = budget.overBudget.formatCurrency(),
-                    remaining = budget.remaining.formatCurrency(),
-                    currencySymbol = budget.currencySymbol
-                )
-            }
-
             Column(
-                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
+                modifier = Modifier.padding(AppTheme.dimensions.spacingMedium),
+                verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingMediumSmall)
             ) {
-                CustomProgressBar(
-                    progress = budget.percentage,
-                    modifier = Modifier.fillMaxWidth(),
-                    progressColor = progressColor,
-                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = formatPercentage(budget.percentage),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    BudgetInfo(
+                        modifier = Modifier.weight(1f),
+                        iconTint = iconTint,
+                        icon = budget.currentCategory.icon,
+                        categoryName = budget.currentCategory.nameResId,
+                        currencySymbol = budget.currencySymbol,
+                        spent = budget.spent.formatCurrency(),
+                        amount = budget.amount.formatCurrency()
                     )
-                    Text(
-                        text = formatAmountNoSpace(budget.currencySymbol, budget.amount.formatCurrency()),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    BudgetAmountStateInfo(
+                        isOverBudget = budget.isOverBudget,
+                        isWarning = budget.isWarning,
+                        progressColor = progressColor,
+                        overBudget = budget.overBudget.formatCurrency(),
+                        remaining = budget.remaining.formatCurrency(),
+                        currencySymbol = budget.currencySymbol
                     )
                 }
-            }
 
-            BudgetStatusBadge(
-                text = budget.syncStatusEnum,
-                color = when (budget.syncStatusEnum) {
-                    SyncStatusEnum.PENDING.name -> MaterialTheme.colorScheme.error
-                    SyncStatusEnum.SYNCED.name -> AppTheme.colors.income
-                    SyncStatusEnum.SYNCING.name -> MaterialTheme.colorScheme.primary
-                    else -> MaterialTheme.colorScheme.outline
-                },
-                modifier = Modifier.align(Alignment.End),
-                icon = null
-            )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.spacingExtraSmall)
+                ) {
+                    CustomProgressBar(
+                        progress = budget.percentage,
+                        modifier = Modifier.fillMaxWidth(),
+                        progressColor = progressColor,
+                        backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = formatPercentage(budget.percentage),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = formatAmountNoSpace(
+                                budget.currencySymbol,
+                                budget.amount.formatCurrency()
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         }
+
     }
 }
 
