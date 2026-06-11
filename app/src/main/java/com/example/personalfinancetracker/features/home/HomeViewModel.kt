@@ -115,14 +115,7 @@ class HomeViewModel(
                         selectedAnalysisTimeframe = Timeframe.WEEKLY,
                         barChartData = barChartItems,
                         dailyAverage = "$formattedDailyAvg $currencySymbol",
-                        budgets = budgetUis.sortedByDescending { it.createdAt }.take(3).map {
-                            BudgetUiModel(
-                                id = it.id,
-                                categoryName = it.category, // Using category ID for now
-                                percentage = it.percentage,
-                                color = 0xFFA855F7 // Placeholder color to avoid UI compose imports in VM
-                            )
-                        },
+                        budgets = budgetUis.sortedByDescending { it.createdAt }.take(3),
                         recentTransactions = transactions.sortedByDescending { it.date }.toTransactionUi().take(3)
                     )
                 ) as HomeUiState

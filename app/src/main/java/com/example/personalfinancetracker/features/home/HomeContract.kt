@@ -2,6 +2,7 @@ package com.example.personalfinancetracker.features.home
 
 import androidx.compose.runtime.Immutable
 import com.example.core.common.UiText
+import com.example.personalfinancetracker.features.budget.model.BudgetUi
 import com.example.personalfinancetracker.features.transaction.model.TransactionUi
 
 enum class Timeframe {
@@ -16,13 +17,7 @@ data class BarChartItem(
     val isSelected: Boolean = false
 )
 
-@Immutable
-data class BudgetUiModel(
-    val id: String,
-    val categoryName: String,
-    val percentage: Float, // 0.0 to 1.0
-    val color: Long // e.g., 0xFFA855F7
-)
+
 
 
 @Immutable
@@ -33,7 +28,7 @@ data class HomeData(
     val selectedAnalysisTimeframe: Timeframe,
     val barChartData: List<BarChartItem>,
     val dailyAverage: String,
-    val budgets: List<BudgetUiModel>,
+    val budgets: List<BudgetUi>,
     val recentTransactions: List<TransactionUi>,
     val currentSymbol: String = ""
 )

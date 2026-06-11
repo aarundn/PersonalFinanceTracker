@@ -26,14 +26,19 @@ import com.example.core.ui.theme.withDisabledAlpha
 import com.example.core.ui.theme.withHoverAlpha
 
 @Composable
-fun IconWrapper(modifier: Modifier = Modifier, icon: ImageVector, iconColor: Color) {
+fun IconWrapper(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    iconColor: Color,
+    borderColor: Color = iconColor.withDisabledAlpha(),
+) {
     Box(
         modifier = modifier.background(
             color = Color.Transparent,
             shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
         ).border(
             width = AppTheme.dimensions.borderThin,
-            color = iconColor.withDisabledAlpha(),
+            color = borderColor,
             shape = RoundedCornerShape(AppTheme.dimensions.radiusLarge)
         ),
         contentAlignment = Alignment.Center

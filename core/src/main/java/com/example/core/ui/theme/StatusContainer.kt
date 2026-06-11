@@ -32,7 +32,9 @@ fun Modifier.statusContainer(
 }
 
 @Composable
-fun Modifier.cardsContainer(): Modifier {
+fun Modifier.cardsContainer(
+    borderRadius: Dp = AppTheme.dimensions.radiusMedium,
+): Modifier {
     return this
         .background(
             brush = Brush.linearGradient(
@@ -43,7 +45,7 @@ fun Modifier.cardsContainer(): Modifier {
                     MaterialTheme.colorScheme.surfaceContainerLow.withScrimAlpha()
                 )
             ),
-            shape = RoundedCornerShape(AppTheme.dimensions.radiusMedium)
+            shape = RoundedCornerShape(borderRadius)
         )
         .blur(
             radius = 10.dp,
