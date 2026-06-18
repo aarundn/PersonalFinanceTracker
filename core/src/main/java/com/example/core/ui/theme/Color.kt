@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
  */
 object AppColorTokens {
 
-    // ── Accent / Brand ───────────────────────────────────────────────
+    // ── Accent / Brand ──────────────────────────────────────────────
     val Blue500      = Color(0xFF3B82F6)
     val Violet500    = Color(0xFF8B5CF6)
     val Pink500      = Color(0xFFEC4899)
@@ -90,62 +90,3 @@ fun Color.withScrimAlpha(): Color = copy(alpha = AppAlphaTokens.Scrim)
 
 /** Returns this color with [AppAlphaTokens.Subtle] opacity — status containers. */
 fun Color.withSubtleAlpha(): Color = copy(alpha = AppAlphaTokens.Subtle)
-
-// =============================================================================
-// Legacy aliases — keep for binary compatibility during migration.
-// Prefer AppColorTokens.XYZ in new code.
-// =============================================================================
-
-@Deprecated("Use AppColorTokens.Gray50", ReplaceWith("AppColorTokens.Gray50"))
-val Gray50 = AppColorTokens.Gray50
-
-@Deprecated("Use AppColorTokens.Gray400", ReplaceWith("AppColorTokens.Gray400"))
-val Gray400 = AppColorTokens.Gray400
-
-@Deprecated("Use AppColorTokens.Gray800", ReplaceWith("AppColorTokens.Gray800"))
-val Miscellaneous = AppColorTokens.Gray800
-
-@Deprecated("Use AppColorTokens.Gray500", ReplaceWith("AppColorTokens.Gray500"))
-val Gray500 = Color(0xFF252525)  // kept as-is: originally a different shade used for outlines
-
-@Deprecated("Use AppColorTokens.DarkSurface", ReplaceWith("AppColorTokens.DarkSurface"))
-val Gray800 = Color(0xFF27272A)  // kept as-is: slightly different neutral used for surface variant
-
-@Deprecated("Use AppColorTokens.DarkSurface", ReplaceWith("AppColorTokens.DarkSurface"))
-val Gray850 = AppColorTokens.DarkSurface
-
-@Deprecated("Use MaterialTheme.colorScheme.surface", ReplaceWith("MaterialTheme.colorScheme.surface"))
-val Gray900 = Color(0xFF18181B)
-
-@Deprecated("Use AppColorTokens.Black", ReplaceWith("AppColorTokens.Black"))
-val Gray950 = AppColorTokens.Black
-
-@Deprecated("Use AppColorTokens.Income", ReplaceWith("AppColorTokens.Income"))
-val Green500 = AppColorTokens.Income
-
-@Deprecated("Use AppColorTokens.Expense", ReplaceWith("AppColorTokens.Expense"))
-val Red500 = AppColorTokens.Expense
-
-@Deprecated("Use AppColorTokens.DarkSlate", ReplaceWith("AppColorTokens.DarkSlate"))
-val DeepNavy = AppColorTokens.DarkSlate
-
-@Deprecated("Use AppColorTokens.GroceriesOrange", ReplaceWith("AppColorTokens.GroceriesOrange"))
-val GroceriesOrange500 = AppColorTokens.GroceriesOrange
-
-@Deprecated("Use AppColorTokens.TransportBlue", ReplaceWith("AppColorTokens.TransportBlue"))
-val TransportBlue500 = AppColorTokens.TransportBlue
-
-@Deprecated("Use AppColorTokens.RestaurantsPink", ReplaceWith("AppColorTokens.RestaurantsPink"))
-val RestaurantsPink500 = AppColorTokens.RestaurantsPink
-
-@Deprecated("Use AppColorTokens.HomeTeal", ReplaceWith("AppColorTokens.HomeTeal"))
-val HomeTeal500 = AppColorTokens.HomeTeal
-
-@Deprecated("Use AppColorTokens.EntertainmentPurple", ReplaceWith("AppColorTokens.EntertainmentPurple"))
-val EntertainmentPurple500 = AppColorTokens.EntertainmentPurple
-
-@Deprecated("Use AppColorTokens.FreelanceCyan", ReplaceWith("AppColorTokens.FreelanceCyan"))
-val FreelanceCyan700 = AppColorTokens.FreelanceCyan
-
-@Deprecated("Use AppColorTokens.CoffeeYellow", ReplaceWith("AppColorTokens.CoffeeYellow"))
-val CoffeeYellow500 = AppColorTokens.CoffeeYellow

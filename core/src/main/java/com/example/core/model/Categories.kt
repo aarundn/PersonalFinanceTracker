@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.example.core.R
 import com.example.core.ui.theme.AppColorTokens
-import com.example.core.ui.theme.Green500
 import com.example.domain.model.Type
 
 /**
@@ -40,7 +39,8 @@ object DefaultCategories {
     val OTHER = Category("other", R.string.category_other, R.drawable.box, Color.Gray, Type.EXPENSE)
 
     // Income Categories
-    val SALARY = Category("salary", R.string.category_salary, R.drawable.salary, Green500, Type.INCOME)
+    val SALARY = Category("salary", R.string.category_salary, R.drawable.salary,
+        AppColorTokens.Income, Type.INCOME)
     val FREELANCE = Category("freelance", R.string.category_freelance, R.drawable.freelance,
         AppColorTokens.FreelanceCyan, Type.INCOME)
     val INVESTMENT = Category("investment", R.string.category_investment, R.drawable.trending_up,
