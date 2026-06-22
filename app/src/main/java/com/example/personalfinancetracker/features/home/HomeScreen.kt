@@ -77,7 +77,7 @@ private fun HomeContent(
                 BalanceCard(
                     totalBalance = data.totalBalance,
                     percentageChange = data.balancePercentageChange,
-                    currency = data.totalBalance,
+                    currency = data.currentSymbol,
                     onAddClick = { onEvent(HomeEvent.OnClickAddTransaction) },
                     onTransferClick = { onEvent(HomeEvent.OnClickTransfer) }
                 )
