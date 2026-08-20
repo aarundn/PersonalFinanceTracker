@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">دنانير</string>
+
     <!-- Home Feature -->
     <string name="home_total_balance">إجمالي الرصيد</string>
     <string name="home_action_add">إضافة</string>

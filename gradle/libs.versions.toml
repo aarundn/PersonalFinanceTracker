@@ -12,6 +12,7 @@ ktor = "3.1.1"
 kotlinxSerializationJson = "1.7.3"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
+splashscreen = "1.0.1"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.09.00"
@@ -61,6 +62,7 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid
 
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }

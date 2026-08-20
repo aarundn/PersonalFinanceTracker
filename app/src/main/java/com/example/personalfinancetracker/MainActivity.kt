@@ -33,8 +33,11 @@ import com.example.personalfinancetracker.features.home.navigation.HomeRoutes
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.getKoin
 
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
