@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/ic_launcher_foreground">
+    <target android:name="logo_group">
+        <aapt:attr name="android:animation">
+            <set>
+                <!-- Scale up animation (Pulse effect) -->
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:valueFrom="0.4"
+                    android:valueTo="0.6"
+                    android:duration="800"
+                    android:interpolator="@android:interpolator/overshoot" />
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:valueFrom="0.4"
+                    android:valueTo="0.6"
+                    android:duration="800"
+                    android:interpolator="@android:interpolator/overshoot" />
+                <!-- Fade in effect -->
+                <objectAnimator
+                    android:propertyName="alpha"
+                    android:valueFrom="0.0"
+                    android:valueTo="1.0"
+                    android:duration="600"
+                    android:interpolator="@android:interpolator/accelerate_decelerate" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
